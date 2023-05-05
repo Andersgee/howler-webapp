@@ -1,0 +1,30 @@
+import { z } from "zod";
+
+// import this file in next.config.mjs to validate process.env at build time
+// also update envSchema when changing .env
+// this file cant be .ts until next.config supports .ts extension
+
+export const envSchema = z.object({
+  NODE_ENV: z.enum(["development", "test", "production"]),
+  yoyox: z.string(),
+  NEXT_PUBLIC_HELLO: z.string(),
+});
+
+function formatErrors(errors) {
+  return Object.entries(errors)
+    .map(([name, value]) => {
+      if (value && "_errors" in value)
+        return `${name}: ${value._errors.join(", ")}\n`;
+    })
+    .filter(Boolean);
+}
+
+const parsedSchema = envSchema.safeParse(process.env);
+
+if (!parsedSchema.success) {
+  console.error(
+    "❌ Invalid env vars:\n",
+    ...formatErrors(parsedSchema.error.format())
+  );
+  throw new Error("Invalid environment variables");
+}
