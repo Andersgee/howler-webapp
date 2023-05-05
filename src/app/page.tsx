@@ -11,6 +11,11 @@ export default function Home() {
             GO TO HMM
           </Link>
         </div>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+          ducimus a voluptate ipsum voluptatum enim eligendi rerum, maiores illo
+          vel earum dolorum porro aperiam atque dicta esse illum, totam non.
+        </p>
       </div>
     </main>
   );
