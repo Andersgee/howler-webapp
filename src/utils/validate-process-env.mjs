@@ -4,6 +4,11 @@ import { z } from "zod";
 // also update envSchema when changing .env
 // this file cant be .ts until next.config supports .ts extension
 
+/**
+ * keep this up to date with .env
+ *
+ * its only purpose is to type the global process.env
+ */
 export const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   yoyox: z.string(),

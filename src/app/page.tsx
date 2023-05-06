@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+export const metadata = {
+  title: "root page",
+};
+
 export default function Home() {
   const someEnvVar = process.env.NEXT_PUBLIC_HELLO;
   return (

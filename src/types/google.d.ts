@@ -21,7 +21,7 @@ interface GsiButtonConfiguration {
 }
 
 interface CredentialResponse {
-  /** google ID token as a base64-encoded JSON Web Token (JWT) string. */
+  /** google idToken as a base64-encoded JSON Web Token (JWT) string. */
   credential: string;
   /**
    * which flow was used to get the credential response.
@@ -33,17 +33,20 @@ interface CredentialResponse {
 type ModeConfiguration =
   | {
       ux_mode: "popup";
-      /** handle CredentialResponse in javascript if ux_mode is popup */
+      /**
+       * handle CredentialResponse in javascript if ux_mode is popup
+       */
       callback: (response: CredentialResponse) => void;
-      login_uri?: string;
     }
   | {
       ux_mode: "redirect";
       /**
        * after login with google click, sends a POST request to this url if ux_mode is redirect
        *
-       * url must handle POST requests that handles query parameter `credential` that has the google idToken jwt
-       * */
+       * The url must handle POST requests where request.formData() has `credential`, `client_id` and `g_csrf_token`
+       *
+       * (the credential value is the actual google idToken jwt)
+       */
       login_uri: string;
     };
 
