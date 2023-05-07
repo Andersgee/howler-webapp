@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       status: 303,
       headers: {
         Location: `http://localhost:3000`,
-        "Set-Cookie": `${USER_COOKIE_NAME}=${token}; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=2592000`,
+        "Set-Cookie": `${USER_COOKIE_NAME}=${token}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=2592000`,
       },
     });
   } catch (error) {

@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   return new Response(undefined, {
     status: 200,
     headers: {
-      "Set-Cookie": `${SESSION_COOKIE_NAME}=${token}; Path=/; Secure; HttpOnly; SameSite=Strict`,
+      "Set-Cookie": `${SESSION_COOKIE_NAME}=${token}; Path=/; Secure; HttpOnly; SameSite=Lax`,
     },
   });
 }
