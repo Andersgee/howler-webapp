@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
         scope: "openid email profile",
         redirect_uri: "http://localhost:3000/api/auth/callback/google",
         state: sessionCookie.value,
-        nonce: "SOMERANDOMVALUEGENERATEDHERE",
+        nonce: "yealfdafdmsffnrsfsnfsmfrr", //optional? some rand string
       }
     );
     return new Response(undefined, {

@@ -1,6 +1,5 @@
 import { type NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME, USER_COOKIE_NAME } from "src/utils/constants";
-import { cookies } from "next/headers";
 
 /**
  * this is where client is redirected after authorizing with google
@@ -13,11 +12,11 @@ export async function GET(request: NextRequest) {
     console.log("api/auth/callback/google recieved GET request");
 
     console.log("request.url:", request.url);
-    const allCookies = request.cookies.getAll();
-    console.log("allCookies:", allCookies); //this is empty because request comes from google
-
-    const sessionCookie = cookies().get(SESSION_COOKIE_NAME);
+    const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME);
     console.log("sessionCookie:", sessionCookie);
+
+    //const sessionCookie = cookies().get(SESSION_COOKIE_NAME);
+    //console.log("sessionCookie:", sessionCookie);
 
     // that worked fine, we got this:
     // request.url: http://localhost:3000/api/auth/callback/google?state=somesessiontokenhere&code=4%2F0AbUR2VOE6OpPl3gjBfswhjBW9xuV_5AOrSNZptYTe5Ie4CTmAZUbQVJWoaBZh2zRQXiu1Q&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=consent
