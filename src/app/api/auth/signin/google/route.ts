@@ -19,21 +19,21 @@ export async function GET(request: NextRequest) {
     const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME);
     if (!sessionCookie) throw new Error("no session token");
 
-    const url = urlWithEncodedParams(
+    const googleAuthRequestUrl = urlWithEncodedParams(
       "https://accounts.google.com/o/oauth2/v2/auth",
       {
-        client_id: "MYCLIENTID",
+        client_id: process.env.GOOGLE_CLIENT_ID,
         response_type: "code",
         scope: "openid email profile",
-        redirect_uri: "http://localhost/auth/callback/google",
+        redirect_uri: "http://localhost:3000/api/auth/callback/google",
         state: sessionCookie.value,
+        nonce: "SOMERANDOMVALUEGENERATEDHERE",
       }
     );
-
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `http://localhost:3000`,
+        Location: googleAuthRequestUrl,
       },
     });
   } catch (error) {
