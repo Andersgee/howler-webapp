@@ -40,6 +40,14 @@ export function Somestuff({ className = "" }: Props) {
       >
         call /api/signin/google
       </button>
+
+      <a href="api/auth/signin/google" className="block px-3 py-2 bg-lime-500">
+        Link to /api/auth/signin/google
+      </a>
+
+      <a href="api/welp" className="block px-3 py-2 bg-lime-500">
+        Link to /api/welp
+      </a>
     </div>
   );
 }

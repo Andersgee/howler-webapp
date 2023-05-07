@@ -1,4 +1,3 @@
-import { myAction } from "../_actions";
 import { Somestuff } from "./Somestuff";
 import { Thingy } from "./Thingy";
 

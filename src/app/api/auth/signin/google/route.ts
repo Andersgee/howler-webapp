@@ -1,4 +1,6 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
+import { urlWithEncodedParams } from "./utils";
+import { SESSION_COOKIE_NAME } from "src/utils/constants";
 
 /*
 https://developers.google.com/identity/openid-connect/openid-connect
@@ -12,23 +14,34 @@ https://developers.google.com/identity/openid-connect/openid-connect#server-flow
 6. Authenticate the user 
 */
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    NextResponse.redirect("http://localhost:3000", { status: 303 });
-    /*
-    return NextResponse.json(
-      { hello: "world" },
+    const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME);
+    if (!sessionCookie) throw new Error("no session token");
+
+    const url = urlWithEncodedParams(
+      "https://accounts.google.com/o/oauth2/v2/auth",
       {
-        status: 200,
+        client_id: "MYCLIENTID",
+        response_type: "code",
+        scope: "openid email profile",
+        redirect_uri: "http://localhost/auth/callback/google",
+        state: sessionCookie.value,
       }
     );
-    */
+
+    return new Response(undefined, {
+      status: 303,
+      headers: {
+        Location: `http://localhost:3000`,
+      },
+    });
   } catch (error) {
-    return NextResponse.json(
-      { hello: "world" },
-      {
-        status: 500,
-      }
-    );
+    return new Response(undefined, {
+      status: 303,
+      headers: {
+        Location: `http://localhost:3000/nope`,
+      },
+    });
   }
 }
