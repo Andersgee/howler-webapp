@@ -1,14 +1,13 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 import { db } from "src/db";
+import { getUserFromCookie } from "src/utils/token";
 
 export const metadata = {
   title: "root page",
 };
 
 export default async function Home() {
-  const allCookies = cookies().getAll();
-  const someEnvVar = process.env.NEXT_PUBLIC_HELLO;
+  const user = getUserFromCookie();
 
   const examples = await db.selectFrom("Example").selectAll().execute();
   return (
@@ -16,7 +15,6 @@ export default async function Home() {
       <div>
         <div>
           <div className="">
-            <div>someEnvVar: {someEnvVar}</div>
             <Link href="/hmm" className="block px-3 py-2 bg-blue-300">
               GO TO HMM
             </Link>
@@ -28,10 +26,24 @@ export default async function Home() {
             non.
           </p>
         </div>
-        <div>
-          <h2>cookies:</h2>
-          <p>{JSON.stringify(allCookies)}</p>
-        </div>
+        {user ? (
+          <div>
+            <h2>signed in as {user.name}</h2>
+            <a href="/api/auth/signout" className="block px-3 py-2 bg-red-400">
+              SIGN OUT
+            </a>
+          </div>
+        ) : (
+          <div>
+            <h2>not signed in</h2>
+            <a
+              href="/api/auth/signin/google"
+              className="block px-3 py-2 bg-green-400"
+            >
+              SIGN IN WITH GOOGLE
+            </a>
+          </div>
+        )}
         <div>
           <h3>examples:</h3>
           {examples.map((example) => (

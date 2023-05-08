@@ -6,6 +6,7 @@ import {
 } from "src/utils/constants";
 import { urlWithSearchparams } from "src/utils/url";
 import { createTokenFromUser } from "src/utils/token";
+import { db } from "src/db";
 
 export const dynamic = "force-dynamic";
 //export const runtime = "edge";
@@ -109,13 +110,37 @@ export async function GET(request: NextRequest) {
 
     // 6. Authenticate the user
 
-    //need to actually create a user in database here to get an id...
-    const user = {
-      id: 0,
+    //maybe person already has an account
+    const existingGoogleUser = await db
+      .selectFrom("User")
+      .selectAll()
+      .where("User.googleUserSub", "=", payload.sub)
+      .executeTakeFirst();
+    let userId: number | undefined = undefined;
+    if (existingGoogleUser) {
+      console.log(
+        "a googleuser just signed in but already has User in db. its fine"
+      );
+      userId = existingGoogleUser.id;
+    } else {
+      console.log("a googleuser just signed, creating new User in db ");
+      const insertResult = await db
+        .insertInto("User")
+        .values({
+          name: payload.name,
+          email: payload.email,
+          googleUserSub: payload.sub,
+          image: payload.picture,
+        })
+        .executeTakeFirst();
+      userId = Number(insertResult.insertId);
+    }
+
+    const user_jwt = createTokenFromUser({
+      id: userId,
       name: payload.name,
       image: payload.picture,
-    };
-    const user_jwt = createTokenFromUser(user);
+    });
 
     return new Response(undefined, {
       status: 303,
