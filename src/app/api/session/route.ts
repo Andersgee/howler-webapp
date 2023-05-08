@@ -1,8 +1,9 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME } from "src/utils/constants";
+import { getUserFromRequestCookie } from "src/utils/token";
 
 export const dynamic = "force-dynamic";
-export const runtime = "edge";
+//export const runtime = "edge";
 
 /*
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
@@ -17,6 +18,11 @@ doesnt really matter but probably status 204 (no content) is be the proper code 
 */
 
 export async function GET(request: NextRequest) {
+  const user = getUserFromRequestCookie(request);
+  if (user) {
+    return NextResponse.json(user, { status: 200 });
+  }
+
   const alreadyHasSession = request.cookies.has(SESSION_COOKIE_NAME);
   if (alreadyHasSession) {
     return new Response(undefined, { status: 204 });

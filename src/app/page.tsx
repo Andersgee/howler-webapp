@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { db } from "src/db";
 import { getUserFromCookie } from "src/utils/token";
+import { RSCUserprofile } from "./RSCUserprofile";
+import { Userprofile } from "./Userprofile";
 
 export const metadata = {
   title: "root page",
@@ -26,24 +28,8 @@ export default async function Home() {
             non.
           </p>
         </div>
-        {user ? (
-          <div>
-            <h2>signed in as {user.name}</h2>
-            <a href="/api/auth/signout" className="block px-3 py-2 bg-red-400">
-              SIGN OUT
-            </a>
-          </div>
-        ) : (
-          <div>
-            <h2>not signed in</h2>
-            <a
-              href="/api/auth/signin/google"
-              className="block px-3 py-2 bg-green-400"
-            >
-              SIGN IN WITH GOOGLE
-            </a>
-          </div>
-        )}
+        <RSCUserprofile />
+        <Userprofile />
         <div>
           <h3>examples:</h3>
           {examples.map((example) => (
