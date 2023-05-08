@@ -1,6 +1,8 @@
 import { type NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME, USER_COOKIE_NAME } from "src/utils/constants";
 
+export const dynamic = "force-dynamic";
+
 /**
  * this is where client is redirected after authorizing with google
  *

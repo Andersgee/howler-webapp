@@ -1,21 +1,13 @@
-import { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { SESSION_COOKIE_NAME } from "src/utils/constants";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  try {
-    throw new Error("this error works properly");
-    return new Response(undefined, {
-      status: 303,
-      headers: {
-        Location: `http://localhost:3000`,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    return new Response(undefined, {
-      status: 303,
-      headers: {
-        Location: `http://localhost:3000/nope`,
-      },
-    });
-  }
+  const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+
+  return NextResponse.json({
+    sessionCookieValue: sessionCookie || "nothing here",
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  });
 }

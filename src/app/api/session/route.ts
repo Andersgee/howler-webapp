@@ -13,6 +13,8 @@ not setting "Max-Age" or "Expires" makes it a session cookie aka deleted browser
 
 */
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   //this is the cross-site request forgery (CSRF) token. (aka anti-forgery state token)
   //purpose is to have something that exists on both client and server

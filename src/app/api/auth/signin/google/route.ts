@@ -2,6 +2,8 @@ import { type NextRequest } from "next/server";
 import { urlWithEncodedParams } from "./utils";
 import { SESSION_COOKIE_NAME } from "src/utils/constants";
 
+export const dynamic = "force-dynamic";
+
 /*
 https://developers.google.com/identity/openid-connect/openid-connect
 https://developers.google.com/identity/openid-connect/openid-connect#server-flow
@@ -14,29 +16,11 @@ https://developers.google.com/identity/openid-connect/openid-connect#server-flow
 6. Authenticate the user 
 */
 
-export async function GET(request: NextRequest) {
-  try {
-    const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME);
-    if (!sessionCookie) throw new Error("no session token");
+//apparently try, catch and throw is borked dont use them
 
-    const googleAuthRequestUrl = urlWithEncodedParams(
-      "https://accounts.google.com/o/oauth2/v2/auth",
-      {
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        response_type: "code",
-        scope: "openid email profile",
-        redirect_uri: "http://localhost:3000/api/auth/callback/google",
-        state: sessionCookie.value,
-        nonce: "mfkdsmfkemfksnfdsne", //optional? some rand string
-      }
-    );
-    return new Response(undefined, {
-      status: 303,
-      headers: {
-        Location: googleAuthRequestUrl,
-      },
-    });
-  } catch (error) {
+export async function GET(request: NextRequest) {
+  const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  if (!sessionCookie) {
     return new Response(undefined, {
       status: 303,
       headers: {
@@ -44,4 +28,23 @@ export async function GET(request: NextRequest) {
       },
     });
   }
+
+  const googleAuthRequestUrl = urlWithEncodedParams(
+    "https://accounts.google.com/o/oauth2/v2/auth",
+    {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      response_type: "code",
+      scope: "openid email profile",
+      redirect_uri: "http://localhost:3000/api/auth/callback/google",
+      state: sessionCookie,
+      nonce: "memamameokffdsjkloadadoekfafa", //optional? some rand string
+    }
+  );
+
+  return new Response(undefined, {
+    status: 303,
+    headers: {
+      Location: googleAuthRequestUrl,
+    },
+  });
 }
