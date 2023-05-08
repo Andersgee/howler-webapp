@@ -2,12 +2,15 @@ import { type NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME, USER_COOKIE_NAME } from "src/utils/constants";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 /**
  * this is where client is redirected after authorizing with google
  *
  * we are at step 3 of openid server flow
  * https://developers.google.com/identity/openid-connect/openid-connect#confirmxsrftoken
+ *
+ * important to check that the "state" value is same as
  * */
 export async function GET(request: NextRequest) {
   try {
