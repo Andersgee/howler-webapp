@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { db } from "src/db";
-import { getUserFromCookie } from "src/utils/token";
 import { RSCUserprofile } from "./RSCUserprofile";
 import { Userprofile } from "./Userprofile";
 
@@ -9,8 +8,6 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const user = getUserFromCookie();
-
   const examples = await db.selectFrom("Example").selectAll().execute();
   return (
     <main className="flex justify-center">
