@@ -1,0 +1,24 @@
+generator kysely {
+    provider = "prisma-kysely"
+    output   = "../src/db"
+    fileName = "types.ts"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_MYSQL_URL")
+}
+
+model User {
+    id            Int     @id @default(autoincrement())
+    googleUserSub String? @unique
+    image         String?
+    name          String
+    email         String
+}
+
+model Example {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+}

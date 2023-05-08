@@ -5,7 +5,7 @@ import {
   USER_COOKIE_NAME,
 } from "src/utils/constants";
 import { urlWithSearchparams } from "src/utils/url";
-import jwt from "jsonwebtoken";
+import { createTokenFromUser } from "src/utils/token";
 
 export const dynamic = "force-dynamic";
 //export const runtime = "edge";
@@ -98,12 +98,14 @@ export async function GET(request: NextRequest) {
     //   that the token you receive really comes from Google and is valid. "
 
     //so just grab the payload part of the Base64-encoded JSON object
-    //const stuff = JSON.parse(Buffer.from(tokenData.id_token.split(".")[1], "base64").toString()) as GoogleIdToken;
+    const payload = JSON.parse(
+      Buffer.from(tokenData.id_token.split(".")[1], "base64").toString()
+    ) as GoogleIdToken;
 
     //actually I need to sign my own jwt also so might aswell use jwt lib here
     //unfortunately this route cant be runtime edge then right?
     //TODO: one option might be to just use crypto module for everything I do
-    const payload = jwt.decode(tokenData.id_token) as GoogleIdToken;
+    //const payload = jwt.decode(tokenData.id_token) as GoogleIdToken;
 
     // 6. Authenticate the user
 
@@ -111,10 +113,9 @@ export async function GET(request: NextRequest) {
     const user = {
       id: 0,
       name: payload.name,
-      email: payload.email,
       image: payload.picture,
     };
-    const user_jwt = jwt.sign(user, process.env.JWT_SECRET);
+    const user_jwt = createTokenFromUser(user);
 
     return new Response(undefined, {
       status: 303,
