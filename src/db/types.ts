@@ -10,7 +10,7 @@ export type Example = {
 };
 export type User = {
     id: Generated<number>;
-    googleUserSub: string | null;
+    googleUserSub: string;
     image: string | null;
     name: string;
     email: string;

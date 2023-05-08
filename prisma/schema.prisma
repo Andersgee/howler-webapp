@@ -9,12 +9,24 @@ datasource db {
     url      = env("DATABASE_MYSQL_URL")
 }
 
+//since im not using prisma, some stuff in schema.prisma may look okay but may not be
+//before I know exactly what those cases are... best to examine schema of tables manually every now and then:
+//
+//> sudo docker exec -it SOME_CONTAINER_ID sh
+//> mysql -u root -p
+//<enter password>
+//> use db;
+//> DESCRIBE User;
+//> SHOW INDEXES FROM User;
+
 model User {
     id            Int     @id @default(autoincrement())
-    googleUserSub String? @unique
+    googleUserSub String
     image         String?
     name          String
     email         String
+
+    @@index([googleUserSub])
 }
 
 model Example {
