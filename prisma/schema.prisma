@@ -20,6 +20,20 @@ datasource db {
 //> DESCRIBE User;
 //> SHOW INDEXES FROM User;
 
+// also while there, can inspect performance of queries with EXPLAIN ANALYZE
+//> EXPLAIN ANALYZE SELECT * FROM User WHERE googleUserSub = '117740985776559123826';
+//
+// that gives:
+// "EXPLAIN": Index lookup on User using User_googleUserSub_idx (googleUserSub='117740985776559123826')
+// "ANALYZE": (cost=0.35 rows=1) (actual time=0.055..0.058 rows=1 loops=1)
+
+//for analyze the numbers means:
+// Actual time to get first row (in milliseconds)
+// Actual time to get all rows (in milliseconds) 
+// Actual number of rows read <- THIS IS THE IMPORTANT ONE TO SEE IF INDEXING IS USED CORRECT
+// Actual number of loops
+//more explanation here: https://dev.mysql.com/blog-archive/mysql-explain-analyze/
+
 model User {
     id            Int     @id @default(autoincrement())
     googleUserSub String
