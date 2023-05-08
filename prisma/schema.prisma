@@ -12,6 +12,7 @@ datasource db {
 //since im not using prisma, some stuff in schema.prisma may look okay but may not be
 //before I know exactly what those cases are... best to examine schema of tables manually every now and then:
 //
+//> sudo docker ps
 //> sudo docker exec -it SOME_CONTAINER_ID sh
 //> mysql -u root -p
 //<enter password>
