@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  //TODO: think about caching here
   const discoveryDocument = (await fetch(GOOGLE_OPENID_DISCOVERY_URL).then(
     (res) => res.json()
   )) as { authorization_endpoint: string };

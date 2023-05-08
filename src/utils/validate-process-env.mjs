@@ -15,6 +15,7 @@ export const envSchema = z.object({
   NEXT_PUBLIC_HELLO: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  JWT_SECRET: z.string(),
 });
 
 function formatErrors(errors) {
