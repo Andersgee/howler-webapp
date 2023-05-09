@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { api } from "src/db";
 import { db } from "src/db";
 import { RSCUserprofile } from "./RSCUserprofile";
 import { Userprofile } from "./Userprofile";
@@ -8,7 +9,13 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const examples = await db.selectFrom("Example").selectAll().execute();
+  //const examples = await db.selectFrom("Example").selectAll().execute();
+  const examples = await api.get(db.selectFrom("Example").selectAll(), {
+    next: { revalidate: 10 },
+  });
+
+  //const examples = await api.post(db.selectFrom("Example").selectAll());
+
   return (
     <main className="flex justify-center">
       <div>
