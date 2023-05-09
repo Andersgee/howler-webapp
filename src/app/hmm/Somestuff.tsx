@@ -18,13 +18,6 @@ export function Somestuff({ className = "" }: Props) {
       >
         button with onClick
       </button>
-
-      <button
-        onClick={() => fetch("api/session")}
-        className="bg-purple-500 block px-3 py-2 font-bold text-white"
-      >
-        button, fetch a session cookie
-      </button>
     </div>
   );
 }
