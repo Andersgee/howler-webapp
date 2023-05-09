@@ -31,7 +31,7 @@ export const db = new Kysely<DB>({
       }),
   },
 });
-
+/*
 async function post<T>(query: Compilable<T>): Promise<SimplifyResult<T>[]> {
   const compiledQuery = query.compile();
   const res = await fetch(process.env.DATABASE_HTTP_URL, {
@@ -72,7 +72,11 @@ async function postTakeFirst<T>(
   const [result] = await post(query);
   return result;
 }
+*/
 
+/**
+ * Use this with SELECT querys only
+ * */
 async function get<T>(
   query: Compilable<T>,
   init?: RequestInit | undefined
@@ -99,10 +103,7 @@ async function get<T>(
   if (res.ok) {
     try {
       const result = deserialize(await res.json()) as any;
-      if (result.rows) {
-        return result.rows;
-      }
-      return result;
+      return result.rows;
     } catch (error) {
       throw new Error(
         "failed to deserialize response.json(), webserver should return superjson.serialize(result)"
@@ -122,8 +123,6 @@ async function getTakeFirst<T>(
 }
 
 export const api = {
-  post,
-  postTakeFirst,
   get,
   getTakeFirst,
 };

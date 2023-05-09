@@ -14,6 +14,18 @@ export default async function Home() {
     next: { revalidate: 10 },
   });
 
+  const hmmm = await db
+    .deleteFrom("Example")
+    .where("Example.id", "=", 1)
+    .executeTakeFirst();
+  hmmm.numDeletedRows;
+
+  const hmmmzz = await db.insertInto("Example").values({}).executeTakeFirst();
+  hmmmzz.insertId;
+  hmmmzz.numInsertedOrUpdatedRows;
+
+  //const deleteResult = await api.post(db.deleteFrom("Example").where("Example.id", "=", 1));
+  //console.log("deleteResult:", deleteResult);
   //const examples = await api.post(db.selectFrom("Example").selectAll());
 
   return (
