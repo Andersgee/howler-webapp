@@ -2,7 +2,7 @@ export const SESSION_COOKIE_NAME = "__Host-session-csrf";
 export const USER_COOKIE_NAME = "__Host-user";
 
 /**
- * should be hardcode
+ * should be hardcoded
  *
  * see https://developers.google.com/identity/openid-connect/openid-connect#discovery
  *

@@ -22,7 +22,6 @@ export function getUserFromToken(token: string | undefined) {
  */
 export function getUserFromRequestCookie(req: NextRequest) {
   const token = req.cookies.get(USER_COOKIE_NAME)?.value;
-  if (!token) return null;
   return getUserFromToken(token);
 }
 
@@ -33,7 +32,6 @@ export function getUserFromRequestCookie(req: NextRequest) {
  */
 export function getUserFromCookie() {
   const token = cookies().get(USER_COOKIE_NAME)?.value;
-  if (!token) return null;
   return getUserFromToken(token);
 }
 

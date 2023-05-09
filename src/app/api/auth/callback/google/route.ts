@@ -59,10 +59,9 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    //TODO: think about caching here
-    const discoveryDocument = (await fetch(GOOGLE_OPENID_DISCOVERY_URL).then(
-      (res) => res.json()
-    )) as { token_endpoint: string };
+    const discoveryDocument = (await fetch(GOOGLE_OPENID_DISCOVERY_URL, {
+      cache: "default",
+    }).then((res) => res.json())) as { token_endpoint: string };
     const token_endpoint = discoveryDocument.token_endpoint;
     //const token_endpoint = "https://oauth2.googleapis.com/token";
 
@@ -77,6 +76,7 @@ export async function GET(request: NextRequest) {
 
     // --- 4. Exchange code for access token and ID token
     const tokenData = (await fetch(googleTokenRequestUrl, {
+      cache: "no-store",
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

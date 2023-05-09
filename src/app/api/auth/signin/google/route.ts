@@ -31,10 +31,9 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  //TODO: think about caching here
-  const discoveryDocument = (await fetch(GOOGLE_OPENID_DISCOVERY_URL).then(
-    (res) => res.json()
-  )) as { authorization_endpoint: string };
+  const discoveryDocument = (await fetch(GOOGLE_OPENID_DISCOVERY_URL, {
+    cache: "default",
+  }).then((res) => res.json())) as { authorization_endpoint: string };
 
   const authorization_endpoint = discoveryDocument.authorization_endpoint;
   //const authorization_endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
