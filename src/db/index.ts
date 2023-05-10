@@ -17,10 +17,22 @@ const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
 declare module "kysely" {
   interface SelectQueryBuilder<DB, TB extends keyof DB, O> {
     /**
-     * fetch with method GET, only for SELECT queries
+     * Plays nice with the fetch cache that nextjs extends.
      *
-     * also takes the normal fetch options such as `{cache: "no-cache"}` or `{next: {revalidate: 10}}`
-     * */
+     * - notes:
+     *     - use `.get()` with SELECT queries (takes standard RequestInit options as arg)
+     *     - use `.execute()` for everything else (also uses fetch but with method POST aka not intended to be cached, think mutations)
+     *
+     * keep in mind that GET request has `{cache: "force-cache"}` by default in nextjs
+     *
+     * # Example
+     *
+     * ```ts
+     * const examples = await db.selectFrom("Example").selectAll().get({
+     *   next: { revalidate: 10 },
+     * });
+     * ```
+     */
     get(init?: RequestInit): Promise<Simplify<O>[]>;
     /** same as get() but return first element */
     getFirst(init?: RequestInit): Promise<Simplify<O> | undefined>;
