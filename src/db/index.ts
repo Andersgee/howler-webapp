@@ -1,13 +1,9 @@
 import {
   type CompiledQuery,
-  type QueryResult,
   Kysely,
   MysqlAdapter,
   MysqlIntrospector,
   MysqlQueryCompiler,
-  Compilable,
-  InferResult,
-  //type SimplifySingleResult
 } from "kysely";
 import type {
   Simplify,
@@ -18,9 +14,22 @@ import { FetchDriver } from "@andersgee/kysely-fetch-driver";
 import type { DB } from "./types";
 import { deserialize, serialize } from "superjson";
 import { urlWithSearchparams } from "src/utils/url";
-//import { type SimplifySingleResult } from "kysely/dist/cjs/util/type-utils";
-
 import { SelectQueryBuilder } from "kysely";
+
+const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
+
+export const db = new Kysely<DB>({
+  dialect: {
+    createAdapter: () => new MysqlAdapter(),
+    createIntrospector: (db) => new MysqlIntrospector(db),
+    createQueryCompiler: () => new MysqlQueryCompiler(),
+    createDriver: () =>
+      new FetchDriver({
+        url: process.env.DATABASE_HTTP_URL,
+        authorization: AUTH_SECRET,
+      }),
+  },
+});
 
 declare module "kysely" {
   interface SelectQueryBuilder<DB, TB extends keyof DB, O> {
@@ -72,21 +81,6 @@ SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(
   }
   return result as Simplify<O>;
 };
-
-const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
-
-export const db = new Kysely<DB>({
-  dialect: {
-    createAdapter: () => new MysqlAdapter(),
-    createIntrospector: (db) => new MysqlIntrospector(db),
-    createQueryCompiler: () => new MysqlQueryCompiler(),
-    createDriver: () =>
-      new FetchDriver({
-        url: process.env.DATABASE_HTTP_URL,
-        authorization: AUTH_SECRET,
-      }),
-  },
-});
 
 async function executeWithFetchGet(
   compiledQuery: CompiledQuery,
