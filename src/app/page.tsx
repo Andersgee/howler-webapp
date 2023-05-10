@@ -9,18 +9,23 @@ export const metadata = {
 
 export default async function Home() {
   //const examples = await db.selectFrom("Example").selectAll().execute();
-  const examples = await db.selectFrom("Example").selectAll().get({
-    cache: "no-cache",
-  });
+  const examples = await db
+    .selectFrom("Example")
+    .selectAll()
+    .get({
+      next: {
+        revalidate: 10,
+      },
+    });
 
   const exampleMaybe = await db.selectFrom("Example").selectAll().getFirst();
   const example = await db.selectFrom("Example").selectAll().getFirstOrThrow();
-
+  /*
   const insertResult = await db
     .insertInto("Example")
     .values({})
     .executeTakeFirst();
-
+*/
   return (
     <main className="flex justify-center">
       <div>

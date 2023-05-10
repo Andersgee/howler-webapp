@@ -36,12 +36,10 @@ datasource db {
 
 model User {
     id            Int     @id @default(autoincrement())
-    googleUserSub String
+    googleUserSub String  @unique
     image         String?
     name          String
     email         String
-
-    @@index([googleUserSub])
 }
 
 model Example {
