@@ -18,13 +18,13 @@ export const envSchema = z.object({
   JWT_SECRET: z.string(),
   DATABASE_HTTP_URL: z.string().url(),
   DATABASE_HTTP_AUTH_SECRET: z.string(),
+  NEXT_PUBLIC_HASHIDS_SALT: z.string(),
 });
 
 function formatErrors(errors) {
   return Object.entries(errors)
     .map(([name, value]) => {
-      if (value && "_errors" in value)
-        return `${name}: ${value._errors.join(", ")}\n`;
+      if (value && "_errors" in value) return `${name}: ${value._errors.join(", ")}\n`;
     })
     .filter(Boolean);
 }
@@ -32,9 +32,6 @@ function formatErrors(errors) {
 const parsedSchema = envSchema.safeParse(process.env);
 
 if (!parsedSchema.success) {
-  console.error(
-    "❌ Invalid env vars:\n",
-    ...formatErrors(parsedSchema.error.format())
-  );
+  console.error("❌ Invalid env vars:\n", ...formatErrors(parsedSchema.error.format()));
   throw new Error("Invalid environment variables");
 }

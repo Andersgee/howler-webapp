@@ -2,6 +2,7 @@ import Link from "next/link";
 import { db } from "src/db";
 import { RSCUserprofile } from "./RSCUserprofile";
 import { Userprofile } from "./Userprofile";
+import { hashidFromId } from "src/utils/hashid";
 
 export const metadata = {
   title: "root page",
@@ -42,14 +43,16 @@ export default async function Home() {
         </div>
         <RSCUserprofile />
         <Userprofile />
-        <div>
-          <h3>examples:</h3>
-          {examples.map((example) => (
-            <div key={example.id}>{JSON.stringify(example)}</div>
-          ))}
-        </div>
-        <div>exampleMaybe: {JSON.stringify(exampleMaybe)}</div>
-        <div>example: {JSON.stringify(example)}</div>
+
+        <Link href={`/example/${hashidFromId(1)}`} className="block px-3 py-2 bg-blue-300">
+          example 1
+        </Link>
+        <Link href={`/example/${hashidFromId(2)}`} className="block px-3 py-2 bg-blue-300">
+          example 2
+        </Link>
+        <Link href={`/example/${hashidFromId(5)}`} className="block px-3 py-2 bg-blue-300">
+          example 5
+        </Link>
       </div>
     </main>
   );

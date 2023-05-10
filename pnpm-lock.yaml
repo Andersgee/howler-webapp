@@ -9,6 +9,7 @@ specifiers:
   autoprefixer: 10.4.14
   eslint: 8.39.0
   eslint-config-next: 13.4.1
+  hashids: ^2.2.11
   jsonwebtoken: ^9.0.0
   kysely: ^0.24.2
   next: 13.4.1
@@ -32,6 +33,7 @@ dependencies:
   autoprefixer: 10.4.14_postcss@8.4.23
   eslint: 8.39.0
   eslint-config-next: 13.4.1_iacogk7kkaymxepzhgcbytyi7q
+  hashids: 2.2.11
   jsonwebtoken: 9.0.0
   kysely: 0.24.2
   next: 13.4.1_biqbaboplfbrettd7655fr4n2y
@@ -2079,6 +2081,10 @@ packages:
       is-stream: 2.0.1
       type-fest: 0.8.1
     dev: true
+
+  /hashids/2.2.11:
+    resolution: {integrity: sha512-e1rAPT5Wa9vf/Dq1eq8LFw5VH2dtKxRf6k9bCw0GLwKL/SRnUphIcqwJWUZ1ki18cdj03nCrpdlJOcyHILQk8Q==}
+    dev: false
 
   /hosted-git-info/2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
