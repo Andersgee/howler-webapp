@@ -14,6 +14,10 @@ export default async function Home() {
     next: { revalidate: 10 },
   });
 
+  const example = await api.getTakeFirst(db.selectFrom("Example").selectAll(), {
+    next: { revalidate: 10 },
+  });
+
   const hmmm = await db
     .deleteFrom("Example")
     .where("Example.id", "=", 1)

@@ -31,6 +31,7 @@ export const db = new Kysely<DB>({
       }),
   },
 });
+
 /*
 async function post<T>(query: Compilable<T>): Promise<SimplifyResult<T>[]> {
   const compiledQuery = query.compile();
