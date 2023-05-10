@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { api } from "src/db";
 import { db } from "src/db";
 import { RSCUserprofile } from "./RSCUserprofile";
 import { Userprofile } from "./Userprofile";
@@ -10,27 +9,17 @@ export const metadata = {
 
 export default async function Home() {
   //const examples = await db.selectFrom("Example").selectAll().execute();
-  const examples = await api.get(db.selectFrom("Example").selectAll(), {
-    next: { revalidate: 10 },
+  const examples = await db.selectFrom("Example").selectAll().get({
+    cache: "no-cache",
   });
 
-  const example = await api.getTakeFirst(db.selectFrom("Example").selectAll(), {
-    next: { revalidate: 10 },
-  });
+  const exampleMaybe = await db.selectFrom("Example").selectAll().getFirst();
+  const example = await db.selectFrom("Example").selectAll().getFirstOrThrow();
 
-  const hmmm = await db
-    .deleteFrom("Example")
-    .where("Example.id", "=", 1)
+  const insertResult = await db
+    .insertInto("Example")
+    .values({})
     .executeTakeFirst();
-  hmmm.numDeletedRows;
-
-  const hmmmzz = await db.insertInto("Example").values({}).executeTakeFirst();
-  hmmmzz.insertId;
-  hmmmzz.numInsertedOrUpdatedRows;
-
-  //const deleteResult = await api.post(db.deleteFrom("Example").where("Example.id", "=", 1));
-  //console.log("deleteResult:", deleteResult);
-  //const examples = await api.post(db.selectFrom("Example").selectAll());
 
   return (
     <main className="flex justify-center">
@@ -56,6 +45,8 @@ export default async function Home() {
             <div key={example.id}>{JSON.stringify(example)}</div>
           ))}
         </div>
+        <div>exampleMaybe: {JSON.stringify(exampleMaybe)}</div>
+        <div>example: {JSON.stringify(example)}</div>
       </div>
     </main>
   );
