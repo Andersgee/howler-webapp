@@ -25,10 +25,6 @@ export async function GET(request: NextRequest) {
     const state = request.nextUrl.searchParams.get("state");
     const code = request.nextUrl.searchParams.get("code");
 
-    console.log("session_csrf", session_csrf);
-    console.log("state", state);
-    console.log("code", code);
-
     // Confirm csrf
     if (!code || !session_csrf || !state || session_csrf !== state) throw new Error("no session");
 
