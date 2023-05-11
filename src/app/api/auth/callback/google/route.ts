@@ -1,6 +1,6 @@
 import { type NextRequest } from "next/server";
 import { GOOGLE_OPENID_DISCOVERY_URL, SESSION_COOKIE_NAME, USER_COOKIE_NAME } from "src/utils/constants";
-import { encodeParams, urlWithSearchparams } from "src/utils/url";
+import { encodeParams } from "src/utils/url";
 import { createTokenFromUser } from "src/utils/token";
 import { db } from "src/db";
 
@@ -41,6 +41,7 @@ https://developers.google.com/identity/openid-connect/openid-connect#server-flow
 export async function GET(request: NextRequest) {
   try {
     const session_csrf = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+    //const state = request.nextUrl.searchParams.get("state") //maybe do this instead? didnt even test it
     const url = new URL(request.url);
     const state = url.searchParams.get("state");
     const code = url.searchParams.get("code");

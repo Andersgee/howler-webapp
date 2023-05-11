@@ -1,8 +1,5 @@
 import { type NextRequest } from "next/server";
-import {
-  GOOGLE_OPENID_DISCOVERY_URL,
-  SESSION_COOKIE_NAME,
-} from "src/utils/constants";
+import { GOOGLE_OPENID_DISCOVERY_URL, SESSION_COOKIE_NAME } from "src/utils/constants";
 import { urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
@@ -33,6 +30,7 @@ export async function GET(request: NextRequest) {
 
   const discoveryDocument = (await fetch(GOOGLE_OPENID_DISCOVERY_URL, {
     cache: "default",
+    //cache: "force-cache",
   }).then((res) => res.json())) as { authorization_endpoint: string };
 
   const authorization_endpoint = discoveryDocument.authorization_endpoint;

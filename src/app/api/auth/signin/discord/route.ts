@@ -10,9 +10,8 @@ https://discord.com/developers/docs/topics/oauth2
 
 */
 
-//const AUTHORIZATION_URL = "https://discord.com/oauth2/authorize"; //is there a typo in their docs? they dont have "api" in the string
-const AUTHORIZATION_URL = "https://discord.com/api/oauth2/authorize"; //this is what next-auth has hardcoded
-const TOKEN_URL = "https://discord.com/api/oauth2/token";
+//const AUTHORIZATION_URL = "https://discord.com/oauth2/authorize"; //discord has a typo in their docs or does this work aswell? didnt even test it.
+const AUTHORIZATION_URL = "https://discord.com/api/oauth2/authorize";
 
 //"https://discord.com/api/oauth2/authorize?scope=identify+email"
 
