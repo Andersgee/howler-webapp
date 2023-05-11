@@ -12,6 +12,7 @@ export type User = {
   id: Generated<number>;
   googleUserSub: string | null;
   discordUserId: string | null;
+  githubUserId: number | null;
   image: string | null;
   name: string;
   email: string;

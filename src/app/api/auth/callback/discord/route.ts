@@ -1,6 +1,6 @@
 import { type NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME, USER_COOKIE_NAME } from "src/utils/constants";
-import { encodeParams, urlWithSearchparams } from "src/utils/url";
+import { encodeParams } from "src/utils/url";
 import { createTokenFromUser } from "src/utils/token";
 import { db } from "src/db";
 
