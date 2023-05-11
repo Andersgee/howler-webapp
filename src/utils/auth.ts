@@ -67,8 +67,8 @@ export const GITHUB_TOKEN = z.object({
 export const GITHUB_USERINFO = z.object({
   id: z.number(),
   login: z.string(),
-  name: z.string().optional(),
-  email: z.string().optional(),
+  name: z.string().nullish(),
+  email: z.string().nullish(),
   avatar_url: z.string(),
 });
 
@@ -87,7 +87,7 @@ export const DISCORD_USERINFO = z.object({
   id: z.string(),
   username: z.string(),
   email: z.string(),
-  avatar: z.string().optional(),
+  avatar: z.string().nullish(),
   discriminator: z.string(),
 });
 
@@ -104,5 +104,5 @@ export async function addUser(user: InsertObjectOrList<DB, "User">) {
 }
 
 export async function getUserByEmail(email: string) {
-  return await db.selectFrom("User").selectAll().where("User.email", "=", email).executeTakeFirst();
+  return await db.selectFrom("User").selectAll().where("email", "=", email).executeTakeFirst();
 }

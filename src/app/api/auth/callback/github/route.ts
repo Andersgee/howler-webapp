@@ -13,6 +13,7 @@ import {
 } from "src/utils/auth";
 import { encodeParams } from "src/utils/url";
 import { createTokenFromUser } from "src/utils/token";
+import { db } from "src/db";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -75,6 +76,10 @@ export async function GET(request: NextRequest) {
     let userId: number | undefined = undefined;
     if (existingUser) {
       userId = existingUser.id;
+
+      if (!existingUser.githubUserId) {
+        await db.updateTable("User").set({ githubUserId: userInfo.id }).where("id", "=", existingUser.id).execute();
+      }
     } else {
       const insertResult = await addUser({
         name: userInfo.name,

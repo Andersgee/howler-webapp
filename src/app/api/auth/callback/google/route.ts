@@ -11,6 +11,7 @@ import {
 } from "src/utils/auth";
 import { encodeParams } from "src/utils/url";
 import { createTokenFromUser } from "src/utils/token";
+import { db } from "src/db";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -55,11 +56,16 @@ export async function GET(request: NextRequest) {
     const userInfo = GOOGLE_USERINFO.parse(JSON.parse(Buffer.from(token.id_token.split(".")[1], "base64").toString()));
 
     // Authenticate the user
+
     const existingUser = await getUserByEmail(userInfo.email);
     let userId: number | undefined = undefined;
 
     if (existingUser) {
       userId = existingUser.id;
+
+      if (!existingUser.googleUserSub) {
+        await db.updateTable("User").set({ googleUserSub: userInfo.sub }).where("id", "=", existingUser.id).execute();
+      }
     } else {
       const insertResult = await addUser({
         name: userInfo.name,
