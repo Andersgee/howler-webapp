@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { type NextRequest } from "next/server";
 import { type TokenUser, TokenUserSchema } from "./token-user";
-import { USER_COOKIE_NAME } from "./constants";
+import { USER_COOKIE_NAME } from "./auth";
 import { SignJWT, jwtVerify } from "jose";
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
@@ -44,7 +44,5 @@ export async function getUserFromCookie() {
  */
 export async function createTokenFromUser(user: TokenUser) {
   const jwt = await new SignJWT(user).setProtectedHeader({ alg: "HS256" }).sign(SECRET);
-
   return jwt;
-  //return jwt.sign(user, process.env.JWT_SECRET); //without expiry
 }

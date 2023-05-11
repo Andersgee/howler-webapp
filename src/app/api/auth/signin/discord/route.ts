@@ -1,34 +1,34 @@
 import { type NextRequest } from "next/server";
-import { SESSION_COOKIE_NAME } from "src/utils/constants";
+import { DISCORD_AUTHORIZATION_URL, SESSION_COOKIE_NAME } from "src/utils/auth";
 import { urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
-/*
-https://discord.com/developers/docs/topics/oauth2
-
-*/
-
-//const AUTHORIZATION_URL = "https://discord.com/oauth2/authorize"; //discord has a typo in their docs or does this work aswell? didnt even test it.
-const AUTHORIZATION_URL = "https://discord.com/api/oauth2/authorize";
-
-//"https://discord.com/api/oauth2/authorize?scope=identify+email"
-
-/*
-example:
-https://discord.com/oauth2/authorize
-?response_type=code
-&client_id=157730590492196864
-&scope=identify%20guilds.join
-&state=15773059ghq9183habn
-&redirect_uri=https%3A%2F%2Fnicememe.website
-&prompt=consent
-*/
+//https://discord.com/developers/docs/topics/oauth2
 
 export async function GET(request: NextRequest) {
-  const session_csrf = request.cookies.get(SESSION_COOKIE_NAME)?.value;
-  if (!session_csrf) {
+  try {
+    const session_csrf = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+    if (!session_csrf) throw new Error("no session");
+
+    const authRequestUrl = urlWithSearchparams(DISCORD_AUTHORIZATION_URL, {
+      response_type: "code",
+      client_id: process.env.DISCORD_CLIENT_ID,
+      scope: "identify email",
+      state: session_csrf,
+      redirect_uri: "http://localhost:3000/api/auth/callback/discord",
+      prompt: "consent",
+    });
+
+    return new Response(undefined, {
+      status: 303,
+      headers: {
+        Location: authRequestUrl.toString(),
+      },
+    });
+  } catch (error) {
+    console.log(error);
     return new Response(undefined, {
       status: 303,
       headers: {
@@ -36,20 +36,4 @@ export async function GET(request: NextRequest) {
       },
     });
   }
-
-  const authRequestUrl = urlWithSearchparams(AUTHORIZATION_URL, {
-    response_type: "code",
-    client_id: process.env.DISCORD_CLIENT_ID,
-    scope: "identify email",
-    state: session_csrf,
-    redirect_uri: "http://localhost:3000/api/auth/callback/discord",
-    prompt: "consent",
-  });
-
-  return new Response(undefined, {
-    status: 303,
-    headers: {
-      Location: authRequestUrl.toString(),
-    },
-  });
 }
