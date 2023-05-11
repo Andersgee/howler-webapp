@@ -3,7 +3,7 @@ import { GOOGLE_OPENID_DISCOVERY_URL, SESSION_COOKIE_NAME } from "src/utils/cons
 import { urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
-//export const runtime = "edge";
+export const runtime = "edge";
 
 /*
 https://developers.google.com/identity/openid-connect/openid-connect

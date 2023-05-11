@@ -1,8 +1,8 @@
 import { getUserFromCookie } from "src/utils/token";
 import Image from "next/image";
 
-export function RSCUserprofile() {
-  const user = getUserFromCookie();
+export async function RSCUserprofile() {
+  const user = await getUserFromCookie();
 
   return (
     <div className="bg-orange-300">

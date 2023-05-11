@@ -5,7 +5,7 @@ import { createTokenFromUser } from "src/utils/token";
 import { db } from "src/db";
 
 export const dynamic = "force-dynamic";
-//export const runtime = "edge";
+export const runtime = "edge";
 
 type GoogleIdToken = {
   sub: string;
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
       userId = Number(insertResult.insertId);
     }
 
-    const user_jwt = createTokenFromUser({
+    const user_jwt = await createTokenFromUser({
       id: userId,
       name: payload.name,
       image: payload.picture,

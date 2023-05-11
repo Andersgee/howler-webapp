@@ -3,7 +3,7 @@ import { SESSION_COOKIE_NAME } from "src/utils/constants";
 import { urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
-//export const runtime = "edge";
+export const runtime = "edge";
 
 /*
 https://discord.com/developers/docs/topics/oauth2

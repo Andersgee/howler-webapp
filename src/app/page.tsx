@@ -10,6 +10,7 @@ export const metadata = {
 
 export default async function Home() {
   //const examples = await db.selectFrom("Example").selectAll().execute();
+  /*
   const examples = await db
     .selectFrom("Example")
     .selectAll()
@@ -21,6 +22,7 @@ export default async function Home() {
 
   const exampleMaybe = await db.selectFrom("Example").selectAll().getFirst();
   const example = await db.selectFrom("Example").selectAll().getFirstOrThrow();
+  */
   /*
   const insertResult = await db
     .insertInto("Example")
@@ -41,6 +43,7 @@ export default async function Home() {
             eligendi rerum, maiores illo vel earum dolorum porro aperiam atque dicta esse illum, totam non.
           </p>
         </div>
+        {/* @ts-expect-error Async Server Component */}
         <RSCUserprofile />
         <Userprofile />
 

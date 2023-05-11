@@ -6,7 +6,7 @@ import Image from "next/image";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const tokenUser = getUserFromCookie();
+  const tokenUser = await getUserFromCookie();
   if (!tokenUser) {
     return (
       <div>

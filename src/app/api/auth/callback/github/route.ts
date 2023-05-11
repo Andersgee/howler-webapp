@@ -5,7 +5,7 @@ import { createTokenFromUser } from "src/utils/token";
 import { db } from "src/db";
 
 export const dynamic = "force-dynamic";
-//export const runtime = "edge";
+export const runtime = "edge";
 
 const TOKEN_URL = "https://github.com/login/oauth/access_token";
 const USERINFO_URL = "https://api.github.com/user";
@@ -125,7 +125,7 @@ export async function GET(request: NextRequest) {
       userId = Number(insertResult.insertId);
     }
 
-    const user_jwt = createTokenFromUser({
+    const user_jwt = await createTokenFromUser({
       id: userId,
       name: userInfo.name,
       image: userInfo.avatar_url,
