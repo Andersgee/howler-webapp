@@ -13,33 +13,10 @@ import {
 } from "src/utils/auth";
 import { encodeParams } from "src/utils/url";
 import { createTokenFromUser } from "src/utils/token";
-import { db } from "src/db";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
-const USERINFO_URL = "https://api.github.com/user";
-
-//has more properties
-//see https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user
-type UserInfo = {
-  id: number;
-  login: string;
-  name?: string;
-  email?: string;
-  avatar_url: string;
-};
-
-type EmailInfo = {
-  email: string;
-  primary: boolean;
-  verified: boolean;
-  visibility: "public" | "private";
-};
-
-/**
- * this is where client is redirected after authorizing with github
- */
 export async function GET(request: NextRequest) {
   try {
     const session_csrf = request.cookies.get(SESSION_COOKIE_NAME)?.value;

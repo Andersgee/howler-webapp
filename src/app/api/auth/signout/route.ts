@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { USER_COOKIE_NAME } from "src/utils/constants";
+import { USER_COOKIE_NAME } from "src/utils/auth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";

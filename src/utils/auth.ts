@@ -18,12 +18,13 @@ export const USER_COOKIE_NAME = "__Host-user";
 export const GOOGLE_OPENID_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration";
 
 export const GITHUB_AUTHORIZATION_URL = "https://github.com/login/oauth/authorize";
-
 export const GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token";
 export const GITHUB_USERINFO_URL = "https://api.github.com/user";
 export const GITHUB_EMAILS_URL = "https://api.github.com/user/emails";
 
 export const DISCORD_AUTHORIZATION_URL = "https://discord.com/api/oauth2/authorize";
+export const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
+export const DISCORD_USERINFO_URL = "https://discord.com/api/users/@me";
 
 export const GOOGLE_discoveryDocument = z.object({
   authorization_endpoint: z.string(),
@@ -62,6 +63,7 @@ export const GITHUB_TOKEN = z.object({
   token_type: z.string(),
 });
 
+//https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user
 export const GITHUB_USERINFO = z.object({
   id: z.number(),
   login: z.string(),
@@ -80,6 +82,22 @@ export const GITHUB_EMAILINFO = z
     })
   )
   .min(1);
+
+export const DISCORD_USERINFO = z.object({
+  id: z.string(),
+  username: z.string(),
+  email: z.string(),
+  avatar: z.string().optional(),
+  discriminator: z.string(),
+});
+
+export const DISCORD_TOKEN = z.object({
+  access_token: z.string(),
+  token_type: z.string(),
+  expires_in: z.number(),
+  refresh_token: z.string(),
+  scope: z.string(),
+});
 
 export async function addUser(user: InsertObjectOrList<DB, "User">) {
   return await db.insertInto("User").values(user).executeTakeFirst();

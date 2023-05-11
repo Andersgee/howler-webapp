@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { SESSION_COOKIE_NAME } from "src/utils/constants";
+import { SESSION_COOKIE_NAME } from "src/utils/auth";
 import { getUserFromRequestCookie } from "src/utils/token";
 
 export const dynamic = "force-dynamic";
