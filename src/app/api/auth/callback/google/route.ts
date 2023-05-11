@@ -1,10 +1,6 @@
 import { type NextRequest } from "next/server";
-import {
-  GOOGLE_OPENID_DISCOVERY_URL,
-  SESSION_COOKIE_NAME,
-  USER_COOKIE_NAME,
-} from "src/utils/constants";
-import { urlWithSearchparams } from "src/utils/url";
+import { GOOGLE_OPENID_DISCOVERY_URL, SESSION_COOKIE_NAME, USER_COOKIE_NAME } from "src/utils/constants";
+import { encodeParams, urlWithSearchparams } from "src/utils/url";
 import { createTokenFromUser } from "src/utils/token";
 import { db } from "src/db";
 
@@ -66,21 +62,22 @@ export async function GET(request: NextRequest) {
     //const token_endpoint = "https://oauth2.googleapis.com/token";
 
     //see https://developers.google.com/identity/openid-connect/openid-connect#exchangecode
-    const googleTokenRequestUrl = urlWithSearchparams(token_endpoint, {
+    const token_params = {
       code: code,
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
       redirect_uri: "http://localhost:3000/api/auth/callback/google",
       grant_type: "authorization_code",
-    });
+    };
 
     // --- 4. Exchange code for access token and ID token
-    const tokenData = (await fetch(googleTokenRequestUrl, {
+    const tokenData = (await fetch(token_endpoint, {
       cache: "no-store",
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
+      body: encodeParams(token_params),
     }).then((res) => res.json())) as {
       id_token: string;
       access_token: string;
@@ -99,9 +96,7 @@ export async function GET(request: NextRequest) {
     //   that the token you receive really comes from Google and is valid. "
 
     //so just grab the payload part of the Base64-encoded JSON object
-    const payload = JSON.parse(
-      Buffer.from(tokenData.id_token.split(".")[1], "base64").toString()
-    ) as GoogleIdToken;
+    const payload = JSON.parse(Buffer.from(tokenData.id_token.split(".")[1], "base64").toString()) as GoogleIdToken;
 
     //actually I need to sign my own jwt also so might aswell use jwt lib here
     //unfortunately this route cant be runtime edge then right?
@@ -118,9 +113,7 @@ export async function GET(request: NextRequest) {
       .executeTakeFirst();
     let userId: number | undefined = undefined;
     if (existingGoogleUser) {
-      console.log(
-        "a googleuser just signed in but already has User in db. its fine"
-      );
+      console.log("a googleuser just signed in but already has User in db. its fine");
       userId = existingGoogleUser.id;
     } else {
       console.log("a googleuser just signed, creating new User in db ");
