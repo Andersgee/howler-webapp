@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 
 /*
 https://discord.com/developers/docs/topics/oauth2
+
 */
 
 //const AUTHORIZATION_URL = "https://discord.com/oauth2/authorize"; //is there a typo in their docs? they dont have "api" in the string

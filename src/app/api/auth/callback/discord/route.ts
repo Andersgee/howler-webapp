@@ -7,6 +7,8 @@ import { db } from "src/db";
 export const dynamic = "force-dynamic";
 //export const runtime = "edge";
 
+//https://discord.com/developers/docs/topics/oauth2
+
 //https://discord.com/developers/docs/topics/oauth2#get-current-authorization-information
 //https://discord.com/developers/docs/resources/user#user-object
 type DiscordUserInfo = {
@@ -16,11 +18,6 @@ type DiscordUserInfo = {
   avatar?: string;
   discriminator: string;
 };
-
-/*
-this is where client is redirected after authorizing with discord
-
-*/
 
 const TOKEN_URL = "https://discord.com/api/oauth2/token";
 const USERINFO_URL = "https://discord.com/api/users/@me";
@@ -49,6 +46,9 @@ function imageUrlFromUserinfo(userInfo: DiscordUserInfo) {
   return `https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.${format}`;
 }
 
+/**
+ * this is where client is redirected after authorizing with discord
+ */
 export async function GET(request: NextRequest) {
   try {
     const session_csrf = request.cookies.get(SESSION_COOKIE_NAME)?.value;
