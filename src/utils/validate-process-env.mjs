@@ -15,6 +15,8 @@ export const envSchema = z.object({
   NEXT_PUBLIC_HELLO: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  DISCORD_CLIENT_ID: z.string(),
+  DISCORD_CLIENT_SECRET: z.string(),
   JWT_SECRET: z.string(),
   DATABASE_HTTP_URL: z.string().url(),
   DATABASE_HTTP_AUTH_SECRET: z.string(),

@@ -21,6 +21,9 @@ export function RSCUserprofile() {
           <a href="/api/auth/signin/google" className="block px-3 py-2 bg-green-400">
             SIGN IN WITH GOOGLE
           </a>
+          <a href="/api/auth/signin/discord" className="block px-3 py-2 bg-green-400">
+            SIGN IN WITH DISCORD
+          </a>
         </div>
       )}
     </div>

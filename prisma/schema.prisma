@@ -36,7 +36,8 @@ datasource db {
 
 model User {
     id            Int     @id @default(autoincrement())
-    googleUserSub String  @unique
+    googleUserSub String? @unique
+    discordUserId String? @unique
     image         String?
     name          String
     email         String
