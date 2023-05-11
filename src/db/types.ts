@@ -10,12 +10,12 @@ export type Example = {
 };
 export type User = {
   id: Generated<number>;
+  email: string;
   googleUserSub: string | null;
   discordUserId: string | null;
   githubUserId: number | null;
   image: string | null;
   name: string;
-  email: string;
 };
 export type DB = {
   Example: Example;

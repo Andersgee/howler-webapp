@@ -11,10 +11,10 @@ export const runtime = "edge";
 
 //https://discord.com/developers/docs/topics/oauth2#get-current-authorization-information
 //https://discord.com/developers/docs/resources/user#user-object
-type DiscordUserInfo = {
+type UserInfo = {
   id: string;
   username: string;
-  email?: string;
+  email: string;
   avatar?: string;
   discriminator: string;
 };
@@ -36,7 +36,7 @@ type DiscordTokenData = {
  *
  * see https://discord.com/developers/docs/reference#image-formatting-cdn-endpoints
  */
-function imageUrlFromUserinfo(userInfo: DiscordUserInfo) {
+function imageUrlFromUserinfo(userInfo: UserInfo) {
   if (!userInfo.avatar) {
     const defaultAvatarNumber = parseInt(userInfo.discriminator) % 5;
     return `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
@@ -98,29 +98,29 @@ export async function GET(request: NextRequest) {
       headers: {
         Authorization: `${tokenData.token_type} ${tokenData.access_token}`,
       },
-    }).then((res) => res.json())) as DiscordUserInfo;
+    }).then((res) => res.json())) as UserInfo;
     console.log("userInfo:", userInfo);
     const imageUrl = imageUrlFromUserinfo(userInfo);
 
     // Authenticate the user
 
     //maybe person already has an account
-    const existingDiscordUser = await db
+    const existingUser = await db
       .selectFrom("User")
       .selectAll()
-      .where("User.discordUserId", "=", userInfo.id)
+      .where("User.email", "=", userInfo.email)
       .executeTakeFirst();
     let userId: number | undefined = undefined;
-    if (existingDiscordUser) {
+    if (existingUser) {
       console.log("a discorduser just signed in but already has User in db. its fine");
-      userId = existingDiscordUser.id;
+      userId = existingUser.id;
     } else {
       console.log("a discorduser just signed, creating new User in db ");
       const insertResult = await db
         .insertInto("User")
         .values({
           name: userInfo.username,
-          email: userInfo.email || "",
+          email: userInfo.email,
           discordUserId: userInfo.id,
           image: imageUrl,
         })

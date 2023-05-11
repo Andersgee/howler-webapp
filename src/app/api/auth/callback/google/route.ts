@@ -7,7 +7,7 @@ import { db } from "src/db";
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
-type GoogleIdToken = {
+type UserInfo = {
   sub: string;
   name: string;
   email: string;
@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
     //   that the token you receive really comes from Google and is valid. "
 
     //so just grab the payload part of the Base64-encoded JSON object
-    const payload = JSON.parse(Buffer.from(tokenData.id_token.split(".")[1], "base64").toString()) as GoogleIdToken;
+    const userInfo = JSON.parse(Buffer.from(tokenData.id_token.split(".")[1], "base64").toString()) as UserInfo;
 
     //actually I need to sign my own jwt also so might aswell use jwt lib here
     //unfortunately this route cant be runtime edge then right?
@@ -107,24 +107,24 @@ export async function GET(request: NextRequest) {
     // 6. Authenticate the user
 
     //maybe person already has an account
-    const existingGoogleUser = await db
+    const existingUser = await db
       .selectFrom("User")
       .selectAll()
-      .where("User.googleUserSub", "=", payload.sub)
+      .where("User.email", "=", userInfo.email)
       .executeTakeFirst();
     let userId: number | undefined = undefined;
-    if (existingGoogleUser) {
+    if (existingUser) {
       console.log("a googleuser just signed in but already has User in db. its fine");
-      userId = existingGoogleUser.id;
+      userId = existingUser.id;
     } else {
       console.log("a googleuser just signed, creating new User in db ");
       const insertResult = await db
         .insertInto("User")
         .values({
-          name: payload.name,
-          email: payload.email,
-          googleUserSub: payload.sub,
-          image: payload.picture,
+          name: userInfo.name,
+          email: userInfo.email,
+          googleUserSub: userInfo.sub,
+          image: userInfo.picture,
         })
         .executeTakeFirst();
       userId = Number(insertResult.insertId);
@@ -132,8 +132,8 @@ export async function GET(request: NextRequest) {
 
     const user_jwt = await createTokenFromUser({
       id: userId,
-      name: payload.name,
-      image: payload.picture,
+      name: userInfo.name,
+      image: userInfo.picture,
     });
 
     return new Response(undefined, {

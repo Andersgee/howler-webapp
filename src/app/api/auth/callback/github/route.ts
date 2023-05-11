@@ -102,15 +102,15 @@ export async function GET(request: NextRequest) {
     }
     // Authenticate the user
     //maybe person already has an account
-    const existingGithubdUser = await db
+    const existingUser = await db
       .selectFrom("User")
       .selectAll()
-      .where("User.githubUserId", "=", userInfo.id)
+      .where("User.email", "=", userInfo.email)
       .executeTakeFirst();
     let userId: number | undefined = undefined;
-    if (existingGithubdUser) {
+    if (existingUser) {
       console.log("a githubuser just signed in but already has User in db. its fine");
-      userId = existingGithubdUser.id;
+      userId = existingUser.id;
     } else {
       console.log("a githubuser just signed, creating new User in db ");
       const insertResult = await db
