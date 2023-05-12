@@ -10,7 +10,7 @@ import {
   addUser,
   getUserByEmail,
 } from "src/utils/auth";
-import { encodeParams } from "src/utils/url";
+import { encodeParams, getBaseUrl } from "src/utils/url";
 import { createTokenFromUser, getSessionFromRequestCookie } from "src/utils/token";
 import { db } from "src/db";
 import { type TokenUser } from "src/utils/token-user";
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `http://localhost:3000`,
+        Location: `${getBaseUrl()}`,
         "Set-Cookie": `${USER_COOKIE_NAME}=${userCookie}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=2592000`,
       },
     });

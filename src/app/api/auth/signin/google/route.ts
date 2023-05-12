@@ -20,6 +20,11 @@ https://developers.google.com/identity/openid-connect/openid-connect#server-flow
 
 export async function GET(request: NextRequest) {
   try {
+    //optionally put desired path to redirect to after successful login here
+    //maybe just always redirect to it even if unsuccessful?
+    //the /nope was just for debug
+    const routeSegmentPath = request.nextUrl.searchParams.get("p") || "";
+
     const session = await getSessionFromRequestCookie(request);
     if (!session) throw new Error("no session");
 
