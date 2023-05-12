@@ -15,6 +15,7 @@ not setting "Max-Age" or "Expires" makes it a session cookie aka deleted browser
 (side note: the particula browser chooses when "session ends" and there might be session restoration going on)
 
 doesnt really matter but probably status 204 (no content) is be the proper code here
+
 */
 
 export async function GET(request: NextRequest) {
