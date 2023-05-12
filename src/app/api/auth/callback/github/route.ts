@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
           client_id: process.env.GITHUB_CLIENT_ID,
           client_secret: process.env.GITHUB_CLIENT_SECRET,
           code: code,
-          redirect_uri: "http://localhost:3000/api/auth/callback/github",
+          redirect_uri: `${process.env.CALLBACK_BASE_URL}/github`,
         }),
       }).then((res) => res.json())
     );

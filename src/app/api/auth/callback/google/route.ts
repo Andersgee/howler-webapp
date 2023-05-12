@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
           code: code,
           client_id: process.env.GOOGLE_CLIENT_ID,
           client_secret: process.env.GOOGLE_CLIENT_SECRET,
-          redirect_uri: "http://localhost:3000/api/auth/callback/google",
+          redirect_uri: `${process.env.CALLBACK_BASE_URL}/google`,
           grant_type: "authorization_code",
         }),
       }).then((r) => r.json())

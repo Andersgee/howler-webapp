@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       client_id: process.env.DISCORD_CLIENT_ID,
       scope: "identify email",
       state: session.csrf,
-      redirect_uri: "http://localhost:3000/api/auth/callback/discord",
+      redirect_uri: `${process.env.CALLBACK_BASE_URL}/discord`,
       prompt: "consent",
     });
 

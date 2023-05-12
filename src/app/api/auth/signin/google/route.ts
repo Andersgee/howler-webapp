@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
     const session = await getSessionFromRequestCookie(request);
     if (!session) throw new Error("no session");
 
+    //google prefers you fetch this url instead of hardcoding it
     //const authorization_endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
     const authorization_endpoint = GOOGLE_discoveryDocument.parse(
       await fetch(GOOGLE_OPENID_DISCOVERY_URL, { cache: "default" }).then((r) => r.json())
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
       client_id: process.env.GOOGLE_CLIENT_ID,
       response_type: "code",
       scope: "openid email profile",
-      redirect_uri: "http://localhost:3000/api/auth/callback/google",
+      redirect_uri: `${process.env.CALLBACK_BASE_URL}/google`,
       state: session.csrf,
       nonce: crypto.randomUUID(),
     });

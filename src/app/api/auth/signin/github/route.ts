@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
     const authRequestUrl = urlWithSearchparams(GITHUB_AUTHORIZATION_URL, {
       client_id: process.env.GITHUB_CLIENT_ID,
-      redirect_uri: "http://localhost:3000/api/auth/callback/github",
+      redirect_uri: `${process.env.CALLBACK_BASE_URL}/github`,
       //login: "", //Suggests a specific account to use for signing in and authorizing the app.
       scope: "read:user user:email",
       state: session.csrf,
