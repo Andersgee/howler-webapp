@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "check-types": "tsc --noemit",
+    "lint": "pnpm check-types && next lint"
   },
   "dependencies": {
     "@andersgee/kysely-fetch-driver": "^1.0.2",
