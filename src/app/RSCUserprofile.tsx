@@ -1,5 +1,6 @@
 import { getUserFromCookie } from "src/utils/token";
 import Image from "next/image";
+import { routeWithSearchparams } from "src/utils/url";
 
 export async function RSCUserprofile() {
   const user = await getUserFromCookie();
@@ -18,8 +19,15 @@ export async function RSCUserprofile() {
       ) : (
         <div>
           <h2>not signed in</h2>
+
           <a href="/api/auth/signin/google" className="block px-3 py-2 bg-green-400">
             SIGN IN WITH GOOGLE
+          </a>
+          <a
+            href={routeWithSearchparams("/api/auth/signin/google", { route: "/example/DmnaA" }).toString()}
+            className="block px-3 py-2 bg-green-400"
+          >
+            SIGN IN WITH GOOGLE AND ROUTE TO AN EXAMPLE
           </a>
           <a href="/api/auth/signin/discord" className="block px-3 py-2 bg-green-400">
             SIGN IN WITH DISCORD

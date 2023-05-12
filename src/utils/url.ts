@@ -7,6 +7,11 @@ export function urlWithSearchparams(url: string, params: Record<string, string |
   return u;
 }
 
+/** for relative paths */
+export function routeWithSearchparams(route: string, params: Record<string, string | number | boolean>) {
+  return `${route}?${encodeParams(params)}`;
+}
+
 export function encodeParams(params: Record<string, string | number | boolean>) {
   return Object.entries(params)
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
