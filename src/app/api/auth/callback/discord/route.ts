@@ -4,13 +4,12 @@ import {
   DISCORD_TOKEN_URL,
   DISCORD_USERINFO,
   DISCORD_USERINFO_URL,
-  SESSION_COOKIE_NAME,
   USER_COOKIE_NAME,
   addUser,
   getUserByEmail,
 } from "src/utils/auth";
 import { encodeParams } from "src/utils/url";
-import { createTokenFromUser } from "src/utils/token";
+import { createTokenFromUser, getSessionFromRequestCookie } from "src/utils/token";
 import { db } from "src/db";
 
 export const dynamic = "force-dynamic";
@@ -22,12 +21,14 @@ export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   try {
-    const session_csrf = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+    const session = await getSessionFromRequestCookie(request);
+    if (!session) throw new Error("no session");
+
     const state = request.nextUrl.searchParams.get("state");
     const code = request.nextUrl.searchParams.get("code");
 
-    // Confirm csrf
-    if (!code || !session_csrf || !state || session_csrf !== state) throw new Error("no session");
+    // confirm csrf
+    if (!code || !state || session.csrf !== state) throw new Error("no session");
 
     // Exchange the code for an access token
     const token = DISCORD_TOKEN.parse(

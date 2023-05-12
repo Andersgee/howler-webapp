@@ -7,3 +7,9 @@ export const TokenUserSchema = z.object({
 });
 
 export type TokenUser = z.infer<typeof TokenUserSchema>;
+
+export const TokenSessionSchema = z.object({
+  csrf: z.string(),
+});
+
+export type TokenSession = z.infer<typeof TokenSessionSchema>;

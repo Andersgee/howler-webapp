@@ -3,7 +3,7 @@ import type { InsertObjectOrList } from "kysely/dist/cjs/parser/insert-values-pa
 import { db } from "src/db";
 import { z } from "zod";
 
-export const SESSION_COOKIE_NAME = "__Host-session-csrf";
+export const SESSION_COOKIE_NAME = "__Host-session";
 export const USER_COOKIE_NAME = "__Host-user";
 
 /**

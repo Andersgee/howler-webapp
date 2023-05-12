@@ -1,5 +1,6 @@
 import { type NextRequest } from "next/server";
-import { DISCORD_AUTHORIZATION_URL, SESSION_COOKIE_NAME } from "src/utils/auth";
+import { DISCORD_AUTHORIZATION_URL } from "src/utils/auth";
+import { getSessionFromRequestCookie } from "src/utils/token";
 import { urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
@@ -9,14 +10,14 @@ export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   try {
-    const session_csrf = request.cookies.get(SESSION_COOKIE_NAME)?.value;
-    if (!session_csrf) throw new Error("no session");
+    const session = await getSessionFromRequestCookie(request);
+    if (!session) throw new Error("no session");
 
     const authRequestUrl = urlWithSearchparams(DISCORD_AUTHORIZATION_URL, {
       response_type: "code",
       client_id: process.env.DISCORD_CLIENT_ID,
       scope: "identify email",
-      state: session_csrf,
+      state: session.csrf,
       redirect_uri: "http://localhost:3000/api/auth/callback/discord",
       prompt: "consent",
     });

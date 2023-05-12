@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { type NextRequest } from "next/server";
-import { type TokenUser, TokenUserSchema } from "./token-user";
-import { USER_COOKIE_NAME } from "./auth";
+import { type TokenUser, TokenUserSchema, TokenSessionSchema } from "./token-user";
+import { USER_COOKIE_NAME, SESSION_COOKIE_NAME } from "./auth";
 import { SignJWT, jwtVerify } from "jose";
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
@@ -9,9 +9,7 @@ const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 export async function getUserFromToken(token: string | undefined) {
   if (!token) return null;
   try {
-    //const payload = jwt.verify(token, process.env.JWT_SECRET);
     const { payload, protectedHeader } = await jwtVerify(token, SECRET);
-
     const user = TokenUserSchema.parse(payload);
     return user;
   } catch (error) {
@@ -19,30 +17,40 @@ export async function getUserFromToken(token: string | undefined) {
   }
 }
 
-/**
- * for route.ts files.
- *
- * make sure the routes are `export const dynamic = "force-dynamic";`.
- */
+export async function getSessionFromToken(token: string | undefined) {
+  if (!token) return null;
+  try {
+    const { payload, protectedHeader } = await jwtVerify(token, SECRET);
+    const session = TokenSessionSchema.parse(payload);
+    return session;
+  } catch (error) {
+    return null;
+  }
+}
+
+/** for route.ts files. (make sure the route exports `dynamic = "force-dynamic"`). */
 export async function getUserFromRequestCookie(req: NextRequest) {
   const token = req.cookies.get(USER_COOKIE_NAME)?.value;
   return getUserFromToken(token);
 }
 
-/**
- * for server component files
- *
- * use this in server component page.tsx files
- */
+export async function getSessionFromRequestCookie(req: NextRequest) {
+  const token = req.cookies.get(SESSION_COOKIE_NAME)?.value;
+  return getSessionFromToken(token);
+}
+
+/** for server component files */
 export async function getUserFromCookie() {
   const token = cookies().get(USER_COOKIE_NAME)?.value;
   return getUserFromToken(token);
 }
 
-/**
- * return a signed jwt from `TokenUser` object
- */
 export async function createTokenFromUser(user: TokenUser) {
   const jwt = await new SignJWT(user).setProtectedHeader({ alg: "HS256" }).sign(SECRET);
+  return jwt;
+}
+
+export async function createSessionToken() {
+  const jwt = await new SignJWT({ csrf: crypto.randomUUID() }).setProtectedHeader({ alg: "HS256" }).sign(SECRET);
   return jwt;
 }
