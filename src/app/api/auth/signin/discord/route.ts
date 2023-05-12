@@ -1,6 +1,6 @@
 import { type NextRequest } from "next/server";
 import { DISCORD_AUTHORIZATION_URL } from "src/utils/auth";
-import { getSessionFromRequestCookie } from "src/utils/token";
+import { createStateToken, getSessionFromRequestCookie } from "src/utils/token";
 import { urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
@@ -10,14 +10,17 @@ export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   try {
+    const route = request.nextUrl.searchParams.get("route") || "";
     const session = await getSessionFromRequestCookie(request);
     if (!session) throw new Error("no session");
+
+    const stateToken = await createStateToken({ csrf: session.csrf, route });
 
     const authRequestUrl = urlWithSearchparams(DISCORD_AUTHORIZATION_URL, {
       response_type: "code",
       client_id: process.env.DISCORD_CLIENT_ID,
       scope: "identify email",
-      state: session.csrf,
+      state: stateToken,
       redirect_uri: `${process.env.AUTH_CALLBACK_BASE_URL}/discord`,
       prompt: "consent",
     });

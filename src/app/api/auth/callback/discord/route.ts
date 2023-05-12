@@ -9,7 +9,7 @@ import {
   getUserByEmail,
 } from "src/utils/auth";
 import { encodeParams, getBaseUrl } from "src/utils/url";
-import { createTokenFromUser, getSessionFromRequestCookie } from "src/utils/token";
+import { createTokenFromUser, getSessionFromRequestCookie, verifyStateToken } from "src/utils/token";
 import { db } from "src/db";
 import { type TokenUser } from "src/utils/token-user";
 
@@ -25,11 +25,15 @@ export async function GET(request: NextRequest) {
     const session = await getSessionFromRequestCookie(request);
     if (!session) throw new Error("no session");
 
-    const state = request.nextUrl.searchParams.get("state");
+    const stateToken = request.nextUrl.searchParams.get("state");
     const code = request.nextUrl.searchParams.get("code");
+    if (!stateToken || !code) throw new Error("no session");
+
+    const state = await verifyStateToken(stateToken);
+    if (!state) throw new Error("no session");
 
     // confirm csrf
-    if (!code || !state || session.csrf !== state) throw new Error("no session");
+    if (state.csrf !== session.csrf) throw new Error("no session");
 
     // Exchange the code for an access token
     const token = DISCORD_TOKEN.parse(
@@ -102,7 +106,7 @@ export async function GET(request: NextRequest) {
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `${getBaseUrl()}`,
+        Location: `${getBaseUrl()}${state.route}`,
         "Set-Cookie": `${USER_COOKIE_NAME}=${userCookie}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=2592000`,
       },
     });

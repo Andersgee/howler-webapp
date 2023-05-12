@@ -13,3 +13,10 @@ export const TokenSessionSchema = z.object({
 });
 
 export type TokenSession = z.infer<typeof TokenSessionSchema>;
+
+export const TokenStateSchema = z.object({
+  csrf: z.string(),
+  route: z.string(),
+});
+
+export type TokenState = z.infer<typeof TokenStateSchema>;

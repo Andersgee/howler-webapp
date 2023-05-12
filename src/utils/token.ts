@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { type NextRequest } from "next/server";
-import { type TokenUser, TokenUserSchema, TokenSessionSchema } from "./token-user";
+import { type TokenUser, TokenUserSchema, TokenSessionSchema, TokenStateSchema } from "./token-user";
 import { USER_COOKIE_NAME, SESSION_COOKIE_NAME } from "./auth";
 import { SignJWT, jwtVerify } from "jose";
 
@@ -53,4 +53,20 @@ export async function createTokenFromUser(user: TokenUser) {
 export async function createSessionToken() {
   const jwt = await new SignJWT({ csrf: crypto.randomUUID() }).setProtectedHeader({ alg: "HS256" }).sign(SECRET);
   return jwt;
+}
+
+export async function createStateToken({ csrf, route }: { csrf: string; route: string }) {
+  const jwt = await new SignJWT({ csrf, route }).setProtectedHeader({ alg: "HS256" }).sign(SECRET);
+  return jwt;
+}
+
+export async function verifyStateToken(token: string) {
+  if (!token) return null;
+  try {
+    const { payload, protectedHeader } = await jwtVerify(token, SECRET);
+    const state = TokenStateSchema.parse(payload);
+    return state;
+  } catch (error) {
+    return null;
+  }
 }

@@ -1,6 +1,6 @@
 import { type NextRequest } from "next/server";
 import { GOOGLE_OPENID_DISCOVERY_URL, GOOGLE_discoveryDocument } from "src/utils/auth";
-import { getSessionFromRequestCookie } from "src/utils/token";
+import { createStateToken, getSessionFromRequestCookie } from "src/utils/token";
 import { urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
@@ -20,14 +20,12 @@ https://developers.google.com/identity/openid-connect/openid-connect#server-flow
 
 export async function GET(request: NextRequest) {
   try {
-    //optionally put desired path to redirect to after successful login here
-    //maybe just always redirect to it even if unsuccessful?
-    //the /nope was just for debug
-    const routeSegmentPath = request.nextUrl.searchParams.get("p") || "";
+    const route = request.nextUrl.searchParams.get("route") || "";
 
     const session = await getSessionFromRequestCookie(request);
     if (!session) throw new Error("no session");
 
+    const stateToken = await createStateToken({ csrf: session.csrf, route });
     //google prefers you fetch this url instead of hardcoding it
     //const authorization_endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
     const authorization_endpoint = GOOGLE_discoveryDocument.parse(
@@ -40,7 +38,7 @@ export async function GET(request: NextRequest) {
       response_type: "code",
       scope: "openid email profile",
       redirect_uri: `${process.env.AUTH_CALLBACK_BASE_URL}/google`,
-      state: session.csrf,
+      state: stateToken,
       nonce: crypto.randomUUID(),
     });
 
