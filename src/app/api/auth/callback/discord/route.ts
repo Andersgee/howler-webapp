@@ -19,6 +19,7 @@ export const runtime = "edge";
 //https://discord.com/developers/docs/topics/oauth2
 //https://discord.com/developers/docs/topics/oauth2#get-current-authorization-information
 //https://discord.com/developers/docs/resources/user#user-object
+//
 
 export async function GET(request: NextRequest) {
   try {
