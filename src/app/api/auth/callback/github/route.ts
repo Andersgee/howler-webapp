@@ -13,6 +13,7 @@ import {
 import { encodeParams } from "src/utils/url";
 import { createTokenFromUser, getSessionFromRequestCookie } from "src/utils/token";
 import { db } from "src/db";
+import { type TokenUser } from "src/utils/token-user";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -74,13 +75,18 @@ export async function GET(request: NextRequest) {
 
     // Authenticate the user
     const existingUser = await getUserByEmail(userInfo.email);
-    let userId: number | undefined = undefined;
-    if (existingUser) {
-      userId = existingUser.id;
+    let tokenUser: TokenUser | undefined = undefined;
 
+    if (existingUser) {
       if (!existingUser.githubUserId) {
         await db.updateTable("User").set({ githubUserId: userInfo.id }).where("id", "=", existingUser.id).execute();
       }
+
+      tokenUser = {
+        id: existingUser.id,
+        name: existingUser.name,
+        image: existingUser.image || "",
+      };
     } else {
       const insertResult = await addUser({
         name: userInfo.name,
@@ -88,14 +94,15 @@ export async function GET(request: NextRequest) {
         githubUserId: userInfo.id,
         image: userInfo.avatar_url,
       });
-      userId = Number(insertResult.insertId);
+
+      tokenUser = {
+        id: Number(insertResult.insertId),
+        name: userInfo.name,
+        image: userInfo.avatar_url,
+      };
     }
 
-    const userCookie = await createTokenFromUser({
-      id: userId,
-      name: userInfo.name,
-      image: userInfo.avatar_url,
-    });
+    const userCookie = await createTokenFromUser(tokenUser);
 
     return new Response(undefined, {
       status: 303,

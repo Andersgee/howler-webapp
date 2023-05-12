@@ -11,6 +11,7 @@ import {
 import { encodeParams } from "src/utils/url";
 import { createTokenFromUser, getSessionFromRequestCookie } from "src/utils/token";
 import { db } from "src/db";
+import { type TokenUser } from "src/utils/token-user";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -59,14 +60,18 @@ export async function GET(request: NextRequest) {
     // Authenticate the user
 
     const existingUser = await getUserByEmail(userInfo.email);
-    let userId: number | undefined = undefined;
+    let tokenUser: TokenUser | undefined = undefined;
 
     if (existingUser) {
-      userId = existingUser.id;
-
       if (!existingUser.googleUserSub) {
         await db.updateTable("User").set({ googleUserSub: userInfo.sub }).where("id", "=", existingUser.id).execute();
       }
+
+      tokenUser = {
+        id: existingUser.id,
+        name: existingUser.name,
+        image: existingUser.image || "",
+      };
     } else {
       const insertResult = await addUser({
         name: userInfo.name,
@@ -74,14 +79,15 @@ export async function GET(request: NextRequest) {
         googleUserSub: userInfo.sub,
         image: userInfo.picture,
       });
-      userId = Number(insertResult.insertId);
+
+      tokenUser = {
+        id: Number(insertResult.insertId),
+        name: userInfo.name,
+        image: userInfo.picture,
+      };
     }
 
-    const userCookie = await createTokenFromUser({
-      id: userId,
-      name: userInfo.name,
-      image: userInfo.picture,
-    });
+    const userCookie = await createTokenFromUser(tokenUser);
 
     return new Response(undefined, {
       status: 303,

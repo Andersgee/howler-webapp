@@ -11,6 +11,7 @@ import {
 import { encodeParams } from "src/utils/url";
 import { createTokenFromUser, getSessionFromRequestCookie } from "src/utils/token";
 import { db } from "src/db";
+import { type TokenUser } from "src/utils/token-user";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -71,12 +72,17 @@ export async function GET(request: NextRequest) {
 
     // Authenticate the user
     const existingUser = await getUserByEmail(userInfo.email);
-    let userId: number | undefined = undefined;
+    let tokenUser: TokenUser | undefined = undefined;
+
     if (existingUser) {
-      userId = existingUser.id;
       if (!existingUser.discordUserId) {
         await db.updateTable("User").set({ discordUserId: userInfo.id }).where("id", "=", existingUser.id).execute();
       }
+      tokenUser = {
+        id: existingUser.id,
+        name: existingUser.name,
+        image: existingUser.image || "",
+      };
     } else {
       const insertResult = await addUser({
         name: userInfo.username,
@@ -84,14 +90,14 @@ export async function GET(request: NextRequest) {
         discordUserId: userInfo.id,
         image: userInfo.avatar,
       });
-      userId = Number(insertResult.insertId);
+      tokenUser = {
+        id: Number(insertResult.insertId),
+        name: userInfo.username,
+        image: userInfo.avatar,
+      };
     }
 
-    const userCookie = await createTokenFromUser({
-      id: userId,
-      name: userInfo.username,
-      image: userInfo.avatar,
-    });
+    const userCookie = await createTokenFromUser(tokenUser);
 
     return new Response(undefined, {
       status: 303,
