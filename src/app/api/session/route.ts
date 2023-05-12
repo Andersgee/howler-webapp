@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
   const session = await getSessionFromRequestCookie(request);
   if (session) return new Response(undefined, { status: 204 });
 
-  const sessionToken = createSessionToken();
+  const sessionToken = await createSessionToken();
   return new Response(undefined, {
     status: 204,
     headers: {
