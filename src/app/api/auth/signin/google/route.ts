@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
       client_id: process.env.GOOGLE_CLIENT_ID,
       response_type: "code",
       scope: "openid email profile",
-      redirect_uri: `${process.env.CALLBACK_BASE_URL}/google`,
+      redirect_uri: `${process.env.AUTH_CALLBACK_BASE_URL}/google`,
       state: session.csrf,
       nonce: crypto.randomUUID(),
     });

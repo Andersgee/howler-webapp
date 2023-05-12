@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
           client_secret: process.env.DISCORD_CLIENT_SECRET,
           grant_type: "authorization_code",
           code: code,
-          redirect_uri: `${process.env.CALLBACK_BASE_URL}/discord`,
+          redirect_uri: `${process.env.AUTH_CALLBACK_BASE_URL}/discord`,
         }),
       }).then((res) => res.json())
     );
