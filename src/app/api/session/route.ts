@@ -9,10 +9,12 @@ export const runtime = "edge";
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
 
 cookie prefixes are not technically needed but makes the browser assert some things about the cookie to even accept it.
-"__Host-" is the strongest assertion. secure and domain locked.
+"__Host-" is the strongest assertion: secure and only for this domain.
 
-not setting "Max-Age" or "Expires" makes it a session cookie aka deleted browser determines "session ends". 
+not setting "Max-Age" or "Expires" makes it a session cookie aka deleted when browser determines "session ends". 
 (side note: the particula browser chooses when "session ends" and there might be session restoration going on)
+
+SameSite Lax and Strict only sends cookie with requests to this domain and nowhere else. but strict also requires that the request itself comes from this domain.
 
 doesnt really matter but probably status 204 (no content) is be the proper code here
 

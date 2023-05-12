@@ -9,7 +9,8 @@ datasource db {
     url      = env("DATABASE_MYSQL_URL")
 }
 
-//since im not using prisma, some stuff in schema.prisma may look okay but may not be
+//since im not actually using prisma client (only using schema to define tables) some stuff in schema.prisma may look okay but may not be
+// one example is uuid() and cuid(), the main thing Im unsure about right now is indexing, do I have to do @@index in some places or is @id enough?
 //before I know exactly what those cases are... best to examine schema of tables manually every now and then:
 //
 //> sudo docker ps
