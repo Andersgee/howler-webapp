@@ -54,12 +54,12 @@ function reducer(value: Value, action: Action): Value {
 
 async function registerSW() {
   try {
-    if (!("serviceWorker" in navigator)) return;
+    if (!("serviceWorker" in navigator)) {
+      console.log("service worker not available in navigator");
+      return null;
+    }
 
-    const registration = await navigator.serviceWorker.register("/sw.js", {
-      scope: "/",
-      type: "module",
-    });
+    const registration = await navigator.serviceWorker.register("/sw.js", { type: "module", scope: "/" });
 
     //force update or not?
     //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update
@@ -68,7 +68,7 @@ async function registerSW() {
     return registration;
   } catch (e) {
     console.log("registering service worker failed:", e);
-    return undefined;
+    return null;
   }
 }
 
