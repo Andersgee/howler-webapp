@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "module": "System",
+    "module": "ESNext",
     "esModuleInterop": true,
     "target": "ESNext",
     "moduleResolution": "node",
-    "outFile": "public/sw.js",
+    "outDir": "public",
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "removeComments": true,
