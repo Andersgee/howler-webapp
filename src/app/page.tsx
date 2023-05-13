@@ -60,19 +60,6 @@ export default async function Home() {
           example 5
         </Link>
       </div>
-      <div>
-        <h2>Discord</h2>
-        <IconDiscord />
-      </div>
-
-      <div>
-        <h2>Github</h2>
-        <IconGithub />
-      </div>
-      <div>
-        <h2>Google</h2>
-        <IconGoogle />
-      </div>
     </main>
   );
 }
