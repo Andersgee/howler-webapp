@@ -102,10 +102,13 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.log(error);
+    //const msg = error instanceof Error ? `${error.name}: ${error.message}` : "no error message";
+
+    //might want to go to an error page and show the error
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `http://localhost:3000/nope`,
+        Location: `${getBaseUrl()}`,
       },
     });
   }

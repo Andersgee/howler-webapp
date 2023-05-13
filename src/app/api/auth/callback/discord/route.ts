@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `http://localhost:3000/nope`,
+        Location: `${getBaseUrl()}`,
       },
     });
   }
