@@ -15,6 +15,7 @@ import { urlWithSearchparams } from "src/utils/url";
 const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
 
 declare module "kysely" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface SelectQueryBuilder<DB, TB extends keyof DB, O> {
     /**
      * Plays nice with the fetch cache that nextjs extends.
@@ -40,9 +41,7 @@ declare module "kysely" {
   }
 }
 
-SelectQueryBuilder.prototype.get = async function <O>(
-  init?: RequestInit
-): Promise<Simplify<O>[]> {
+SelectQueryBuilder.prototype.get = async function <O>(init?: RequestInit): Promise<Simplify<O>[]> {
   const compiledQuery = this.compile();
   const res = await executeWithFetchGet(compiledQuery, init);
 
@@ -51,25 +50,19 @@ SelectQueryBuilder.prototype.get = async function <O>(
       const result = deserialize(await res.json()) as any;
       return result.rows;
     } catch (error) {
-      throw new Error(
-        "failed to deserialize response.json(), webserver should return superjson.serialize(result)"
-      );
+      throw new Error("failed to deserialize response.json(), webserver should return superjson.serialize(result)");
     }
   } else {
     throw new Error(`${res.status} ${res.statusText}`);
   }
 };
 
-SelectQueryBuilder.prototype.getFirst = async function <O>(
-  init?: RequestInit
-): Promise<Simplify<O> | undefined> {
+SelectQueryBuilder.prototype.getFirst = async function <O>(init?: RequestInit): Promise<Simplify<O> | undefined> {
   const [result] = await this.get(init);
   return result as Simplify<O> | undefined;
 };
 
-SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(
-  init?: RequestInit
-): Promise<Simplify<O>> {
+SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(init?: RequestInit): Promise<Simplify<O>> {
   const [result] = await this.get(init);
   if (result === undefined) {
     throw new Error("no result");
@@ -77,10 +70,7 @@ SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(
   return result as Simplify<O>;
 };
 
-async function executeWithFetchGet(
-  compiledQuery: CompiledQuery,
-  init?: RequestInit
-) {
+async function executeWithFetchGet(compiledQuery: CompiledQuery, init?: RequestInit) {
   const queryString = JSON.stringify(
     serialize({
       sql: compiledQuery.sql,

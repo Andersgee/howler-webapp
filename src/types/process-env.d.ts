@@ -1,5 +1,5 @@
-import { envSchema } from "../utils/validate-process-env.mjs";
-import { z } from "zod";
+import type { envSchema } from "../utils/validate-process-env.mjs";
+import type { z } from "zod";
 
 declare global {
   namespace NodeJS {

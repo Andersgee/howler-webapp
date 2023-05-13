@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { db } from "src/db";
+//import { db } from "src/db";
 import { RSCUserprofile } from "./RSCUserprofile";
 import { Userprofile } from "./Userprofile";
 import { hashidFromId } from "src/utils/hashid";

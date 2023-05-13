@@ -11,7 +11,7 @@ import {
 import { encodeParams, getBaseUrl } from "src/utils/url";
 import { createTokenFromUser, getSessionFromRequestCookie, verifyStateToken } from "src/utils/token";
 import { db } from "src/db";
-import { type TokenUser } from "src/utils/token/schema";
+import type { TokenUser } from "src/utils/token/schema";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";

@@ -9,7 +9,7 @@ const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 export async function getUserFromToken(token: string | undefined) {
   if (!token) return null;
   try {
-    const { payload, protectedHeader } = await jwtVerify(token, SECRET);
+    const { payload } = await jwtVerify(token, SECRET);
     const user = TokenUserSchema.parse(payload);
     return user;
   } catch (error) {
@@ -20,7 +20,7 @@ export async function getUserFromToken(token: string | undefined) {
 export async function getSessionFromToken(token: string | undefined) {
   if (!token) return null;
   try {
-    const { payload, protectedHeader } = await jwtVerify(token, SECRET);
+    const { payload } = await jwtVerify(token, SECRET);
     const session = TokenSessionSchema.parse(payload);
     return session;
   } catch (error) {
@@ -63,7 +63,7 @@ export async function createStateToken({ csrf, route }: { csrf: string; route: s
 export async function verifyStateToken(token: string) {
   if (!token) return null;
   try {
-    const { payload, protectedHeader } = await jwtVerify(token, SECRET);
+    const { payload } = await jwtVerify(token, SECRET);
     const state = TokenStateSchema.parse(payload);
     return state;
   } catch (error) {

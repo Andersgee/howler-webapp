@@ -35,7 +35,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           setValue(user);
         }
       })
-      .catch((err) => {
+      .catch((_err) => {
         //ignore
       });
   }, []);
