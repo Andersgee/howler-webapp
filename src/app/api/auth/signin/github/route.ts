@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { GITHUB_AUTHORIZATION_URL } from "src/utils/auth";
 import { createStateToken, getSessionFromRequestCookie } from "src/utils/token";
-import { urlWithSearchparams } from "src/utils/url";
+import { getBaseUrl, urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `http://localhost:3000/nope`,
+        Location: `${getBaseUrl()}`,
       },
     });
   }
