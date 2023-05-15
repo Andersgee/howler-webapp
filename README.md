@@ -1,34 +1,21 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# random notes
 
-## Getting Started
+try to make user always hit cached data
 
-First, run the development server:
+search? https://github.com/nextapps-de/flexsearch
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+need notifications, pwa / service-worker probably
+https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Tutorials/js13kGames/Re-engageable_Notifications_Push
+does this work on a phone? yes it triggers the OS native notification system... but not on iOS??
+https://github.com/GoogleChrome/samples/tree/gh-pages/push-messaging-and-notifications
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+so those are all old and archived ish info.. in 2023, this is the way?: https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#notification
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+https://github.com/GoogleChrome/samples/tree/gh-pages/push-messaging-and-notifications
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+google sais GCM (Google Cloud Messaging) is deprecated
+use FCM instead https://firebase.google.com/docs/cloud-messaging/messages#notification
+which is the same thing but via firebase
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+man... maybe just roll my own with VAPID keys instead?
+https://blog.mozilla.org/services/2016/08/23/sending-vapid-identified-webpush-notifications-via-mozillas-push-service/

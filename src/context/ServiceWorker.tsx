@@ -61,6 +61,8 @@ async function registerSW() {
 
     const registration = await navigator.serviceWorker.register("/sw.js", { type: "module", scope: "/" });
 
+    //const subscription = await registration.pushManager.getSubscription()
+
     //force update or not?
     //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update
     //await registration.update() //force update unless the ?
