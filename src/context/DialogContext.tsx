@@ -34,16 +34,15 @@ export function DialogProvider({ children }: { children: React.ReactNode }) {
 
 //probably overkill to use reducer here but...
 
-type Type = "show" | "hide";
+type Type = "show" | "hide" | "toggle";
 type Name = "signin" | "warning";
 type Value = Prettify<"none" | Name>;
 type Action = { type: Type; name: Name };
 
 function reducer(value: Value, action: Action): Value {
-  if (action.type === "show") {
+  const t = action.type;
+  if (t === "show" || (t === "toggle" && value === "none")) {
     return action.name;
-  } else if (action.type === "hide" && value === action.name) {
-    return "none";
   }
-  return value;
+  return "none";
 }

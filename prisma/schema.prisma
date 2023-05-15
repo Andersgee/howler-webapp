@@ -43,10 +43,50 @@ model User {
     githubUserId  Int?    @unique
     image         String?
     name          String
+
+    events       Event[]
+    joinedEvents UserEventPivot[]
 }
 
 model Example {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now())
+}
+
+model UserEventPivot {
+    user     User     @relation(fields: [userId], references: [id])
+    userId   Int
+    event    Event    @relation(fields: [eventId], references: [id])
+    eventId  Int
+    joinDate DateTime @default(now())
+
+    @@id([userId, eventId])
+}
+
+model Event {
+    id        Int  @id @default(autoincrement())
+    creator   User @relation(fields: [creatorId], references: [id])
+    creatorId Int
+
+    what  String
+    where String
+    when  DateTime
+    who   String
+    info  String
+
+    place   Place? @relation(fields: [placeId], references: [id])
+    placeId Int?
+
+    joinedUsers UserEventPivot[]
+
+    //@@fulltext([what])
+}
+
+model Place {
+    id     Int     @id @default(autoincrement())
+    label  String
+    lng    Float
+    lat    Float
+    events Event[]
 }

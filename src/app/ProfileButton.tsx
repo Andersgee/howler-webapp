@@ -5,34 +5,42 @@ import { useRef } from "react";
 import { useDialogContext, useDialogDispatch } from "src/context/DialogContext";
 import { useUser } from "src/context/UserContext";
 import { useOnClickOutside } from "src/hooks/useOnClickOutside";
+import { IconAvatar } from "src/icons/Avatar";
 import { IconDiscord } from "src/icons/Discord";
 import { IconGithub } from "src/icons/Github";
 import { IconGoogle } from "src/icons/Google";
 
-export function SignInDialog() {
+export function ProfileButton() {
   const dialog = useDialogContext();
   const dialogDispatch = useDialogDispatch();
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
   useOnClickOutside(ref, () => dialogDispatch({ type: "hide", name: "signin" }));
   const user = useUser();
 
-  /*
-  const { data: session } = useSession();
-  useEffect(() => {
-    if (showSignIn && session?.user) {
-      dialogDispatch({ type: "hide", name: "signin" });
-    }
-  }, [session, showSignIn, dialogDispatch]);
-*/
-  //if (dialog === "signin") {
-  if (true) {
-    return (
-      <div ref={ref} className="absolute right-0 top-0 z-10 border-2 bg-neutral-50 shadow-md p-4">
-        {user ? <div>signed in as {user.name}</div> : <SigninButtons />}
-      </div>
-    );
-  }
-  return null;
+  return (
+    <button ref={ref} onClick={() => dialogDispatch({ type: "toggle", name: "signin" })}>
+      <IconAvatar />
+      {dialog === "signin" && (
+        <div className="absolute right-0 top-12 z-10 border-2 bg-neutral-50 shadow-md p-4">
+          {user ? (
+            <div>
+              <div>
+                signed in as{" "}
+                <Link className="underline decoration-dotted" href={`/profile`}>
+                  {user.name}
+                </Link>
+              </div>
+              <div>
+                <a href="/api/auth/signout">sign out</a>
+              </div>
+            </div>
+          ) : (
+            <SigninButtons />
+          )}
+        </div>
+      )}
+    </button>
+  );
 }
 
 function SigninButtons() {
