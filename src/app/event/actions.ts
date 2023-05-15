@@ -1,9 +1,12 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { db } from "src/db";
+import { hashidFromId } from "src/utils/hashid";
 //import { redirect } from "next/navigation";
 import { getUserFromCookie } from "src/utils/token";
 
-import { z } from "zod";
+//import { z } from "zod";
 
 /*
 notes to self:
@@ -16,17 +19,44 @@ all input and output args must be serializable.. so prob use superjson liberally
 
 export async function myAction(formData: FormData) {
   console.log("formData:", formData);
-  const say = formData.get("say");
-  const to = formData.get("to");
-
-  //if (!isValidData) throw new Error('Invalid input.');
-
   const user = await getUserFromCookie();
-  /*
-  if (!user) {
-    redirect("/profile")
+
+  //there has to be a nicer way to validate this...
+  const what = formData.get("what");
+  const where = formData.get("where");
+  const when = formData.get("when");
+  const who = formData.get("who");
+  if (
+    !user ||
+    !what ||
+    !where ||
+    !when ||
+    !who ||
+    typeof what !== "string" ||
+    typeof where !== "string" ||
+    typeof when !== "string" ||
+    typeof who !== "string"
+  ) {
+    console.log("invalid");
+    return null;
   }
-  */
-  console.log("user:", user);
-  console.log("myAction called");
+
+  const insertresult = await db
+    .insertInto("Event")
+    .values({
+      creatorId: user.id,
+      what: what,
+      where: where,
+      when: new Date(),
+      who: who,
+      info: "",
+    })
+    .executeTakeFirst();
+
+  console.log("insertresult", insertresult);
+  const insertId = Number(insertresult.insertId);
+  const hashid = hashidFromId(insertId);
+
+  redirect(`/event/${hashid}`);
+  //console.log("insertId", insertId);
 }
