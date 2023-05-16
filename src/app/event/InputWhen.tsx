@@ -1,22 +1,28 @@
 "use client";
 
-import { startOfHour } from "date-fns";
+import { addHours, startOfHour } from "date-fns";
 import { useState } from "react";
 
 type Precision = "m" | "s";
 
 export function InputWhen() {
-  const [dateWhen, setDateWhen] = useState(startOfHour(new Date()));
+  const [dateWhen, setDateWhen] = useState(startOfHour(addHours(new Date(), 1)));
 
   return (
-    <div className="relative flex w-64 justify-between bg-white dark:bg-black">
-      <span className="absolute left-2 top-1 pr-1 text-neutral-400">When?</span>
+    <div className="">
       <input
         name="when"
-        className="w-full bg-white py-1 pl-16 pr-1 dark:bg-black"
+        className="bg-white dark:bg-black"
         type="datetime-local"
         value={datetimelocalString(dateWhen)}
         onChange={(e) => {
+          /*
+            const d = e.target.valueAsDate;
+          if (d) {
+            setDateWhen(d);
+          }
+          */
+
           if (e.target.value) {
             setDateWhen(new Date(e.target.value));
           }
