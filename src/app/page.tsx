@@ -3,35 +3,12 @@ import Link from "next/link";
 import { RSCUserprofile } from "./RSCUserprofile";
 import { Userprofile } from "./Userprofile";
 import { hashidFromId } from "src/utils/hashid";
-import { IconGoogle } from "src/icons/Google";
-import { IconGithub } from "src/icons/Github";
-import { IconDiscord } from "src/icons/Discord";
 
 export const metadata = {
   title: "root page",
 };
 
 export default async function Home() {
-  //const examples = await db.selectFrom("Example").selectAll().execute();
-  /*
-  const examples = await db
-    .selectFrom("Example")
-    .selectAll()
-    .get({
-      next: {
-        revalidate: 10,
-      },
-    });
-
-  const exampleMaybe = await db.selectFrom("Example").selectAll().getFirst();
-  const example = await db.selectFrom("Example").selectAll().getFirstOrThrow();
-  */
-  /*
-  const insertResult = await db
-    .insertInto("Example")
-    .values({})
-    .executeTakeFirst();
-*/
   return (
     <main className="flex justify-center">
       <div>

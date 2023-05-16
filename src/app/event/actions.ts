@@ -22,6 +22,7 @@ export async function myAction(formData: FormData) {
   const user = await getUserFromCookie();
 
   //there has to be a nicer way to validate this...
+  /*
   const what = formData.get("what");
   const where = formData.get("where");
   const when = formData.get("when");
@@ -59,4 +60,5 @@ export async function myAction(formData: FormData) {
 
   redirect(`/event/${hashid}`);
   //console.log("insertId", insertId);
+  */
 }

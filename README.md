@@ -19,3 +19,10 @@ which is the same thing but via firebase
 
 man... maybe just roll my own with VAPID keys instead?
 https://blog.mozilla.org/services/2016/08/23/sending-vapid-identified-webpush-notifications-via-mozillas-push-service/
+
+## rsc input type datetime-local
+
+since the date in a datetime-local can not include timezone info, aka does not include all info required for a universal date... how to know the real date to save to db?
+perhaps send a an extra date.getTimezoneOffset() string along with the formData? that would atleast allow server to know the real date...
+`<input type="hidden" name="tz" defaultValue={d.getTimezoneOffset()} />`
+ok that worked.. it this really the developer experience with date inputs in 2023? sigh
