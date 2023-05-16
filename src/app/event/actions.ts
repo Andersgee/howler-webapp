@@ -30,41 +30,37 @@ function localIsoStringToDate(localIsoStringDate: string, tzminuteoffset: number
   return addMinutes(utcDate, tzminuteoffset);
 }
 
+/** utility, validate and parse formdata into `Record<string,string>` (with typed keys) */
+function validateFormData<T extends string>(formData: FormData, names: T[]): Record<T, string> | null {
+  const r: Record<string, string> = {};
+  for (const name of names) {
+    const val = formData.get(name);
+    if (typeof val === "string") {
+      r[name] = val;
+    } else {
+      return null;
+    }
+  }
+  return r;
+}
+
 export async function myAction(formData: FormData) {
   console.log("formData:", formData);
 
   const user = await getUserFromCookie();
-
-  //there has to be a nicer way to validate this...
-  const what = formData.get("what");
-  const where = formData.get("where");
-  const when = formData.get("when");
-  const whenend = formData.get("whenend");
-  const who = formData.get("who");
-  const tzminuteoffset = formData.get("tzminuteoffset");
-
-  if (
-    typeof what !== "string" ||
-    typeof where !== "string" ||
-    typeof when !== "string" ||
-    typeof who !== "string" ||
-    typeof whenend !== "string" ||
-    typeof tzminuteoffset !== "string"
-  ) {
-    console.log("invalid");
-    return null;
-  }
-  // note to self:
+  const data = validateFormData(formData, ["what", "where", "when", "whenend", "who", "tzminuteoffset"]);
+  if (!data) return null;
 
   // -120 for sweden in summertime, new york would be +240 or something
-  const offset = parseInt(tzminuteoffset, 10);
+  const offset = parseInt(data.tzminuteoffset, 10);
+  if (!isFinite(offset)) return null;
 
-  const whenDate = localIsoStringToDate(when, offset);
-  const whenDateto = localIsoStringToDate(whenend, offset);
+  const whenDate = localIsoStringToDate(data.when, offset);
+  const whenDateto = localIsoStringToDate(data.whenend, offset);
   console.log({ whenDate, whenDateto });
 
   console.log({
-    when_string: new Date(when).toString(),
+    when_string: new Date(data.when).toString(),
     when_sring_new: whenDate.toString(),
   });
 
