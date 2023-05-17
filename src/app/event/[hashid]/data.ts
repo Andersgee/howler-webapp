@@ -3,8 +3,8 @@ import { jsonObjectFrom } from "kysely/helpers/mysql";
 //import { jsonArrayFrom } from "kysely/helpers/mysql";
 import { idFromHashid } from "src/utils/hashid";
 
-export async function getEvent(hashid: string) {
-  const eventId = idFromHashid(hashid);
+export async function getEvent(eventHashid: string) {
+  const eventId = idFromHashid(eventHashid);
   if (!eventId) return undefined;
   return db
     .selectFrom("Event")
@@ -18,7 +18,7 @@ export async function getEvent(hashid: string) {
     .getFirst({
       cache: "force-cache",
       next: {
-        tags: [`event-${hashid}`, `event-${eventId}`],
+        tags: [`event-${eventHashid}`, `event-${eventId}`],
       },
     });
 }
