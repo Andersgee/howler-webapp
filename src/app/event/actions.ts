@@ -44,25 +44,23 @@ function validateFormData<T extends string>(formData: FormData, names: T[]): Rec
   return r;
 }
 
-export async function myAction(formData: FormData) {
-  console.log("formData:", formData);
+function int(s: string) {
+  const x = parseInt(s, 10);
+  return isFinite(x) ? x : null;
+}
 
+export async function myAction(formData: FormData) {
   const user = await getUserFromCookie();
+  if (!user) return null;
+
   const data = validateFormData(formData, ["what", "where", "when", "whenend", "who", "tzminuteoffset"]);
   if (!data) return null;
 
-  // -120 for sweden in summertime, new york would be +240 or something
-  const offset = parseInt(data.tzminuteoffset, 10);
-  if (!isFinite(offset)) return null;
+  const offset = int(data.tzminuteoffset);
+  if (!offset) return null;
 
   const whenDate = localIsoStringToDate(data.when, offset);
   const whenDateto = localIsoStringToDate(data.whenend, offset);
-  console.log({ whenDate, whenDateto });
-
-  console.log({
-    when_string: new Date(data.when).toString(),
-    when_sring_new: whenDate.toString(),
-  });
 
   /*
   const insertresult = await db

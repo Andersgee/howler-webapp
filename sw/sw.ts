@@ -2,10 +2,10 @@
 //import { CACHES } from "./utils/constants"
 //import onFetch from "./fetch";
 //import onMessage from "./messages"
-//export null
+
 export {}; //typescript considers this file a script...
 
-declare var self: ServiceWorkerGlobalScope; // eslint-disable-line no-var
+declare var self: ServiceWorkerGlobalScope;
 
 //events: install, activate, message
 //Functional events: fetch, sync, push

@@ -9,6 +9,7 @@ export type Event = {
   what: string;
   where: string;
   when: Timestamp;
+  whenEnd: Timestamp;
   who: string;
   info: string;
   placeId: number | null;
