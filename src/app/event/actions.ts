@@ -51,13 +51,22 @@ function int(s: string) {
 
 export async function myAction(formData: FormData) {
   const user = await getUserFromCookie();
-  if (!user) return null;
+  if (!user) {
+    console.log("no user");
+    return null;
+  }
 
   const data = validateFormData(formData, ["what", "where", "when", "whenend", "who", "tzminuteoffset"]);
-  if (!data) return null;
+  if (!data) {
+    console.log("no data");
+    return null;
+  }
 
   const offset = int(data.tzminuteoffset);
-  if (!offset) return null;
+  if (!offset) {
+    console.log("no tz offset");
+    return null;
+  }
 
   const whenDate = localIsoStringToDate(data.when, offset);
   const whenendDate = localIsoStringToDate(data.whenend, offset);
