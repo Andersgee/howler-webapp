@@ -26,9 +26,9 @@ export function ServiceWorkerProvider({ children }: { children: React.ReactNode 
   const [value, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    registerSW().then((r) => {
-      //ignore
-    });
+    //registerSW().then((r) => {
+    //  //ignore
+    //});
   }, []);
 
   return (

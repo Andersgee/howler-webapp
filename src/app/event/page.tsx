@@ -1,12 +1,10 @@
-import { IconWhat } from "src/icons/What";
 import { myAction } from "./actions";
+import { IconWhat } from "src/icons/What";
 import { IconWhere } from "src/icons/Where";
 import { IconWhen } from "src/icons/When";
 import { IconWho } from "src/icons/Who";
 import { IconHowler } from "src/icons/Howler";
-import { datetimelocalString } from "src/utils/date";
 import { InputWhen } from "./InputWhen";
-//import { roundToNearestMinutes,endOfHour } from "date-fns";
 
 const OPTIONS_WHO = {
   anyone: "anyone",
@@ -15,9 +13,6 @@ const OPTIONS_WHO = {
 };
 
 export default function Page() {
-  //const defaultWhen = roundToNearestMinutes(new Date(), { nearestTo: 30, roundingMethod: "ceil" });
-  //const defaultWhen = endOfHour()
-  const defaultWhen = new Date();
   return (
     <div>
       <h1>create event</h1>
