@@ -8,10 +8,10 @@ export function InputWhen() {
   const [dateWhenend, setDateWhenend] = useState(startOfHour(addHours(new Date(), 2)));
 
   return (
-    <div className="">
+    <div className="flex items-center bg-white dark:bg-black">
       <input
         name="when"
-        className="bg-white dark:bg-black"
+        className="block bg-white px-2 py-1 dark:bg-black"
         type="datetime-local"
         value={datetimelocalString(dateWhen)}
         onChange={(e) => {
@@ -24,9 +24,16 @@ export function InputWhen() {
         }}
       />
 
+      <input type="hidden" name="tzminuteoffset" value={dateWhen.getTimezoneOffset()} />
+    </div>
+  );
+}
+
+/*
+<span className="px-2">&#8212;</span>
       <input
         name="whenend"
-        className="bg-white dark:bg-black"
+        className="block bg-white dark:bg-black"
         type="datetime-local"
         value={datetimelocalString(dateWhenend)}
         onChange={(e) => {
@@ -39,10 +46,7 @@ export function InputWhen() {
           }
         }}
       />
-      <input type="hidden" name="tzminuteoffset" value={dateWhen.getTimezoneOffset()} />
-    </div>
-  );
-}
+      */
 
 /**
  * `<input type="datetime-local">` wants a particular string format in local time such as

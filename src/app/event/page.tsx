@@ -9,7 +9,7 @@ import { InputWhen } from "./InputWhen";
 //import { roundToNearestMinutes,endOfHour } from "date-fns";
 
 const OPTIONS_WHO = {
-  anyone: "Who? (anyone)",
+  anyone: "anyone",
   friends: "Only my friends",
   friendsOfFriends: "My friends and their friends",
 };
@@ -22,41 +22,41 @@ export default function Page() {
     <div>
       <h1>create event</h1>
       <p>Lorem ipsum dolor sit amet consectetur.</p>
-      <form action={myAction}>
+      <form action={myAction} className="flex flex-col gap-3">
         <div className="flex items-center gap-1">
           <IconWhat />
-          <input
-            name="what"
-            type="text"
-            placeholder="What? (anything)"
-            className="w-64 bg-white px-2 py-1 dark:bg-black"
-          />
+          <span className="pr-2 w-16">What?</span>
+          <div className="flex items-center bg-white dark:bg-black">
+            <input name="what" type="text" placeholder="anything" className="w-64 bg-white px-2 py-1 dark:bg-black" />
+          </div>
         </div>
 
         <div className="flex items-center gap-1">
           <IconWhere />
-          <input
-            name="where"
-            type="text"
-            placeholder="Where? (anywhere)"
-            className="w-64 bg-white px-2 py-1 dark:bg-black"
-          />
+          <span className="pr-2 w-16">Where?</span>
+          <div className="flex items-center bg-white dark:bg-black">
+            <input name="where" type="text" placeholder="anywhere" className="w-64 bg-white px-2 py-1 dark:bg-black" />
+          </div>
         </div>
 
         <div className="flex items-center gap-1">
           <IconWhen />
+          <span className="pr-2 w-16">When?</span>
           <InputWhen />
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 ">
           <IconWho />
-          <select name="who" className="w-64 bg-white px-2 py-2 text-neutral-400 dark:bg-black">
-            {Object.entries(OPTIONS_WHO).map(([k, str]) => (
-              <option key={k} value={k}>
-                {str}
-              </option>
-            ))}
-          </select>
+          <span className="pr-2 w-16">Who?</span>
+          <div className="flex items-center bg-white dark:bg-black">
+            <select name="who" className="bg-white px-2 py-2 dark:bg-black ">
+              {Object.entries(OPTIONS_WHO).map(([k, str]) => (
+                <option key={k} value={k}>
+                  {str}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="my-6 ml-6 flex w-60 flex-col items-center">

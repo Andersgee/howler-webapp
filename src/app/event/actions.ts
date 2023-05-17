@@ -60,17 +60,17 @@ export async function myAction(formData: FormData) {
   if (!offset) return null;
 
   const whenDate = localIsoStringToDate(data.when, offset);
-  const whenDateto = localIsoStringToDate(data.whenend, offset);
+  const whenendDate = localIsoStringToDate(data.whenend, offset);
 
-  /*
   const insertresult = await db
     .insertInto("Event")
     .values({
       creatorId: user.id,
-      what: what,
-      where: where,
-      when: new Date(),
-      who: who,
+      what: data.what,
+      where: data.where,
+      when: whenDate,
+      whenEnd: whenendDate,
+      who: data.who,
       info: "",
     })
     .executeTakeFirst();
@@ -81,5 +81,4 @@ export async function myAction(formData: FormData) {
 
   redirect(`/event/${hashid}`);
   //console.log("insertId", insertId);
-  */
 }
