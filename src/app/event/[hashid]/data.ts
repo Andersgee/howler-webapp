@@ -6,6 +6,7 @@ import { idFromHashid } from "src/utils/hashid";
 export async function getEvent(eventHashid: string) {
   const eventId = idFromHashid(eventHashid);
   if (!eventId) return undefined;
+
   return db
     .selectFrom("Event")
     .selectAll("Event")
@@ -18,7 +19,24 @@ export async function getEvent(eventHashid: string) {
     .getFirst({
       cache: "force-cache",
       next: {
-        tags: [`event-${eventHashid}`, `event-${eventId}`],
+        tags: [`event-${eventHashid}`],
       },
     });
+}
+
+export async function getJoinedUserIds(eventHashid: string) {
+  const eventId = idFromHashid(eventHashid);
+  if (!eventId) return [];
+  const userEventPivots = await db
+    .selectFrom("UserEventPivot")
+    .select("userId")
+    .where("eventId", "=", eventId)
+    .get({
+      cache: "force-cache",
+      next: {
+        tags: [`event-joinedusers-${eventHashid}`],
+      },
+    });
+
+  return userEventPivots.map((x) => x.userId);
 }
