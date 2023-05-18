@@ -18,10 +18,10 @@ export function InputWhen() {
         value={datetimelocalString(dateWhen)}
         onChange={(e) => {
           if (!e.target.value) return;
-          const d = new Date(e.target.value);
-          setDateWhen(d);
-          if (dateWhenend.getTime() <= d.getTime()) {
-            setDateWhenend(addHours(d, 1));
+          const newWhen = new Date(e.target.value);
+          setDateWhen(newWhen);
+          if (dateWhenend.getTime() <= newWhen.getTime()) {
+            setDateWhenend(addHours(newWhen, 1));
           }
         }}
       />
@@ -33,11 +33,11 @@ export function InputWhen() {
         value={datetimelocalString(dateWhenend)}
         onChange={(e) => {
           if (!e.target.value) return;
-          const d = new Date(e.target.value);
-          setDateWhenend(d);
+          const newWhenend = new Date(e.target.value);
+          setDateWhenend(newWhenend);
 
-          if (dateWhen.getTime() >= d.getTime()) {
-            setDateWhen(subHours(d, 1));
+          if (dateWhen.getTime() >= newWhenend.getTime()) {
+            setDateWhen(subHours(newWhenend, 1));
           }
         }}
       />
