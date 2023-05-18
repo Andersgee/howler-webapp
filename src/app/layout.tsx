@@ -20,8 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <UserProvider>
             <DialogProvider>
               <Topnav />
-
-              <div>{children}</div>
+              {children}
             </DialogProvider>
           </UserProvider>
         </ServiceWorkerProvider>

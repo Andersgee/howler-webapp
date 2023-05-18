@@ -1,7 +1,9 @@
 import { getUserFromCookie } from "src/utils/token";
 import { hashidFromId } from "src/utils/hashid";
 import { db } from "src/db";
-import Image from "next/image";
+import { SigninButtons } from "src/sc/SigninButtons";
+import Link from "next/link";
+import { UserImageLarge } from "src/sc/UserImage";
 
 export const dynamic = "force-dynamic";
 
@@ -9,12 +11,12 @@ export default async function Page() {
   const tokenUser = await getUserFromCookie();
   if (!tokenUser) {
     return (
-      <div>
-        <div>you are not signed in</div>
-        <a href="/api/auth/signin/google" className="block px-3 py-2 bg-green-400">
-          SIGN IN WITH GOOGLE
-        </a>
-      </div>
+      <main className="container flex justify-center">
+        <div>
+          <h1 className="text-center">you are not signed in</h1>
+          <SigninButtons />
+        </div>
+      </main>
     );
   }
 
@@ -36,13 +38,13 @@ export default async function Page() {
     <main className="container flex justify-center">
       <div>
         <div className="flex items-center">
-          <Image src={user.image || ""} alt={user.name} width={48} height={48} /> <h1 className="ml-2">{user.name}</h1>
+          <UserImageLarge src={user.image || ""} alt={user.name} /> <h1 className="ml-2">{user.name}</h1>
         </div>
-        <div>edit your profile here</div>
+        <div>Edit your profile information</div>
         <div>
-          <a href={`/profile/${hashidFromId(user.id)}`} className="block px-3 py-2 bg-blue-500">
+          <Link href={`/profile/${hashidFromId(user.id)}`} className="block px-3 py-2 bg-blue-500">
             also, view your public profile here
-          </a>
+          </Link>
         </div>
       </div>
     </main>
