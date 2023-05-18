@@ -6,7 +6,7 @@ import { validateFormData } from "src/utils/formdata";
 import { idFromHashid } from "src/utils/hashid";
 import { getUserFromCookie } from "src/utils/token";
 
-export async function joinOrLeaveEvent(formData: FormData) {
+export async function actionJoinOrLeaveEvent(formData: FormData) {
   const user = await getUserFromCookie();
   if (!user) {
     console.log("no user");

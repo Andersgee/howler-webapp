@@ -48,7 +48,7 @@ function int(s: string) {
   return isFinite(x) ? x : null;
 }
 
-export async function myAction(formData: FormData) {
+export async function actionCreateEvent(formData: FormData) {
   const user = await getUserFromCookie();
   if (!user) {
     console.log("no user");

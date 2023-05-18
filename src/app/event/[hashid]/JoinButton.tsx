@@ -1,7 +1,7 @@
 import { getJoinedUserIds } from "./data";
 import { IconHowler } from "src/icons/Howler";
 
-import { joinOrLeaveEvent } from "./actions";
+import { actionJoinOrLeaveEvent } from "./actions";
 import type { TokenUser } from "src/utils/token/schema";
 
 type Props = {
@@ -13,7 +13,7 @@ export async function JoinButton({ user, eventHashid }: Props) {
   const userHasJoined = user && joinedUserIds.includes(user.id);
 
   return (
-    <form action={joinOrLeaveEvent}>
+    <form action={actionJoinOrLeaveEvent}>
       <input type="hidden" name="eventhashid" value={eventHashid} />
       <button
         type="submit"
