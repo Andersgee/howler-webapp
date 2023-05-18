@@ -31,20 +31,15 @@ export async function joinOrLeaveEvent(formData: FormData) {
     .where("eventId", "=", eventId)
     .executeTakeFirst();
 
-  if (Number(deleteResult.numDeletedRows)) {
-    //we just unjoined the user from the event
-    //
-    console.log("UN-joined user from event");
-  } else {
-    const insertResult = await db
+  const numDeletedRows = Number(deleteResult.numDeletedRows);
+  if (!numDeletedRows) {
+    await db
       .insertInto("UserEventPivot")
       .values({
         eventId: eventId,
         userId: user.id,
       })
       .executeTakeFirst();
-
-    console.log("user joined event");
   }
 
   revalidateTag(`event-joinedusers-${data.eventhashid}`);
