@@ -58,6 +58,7 @@ export const actionJoinOrLeaveEvent = protectedAction(
   }
 );
 
+/*
 export async function actionJoinOrLeaveEventXXX(formData: FormData) {
   const user = await getUserFromCookie();
   if (!user) {
@@ -103,3 +104,4 @@ export async function actionJoinOrLeaveEventXXX(formData: FormData) {
 
   revalidateTag(hasJoinedEventTag({ eventId, userId: user.id }));
 }
+*/
