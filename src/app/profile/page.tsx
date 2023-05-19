@@ -4,6 +4,7 @@ import { db } from "src/db";
 import { SigninButtons } from "src/sc/SigninButtons";
 import Link from "next/link";
 import { UserImageLarge } from "src/sc/UserImage";
+import { userTag } from "src/utils/tags";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,10 @@ export default async function Page() {
     .select("User.image")
     .where("User.id", "=", tokenUser.id)
     .getFirst({
-      cache: "no-store",
+      cache: "force-cache",
+      next: {
+        tags: [userTag({ userId: tokenUser.id })],
+      },
     });
 
   if (!user) {
