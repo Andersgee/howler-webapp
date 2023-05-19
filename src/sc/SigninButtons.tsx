@@ -10,7 +10,6 @@ export function SigninButtons() {
 
   return (
     <div>
-      <div>pathname: {pathname}</div>
       <div>
         <a
           href={`/api/auth/signin/google?route=${pathname}`}
