@@ -4,6 +4,7 @@ import { revalidateTag } from "next/cache";
 import { db } from "src/db";
 import { validateFormData } from "src/utils/formdata";
 import { idFromHashid } from "src/utils/hashid";
+import { hasJoinedEventTag } from "src/utils/tags";
 import { getUserFromCookie } from "src/utils/token";
 
 export async function actionJoinOrLeaveEvent(formData: FormData) {
@@ -42,5 +43,5 @@ export async function actionJoinOrLeaveEvent(formData: FormData) {
       .executeTakeFirst();
   }
 
-  revalidateTag(`event-joinedusers-${data.eventhashid}`);
+  revalidateTag(hasJoinedEventTag({ eventId, userId: user.id }));
 }
