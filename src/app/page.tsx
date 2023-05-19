@@ -1,7 +1,8 @@
+/*
 export const metadata = {
   title: "Howler",
 };
-
+*/
 export default async function Page() {
   return (
     <main className="flex justify-center">

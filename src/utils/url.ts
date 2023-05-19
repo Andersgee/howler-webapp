@@ -23,3 +23,15 @@ export function getBaseUrl() {
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; //for server in production
   return `http://localhost:${process.env.PORT ?? 3000}`; // for server in development
 }
+
+/** allow relative urls such as "/about", empty string just returns baseurl */
+export function absUrl(url: string) {
+  const baseUrl = getBaseUrl();
+  if (url === "" || url === "/") return baseUrl;
+
+  if (url.startsWith("/")) {
+    return `${baseUrl}${url}`;
+  } else {
+    return url;
+  }
+}

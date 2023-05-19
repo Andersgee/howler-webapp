@@ -1,0 +1,25 @@
+{
+  "name": "Howler",
+  "short_name": "Howler",
+  "theme_color": "#fafafa",
+  "background_color": "#fafafa",
+  "display": "fullscreen",
+  "orientation": "any",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/favicon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "splash_pages": null
+}

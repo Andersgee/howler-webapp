@@ -6,10 +6,11 @@ import type { TokenUser } from "src/utils/token/schema";
 
 type Props = {
   eventHashid: string;
-  user: TokenUser | null;
+  user: TokenUser;
 };
+
 export async function JoinButton({ user, eventHashid }: Props) {
-  const userHasJoined = user ? await getHasJoinedEvent(eventHashid, user.id) : false;
+  const userHasJoined = await getHasJoinedEvent(eventHashid, user.id);
 
   return (
     <form action={actionJoinOrLeaveEvent}>

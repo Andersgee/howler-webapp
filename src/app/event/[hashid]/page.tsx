@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getEvent } from "./data";
-import { WhenText } from "./components";
+import { JoinbuttonTriggerSignin, WhenText } from "./components";
 import { IconWhat } from "src/icons/What";
 import { IconWhere } from "src/icons/Where";
 import { IconWhen } from "src/icons/When";
@@ -8,8 +8,26 @@ import { IconWho } from "src/icons/Who";
 import { getUserFromCookie } from "src/utils/token";
 import { JoinButton } from "./JoinButton";
 import { IconArrowDown } from "src/icons/ArrowDown";
+import { seo } from "src/utils/seo";
 
-export default async function Page({ params }: { params: { hashid: string } }) {
+type PageProps = {
+  params: { hashid: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({ params }: PageProps) {
+  const event = await getEvent(params.hashid);
+  if (!event) notFound();
+
+  return seo({
+    title: `${event.what} | Event | Howler`,
+    description: `where: ${event.where} who: ${event.who} info: ${event.info}`,
+    url: `/event/${params.hashid}`,
+    image: "/icons/favicon-512x512.png",
+  });
+}
+
+export default async function Page({ params }: PageProps) {
   const event = await getEvent(params.hashid);
   if (!event) notFound();
   const user = await getUserFromCookie();
@@ -48,7 +66,7 @@ export default async function Page({ params }: { params: { hashid: string } }) {
           </div>
           <div className="flex justify-center my-2">
             {/* @ts-expect-error Async Server Component */}
-            <JoinButton eventHashid={params.hashid} user={user} />
+            {user ? <JoinButton eventHashid={params.hashid} user={user} /> : <JoinbuttonTriggerSignin />}
           </div>
         </div>
       </div>

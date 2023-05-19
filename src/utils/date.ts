@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 /**
  * `<input type="datetime-local">` wants a particular string format in local time such as
  *
@@ -18,4 +20,8 @@ export function datetimelocalString(date: Date, p: "m" | "s" = "m") {
 function localIsoString(d: Date) {
   const date = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
   return date.toISOString();
+}
+
+export function formatDate(d: Date) {
+  return format(d, "yyyy-MM-dd HH:mm");
 }
