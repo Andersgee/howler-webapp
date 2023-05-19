@@ -1,14 +1,19 @@
+"use client";
 import Link from "next/link";
 import { IconDiscord } from "src/icons/Discord";
 import { IconGithub } from "src/icons/Github";
 import { IconGoogle } from "src/icons/Google";
 
+import { usePathname } from "next/navigation";
 export function SigninButtons() {
+  const pathname = usePathname();
+
   return (
     <div>
+      <div>pathname: {pathname}</div>
       <div>
         <a
-          href="/api/auth/signin/google"
+          href={`/api/auth/signin/google?route=${pathname}`}
           className="mb-4 flex w-64 items-center justify-around bg-white p-3 font-medium text-black shadow-md transition duration-100 ease-out hover:bg-neutral-100 hover:ease-in focus:bg-neutral-200"
         >
           <IconGoogle />
@@ -17,7 +22,7 @@ export function SigninButtons() {
       </div>
       <div>
         <a
-          href="/api/auth/signin/discord"
+          href={`/api/auth/signin/discord?route=${pathname}`}
           className="mb-4 flex w-64 items-center justify-around bg-white p-3 font-medium text-black shadow-md transition duration-100 ease-out hover:bg-neutral-100 hover:ease-in focus:bg-neutral-200"
         >
           <IconDiscord />
@@ -26,7 +31,7 @@ export function SigninButtons() {
       </div>
       <div>
         <a
-          href="/api/auth/signin/github"
+          href={`/api/auth/signin/github?route=${pathname}`}
           className="mb-4 flex w-64 items-center justify-around bg-white p-3 font-medium text-black shadow-md transition duration-100 ease-out hover:bg-neutral-100 hover:ease-in focus:bg-neutral-200"
         >
           <IconGithub />
