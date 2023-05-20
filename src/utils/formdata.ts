@@ -14,12 +14,10 @@ export function protectedAction<T extends z.ZodTypeAny>(
     const parsedFormData = schema.safeParse(Object.fromEntries(formData));
     if (!parsedFormData.success) {
       console.log(parsedFormData.error);
-      //throw new Error("Invalid input.");
       return null;
     }
     if (!user) {
       console.log("no user");
-      //throw new Error("no user.");
       return null;
     }
 
