@@ -1,10 +1,11 @@
 "use client";
+
 import Link from "next/link";
 import { IconDiscord } from "src/icons/Discord";
 import { IconGithub } from "src/icons/Github";
 import { IconGoogle } from "src/icons/Google";
-
 import { usePathname } from "next/navigation";
+
 export function SigninButtons() {
   const pathname = usePathname();
 

@@ -7,6 +7,7 @@ import { useUser } from "src/context/UserContext";
 import { useOnClickOutside } from "src/hooks/useOnClickOutside";
 import { IconAvatar } from "src/icons/Avatar";
 import { SigninButtons } from "src/sc/SigninButtons";
+import { SignoutButton } from "src/sc/SignoutButton";
 import { UserImage } from "src/sc/UserImage";
 
 export function Topnav() {
@@ -40,11 +41,7 @@ function ProfileButton() {
                   {user.name}
                 </Link>
               </div>
-              <div className="mt-2">
-                <a href="/api/auth/signout" className="underline decoration-dotted">
-                  sign out
-                </a>
-              </div>
+              <SignoutButton />
             </div>
           ) : (
             <SigninButtons />
