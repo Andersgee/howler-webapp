@@ -9,11 +9,7 @@ import { getUserFromCookie } from "src/utils/token";
 import { JoinButton } from "./JoinButton";
 import { IconArrowDown } from "src/icons/ArrowDown";
 import { seo } from "src/utils/seo";
-
-type PageProps = {
-  params: { hashid: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+import type { PageProps } from "src/utils/typescript";
 
 export async function generateMetadata({ params }: PageProps) {
   const event = await getEvent(params.hashid);

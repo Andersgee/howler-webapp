@@ -12,28 +12,19 @@ export function protectedAction<T extends z.ZodTypeAny>(
   return async (formData: FormData) => {
     const user = await getUserFromCookie();
     const parsedFormData = schema.safeParse(Object.fromEntries(formData));
-    if (!parsedFormData.success || !user) {
-      throw new Error("Invalid input.");
+    if (!parsedFormData.success) {
+      console.log(parsedFormData.error);
+      //throw new Error("Invalid input.");
+      return null;
     }
+    if (!user) {
+      console.log("no user");
+      //throw new Error("no user.");
+      return null;
+    }
+
     const data = parsedFormData.data;
 
     return action({ data, user });
   };
-}
-
-/**
- * @deprecated
- * utility, validate and parse formdata into `Record<string,string>` (with typed keys)
- */
-export function validateFormData<T extends string>(formData: FormData, names: T[]): Record<T, string> | null {
-  const r: Record<string, string> = {};
-  for (const name of names) {
-    const val = formData.get(name);
-    if (typeof val === "string") {
-      r[name] = val;
-    } else {
-      return null;
-    }
-  }
-  return r;
 }

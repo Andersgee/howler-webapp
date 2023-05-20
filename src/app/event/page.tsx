@@ -1,10 +1,9 @@
-import { actionCreateEvent } from "./actions";
 import { IconWhat } from "src/icons/What";
 import { IconWhere } from "src/icons/Where";
 import { IconWhen } from "src/icons/When";
 import { IconWho } from "src/icons/Who";
-import { IconHowler } from "src/icons/Howler";
 import { InputWhen } from "./InputWhen";
+import { HowlButton } from "./HowlButton";
 
 const OPTIONS_WHO = {
   anyone: "anyone",
@@ -12,13 +11,13 @@ const OPTIONS_WHO = {
   friendsOfFriends: "My friends and their friends",
 };
 
-export default function Page() {
+export default async function Page() {
   return (
     <div className="container flex justify-center">
       <div className="">
         <h1 className="text-center my-2">Make something happen!</h1>
 
-        <form action={actionCreateEvent} className="flex flex-col gap-3">
+        <form className="flex flex-col gap-3">
           <div className="flex items-center gap-1">
             <IconWhat />
             <span className="pr-2 w-16">What?</span>
@@ -56,13 +55,8 @@ export default function Page() {
           </div>
 
           <div className="flex justify-center my-2">
-            <button
-              type="submit"
-              className="flex w-40 items-center justify-center rounded-full border-2 border-black bg-blue-50 px-2 py-2 transition-colors hover:bg-blue-200"
-            >
-              <span className="mr-2 text-2xl text-black">Howl</span>
-              <IconHowler />
-            </button>
+            {/* @ts-expect-error Async Server Component */}
+            <HowlButton />
           </div>
         </form>
       </div>

@@ -1,9 +1,9 @@
 import { getUserFromCookie } from "src/utils/token";
 import { hashidFromId } from "src/utils/hashid";
 import { db } from "src/db";
-import { SigninButtons } from "src/sc/SigninButtons";
+import { SigninButtons } from "src/components/SigninButtons";
 import Link from "next/link";
-import { UserImageLarge } from "src/sc/UserImage";
+import { UserImageLarge } from "src/components/UserImage";
 import { userTag } from "src/utils/tags";
 
 export const dynamic = "force-dynamic";

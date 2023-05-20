@@ -6,9 +6,9 @@ import { useDialogContext, useDialogDispatch } from "src/context/DialogContext";
 import { useUser } from "src/context/UserContext";
 import { useOnClickOutside } from "src/hooks/useOnClickOutside";
 import { IconAvatar } from "src/icons/Avatar";
-import { SigninButtons } from "src/sc/SigninButtons";
-import { SignoutButton } from "src/sc/SignoutButton";
-import { UserImage } from "src/sc/UserImage";
+import { SigninButtons } from "src/components/SigninButtons";
+import { SignoutButton } from "src/components/SignoutButton";
+import { UserImage } from "src/components/UserImage";
 
 export function Topnav() {
   return (
