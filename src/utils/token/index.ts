@@ -39,7 +39,7 @@ export async function getSessionFromRequestCookie(req: NextRequest) {
   return getSessionFromToken(token);
 }
 
-/** for server component files */
+/** for server component files (or in server actions) */
 export async function getUserFromCookie() {
   const token = cookies().get(USER_COOKIE_NAME)?.value;
   return getUserFromToken(token);

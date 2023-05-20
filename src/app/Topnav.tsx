@@ -1,13 +1,11 @@
 "use client";
+
 import Link from "next/link";
 import { useRef } from "react";
 import { useDialogContext, useDialogDispatch } from "src/context/DialogContext";
 import { useUser } from "src/context/UserContext";
 import { useOnClickOutside } from "src/hooks/useOnClickOutside";
 import { IconAvatar } from "src/icons/Avatar";
-import { IconDiscord } from "src/icons/Discord";
-import { IconGithub } from "src/icons/Github";
-import { IconGoogle } from "src/icons/Google";
 import { SigninButtons } from "src/sc/SigninButtons";
 import { UserImage } from "src/sc/UserImage";
 
