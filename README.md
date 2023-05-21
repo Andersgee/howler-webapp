@@ -1,3 +1,11 @@
+# the cache stack
+
+pages loads should never ever hit db
+also they should not ship js either, if possible
+
+do parallel-routes for 'joinbutton' etc that needs auth state (either from servercomp or clientcomp)
+https://nextjs.org/docs/app/building-your-application/routing/parallel-routes
+
 # random notes
 
 try to make user always hit cached data
@@ -26,3 +34,5 @@ since the date in a datetime-local can not include timezone info, aka does not i
 perhaps send a an extra date.getTimezoneOffset() string along with the formData? that would atleast allow server to know the real date...
 `<input type="hidden" name="tz" defaultValue={d.getTimezoneOffset()} />`
 ok that worked.. it this really the developer experience with date inputs in 2023? sigh
+
+## parallel routes

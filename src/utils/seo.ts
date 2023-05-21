@@ -98,7 +98,7 @@ export function seo({
     referrer: "origin-when-cross-origin",
     viewport: "width=device-width, initial-scale=1",
     themeColor: "#fafafa",
-    manifest: absUrl("/manifest.json"),
+    manifest: absUrl("/manifest.webmanifest"),
     icons: [
       { rel: "icon", type: "image/svg+xml", url: absUrl("/icons/favicon.svg") },
       { rel: "apple-touch-icon", url: absUrl("/icons/favicon-maskable-512x512.png") },
