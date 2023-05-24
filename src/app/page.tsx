@@ -2,6 +2,7 @@ import Link from "next/link";
 import { db } from "src/db";
 import { formatDate } from "src/utils/date";
 import { hashidFromId } from "src/utils/hashid";
+import { MessagingTest } from "./messaging-test";
 
 export default async function Page() {
   const events = await db
@@ -20,6 +21,7 @@ export default async function Page() {
     <main className="">
       <div className="container bg-orange-400">
         <div>hello</div>
+        <MessagingTest />
         <div>
           <Link href="/event" className="px-3 py-2 bg-blue-500">
             go to event

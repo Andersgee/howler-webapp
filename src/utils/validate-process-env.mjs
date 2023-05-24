@@ -24,6 +24,7 @@ export const envSchema = z.object({
   DATABASE_HTTP_AUTH_SECRET: z.string(),
   NEXT_PUBLIC_HASHIDS_SALT: z.string(),
   AUTH_CALLBACK_BASE_URL: z.string().url(),
+  NEXT_PUBLIC_FCM_VAPID_KEY: z.string(),
 });
 
 function formatErrors(errors) {

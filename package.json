@@ -19,6 +19,7 @@
     "date-fns": "^2.30.0",
     "eslint": "8.39.0",
     "eslint-config-next": "13.4.1",
+    "firebase": "^9.22.0",
     "hashids": "^2.2.11",
     "jose": "^4.14.4",
     "kysely": "^0.24.2",

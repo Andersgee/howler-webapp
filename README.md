@@ -1,10 +1,19 @@
 # the cache stack
 
-pages loads should never ever hit db
-also they should not ship js either, if possible
+- pages loads should never ever wait for data
+- rely on the nextjs http cache instead of fetching data
+  - use tags and revalidate when needed instead
+- first load for a particular user will need suspense for data
 
-do parallel-routes for 'joinbutton' etc that needs auth state (either from servercomp or clientcomp)
-https://nextjs.org/docs/app/building-your-application/routing/parallel-routes
+perhaps use parallel-routes instead when it makes sense, but its literally the same thing as Suspense but with fallback=loading.tsx
+
+## notifications:
+
+Firebase cloud messaging setup:
+
+- https://firebase.google.com/docs/cloud-messaging/js/client
+- fcm service if apparently 0 cost
+- (GCM, google cloud messaging is deprecated)
 
 # random notes
 
