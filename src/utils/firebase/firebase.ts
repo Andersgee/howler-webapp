@@ -32,21 +32,26 @@ export function requestNotificationPermission() {
 // Get registration token. Initially this makes a network call, once retrieved
 // subsequent calls to getToken will return from cache.
 
-export function getCurrentToken() {
-  getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FCM_VAPID_KEY })
-    .then((currentToken) => {
-      if (currentToken) {
-        console.log("currentToken:", currentToken);
-        // Send the token to your server and update the UI if necessary
-        // ...
-      } else {
-        // Show permission request UI
-        console.log("No registration token available. Request permission to generate one.");
-        // ...
-      }
-    })
-    .catch((err) => {
-      console.log("An error occurred while retrieving token. ", err);
-      // ...
+/**
+ * returns the "device id" basically. Use this id later (on server side) to subscribe it to "topics"
+ *
+ * and even later, we can send messages to topics
+ *
+ * TODO: find out if this changes everytime you open the app or what? do I need to keep track of if different tokens are actually same user?
+ * or is this just 'for a single registration to a topic'? or a single session or what
+ *
+ * the docstring sais it subscribes the messaging instance to push notifications
+ */
+export async function getFcmRegistrationToken(serviceWorkerRegistration: ServiceWorkerRegistration) {
+  try {
+    const token = await getToken(messaging, {
+      vapidKey: process.env.NEXT_PUBLIC_FCM_VAPID_KEY,
+      serviceWorkerRegistration,
     });
+    // Send the token to your server and update the UI if necessary
+    return token;
+  } catch (error) {
+    //use clicked "no" on accept notifications
+    console.log("need to ask for permission again probably, they clicked no on allow notifications.");
+  }
 }
