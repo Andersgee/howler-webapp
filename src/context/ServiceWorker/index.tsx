@@ -12,32 +12,34 @@ export function useServiceWorkerContext() {
 /////////////////////////////////////////////////
 
 type Value = {
-  x: number;
+  fcm: FirebaseCloudMessaging | null;
 };
 
 const Context = createContext<undefined | Value>(undefined);
 
 export function ServiceWorkerProvider({ children }: { children: React.ReactNode }) {
-  const [x, setX] = useState(0);
+  const [fcm, setFcm] = useState<FirebaseCloudMessaging | null>(null);
 
   useEffect(() => {
     initSwAndFcm()
-      .then((fcmToken) => {
-        console.log("fcmToken:", fcmToken);
+      .then((f) => {
+        setFcm(f);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  return <Context.Provider value={{ x }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ fcm }}>{children}</Context.Provider>;
 }
 
 async function initSwAndFcm() {
   const registration = await registerSW();
   if (!registration) return null;
   const fcm = new FirebaseCloudMessaging(registration);
-  return fcm.getFcmToken();
+  const fcmToken = fcm.getFcmToken();
+  console.log("fcmToken:", fcmToken);
+  return fcm;
 }
 
 async function registerSW() {
