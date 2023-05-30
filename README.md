@@ -44,4 +44,18 @@ perhaps send a an extra date.getTimezoneOffset() string along with the formData?
 `<input type="hidden" name="tz" defaultValue={d.getTimezoneOffset()} />`
 ok that worked.. it this really the developer experience with date inputs in 2023? sigh
 
-## parallel routes
+## TODO
+
+figure out how notifications work
+
+- [x] separate package for building `sw.js` (0 dependency, single file)
+- [x] api for `firebase-admin/messaging` for sending notifications
+- [ ] initialize `sw.js` and `firebase/messaging` client side
+- [ ] allow user to "join" to events
+- [ ] prompt for "alert me" on some button click, perhaps when joining an event
+- [ ] store fcmToken in db after user allows notifications
+- [ ] send a notification to all users that are "attending" to a particular event id
+- [ ] test notifications when app is open (in foreground), perhaps show toast or something
+  - handle in js with onMessage from "firebase/messaging")
+- [ ] test notifications when app is not open (in background)
+  - handle with onBackgroundMessage in sw.js)

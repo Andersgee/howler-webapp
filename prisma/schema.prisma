@@ -46,6 +46,7 @@ model User {
 
     events       Event[]
     joinedEvents UserEventPivot[]
+    fcmToken     String? // the getToken() from firebase/messaging
 }
 
 model Example {

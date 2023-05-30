@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useReducer } from "react";
-import type { Prettify } from "src/utils/typescript";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
 
 export function useServiceWorkerContext() {
   const ctx = useContext(Context);
@@ -9,47 +9,35 @@ export function useServiceWorkerContext() {
   return ctx;
 }
 
-export function useServiceWorkerDispatch() {
-  const ctx = useContext(DispatchContext);
-  if (ctx === undefined) throw new Error("context does not have provider");
-  return ctx;
-}
-
 /////////////////////////////////////////////////
 
-const initialState = "none";
+type Value = {
+  x: number;
+};
 
 const Context = createContext<undefined | Value>(undefined);
-const DispatchContext = createContext<undefined | React.Dispatch<Action>>(undefined);
 
 export function ServiceWorkerProvider({ children }: { children: React.ReactNode }) {
-  const [value, dispatch] = useReducer(reducer, initialState);
+  const [x, setX] = useState(0);
 
   useEffect(() => {
-    //registerSW().then((r) => {
-    //  //ignore
-    //});
+    initSwAndFcm()
+      .then((fcmToken) => {
+        console.log("fcmToken:", fcmToken);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
-  return (
-    <Context.Provider value={value}>
-      <DispatchContext.Provider value={dispatch}>{children}</DispatchContext.Provider>
-    </Context.Provider>
-  );
+  return <Context.Provider value={{ x }}>{children}</Context.Provider>;
 }
 
-type Type = "show" | "hide";
-type Name = "signin" | "warning";
-type Value = Prettify<"none" | Name>;
-type Action = { type: Type; name: Name };
-
-function reducer(value: Value, action: Action): Value {
-  if (action.type === "show") {
-    return action.name;
-  } else if (action.type === "hide" && value === action.name) {
-    return "none";
-  }
-  return value;
+async function initSwAndFcm() {
+  const registration = await registerSW();
+  if (!registration) return null;
+  const fcm = new FirebaseCloudMessaging(registration);
+  return fcm.getFcmToken();
 }
 
 async function registerSW() {
@@ -61,7 +49,7 @@ async function registerSW() {
 
     const registration = await navigator.serviceWorker.register("/sw.js", { type: "module", scope: "/" });
 
-    //const subscription = await registration.pushManager.getSubscription()
+    //const registrationToken = await getFcmRegistrationToken(registration);
 
     //force update or not?
     //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update

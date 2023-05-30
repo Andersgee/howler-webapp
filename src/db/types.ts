@@ -33,6 +33,7 @@ export type User = {
   githubUserId: number | null;
   image: string | null;
   name: string;
+  fcmToken: string | null;
 };
 export type UserEventPivot = {
   userId: number;
