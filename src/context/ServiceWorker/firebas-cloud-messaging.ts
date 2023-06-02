@@ -1,13 +1,15 @@
 import { initializeApp, type FirebaseApp } from "firebase/app";
 import { getMessaging, type Messaging, getToken, onMessage, type MessagePayload } from "firebase/messaging";
 
-/** simpler wrapper for interacting with Firebase cloud messaging service */
+/**
+ * simpler wrapper for interacting with Firebase cloud messaging service
+ * */
 export class FirebaseCloudMessaging {
   app: FirebaseApp;
   messaging: Messaging;
   serviceWorkerRegistration: ServiceWorkerRegistration | null;
   fcmToken: string | null;
-  constructor(serviceWorkerRegistration: ServiceWorkerRegistration) {
+  constructor(serviceWorkerRegistration: ServiceWorkerRegistration, onMsg: (payload: MessagePayload) => void) {
     this.app = initializeApp({
       apiKey: "AIzaSyAroe8n3vb7b9FooVuf8Q9UAXXcCIZ4SNI",
       authDomain: "howler-67f34.firebaseapp.com",
@@ -20,7 +22,7 @@ export class FirebaseCloudMessaging {
     this.serviceWorkerRegistration = serviceWorkerRegistration;
     this.fcmToken = null;
 
-    //onMessage(this.messaging, (payload)=>onForegroundMessage(payload));
+    onMessage(this.messaging, onMsg);
   }
 
   /**
@@ -73,6 +75,7 @@ export function notificationsGranted() {
  *
  * the docstring sais it subscribes the messaging instance to push notifications
  */
+/*
 async function getFcmRegistrationToken(messaging: Messaging, serviceWorkerRegistration: ServiceWorkerRegistration) {
   try {
     const token = await getToken(messaging, {
@@ -87,3 +90,4 @@ async function getFcmRegistrationToken(messaging: Messaging, serviceWorkerRegist
     return undefined;
   }
 }
+*/

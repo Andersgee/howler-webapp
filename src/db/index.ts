@@ -12,7 +12,7 @@ import type { DB } from "./types";
 import { deserialize, serialize } from "superjson";
 import { urlWithSearchparams } from "src/utils/url";
 
-const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
+//const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
 
 declare module "kysely" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -83,7 +83,7 @@ async function executeWithFetchGet(compiledQuery: CompiledQuery, init?: RequestI
   return fetch(url, {
     method: "GET",
     headers: {
-      Authorization: AUTH_SECRET,
+      Authorization: process.env.DATABASE_HTTP_AUTH_HEADER,
     },
     ...init,
   });
@@ -97,7 +97,7 @@ export const db = new Kysely<DB>({
     createDriver: () =>
       new FetchDriver({
         url: process.env.DATABASE_HTTP_URL,
-        authorization: AUTH_SECRET,
+        authorization: process.env.DATABASE_HTTP_AUTH_HEADER,
       }),
   },
 });

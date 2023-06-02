@@ -21,7 +21,7 @@ export const envSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string(),
   JWT_SECRET: z.string(),
   DATABASE_HTTP_URL: z.string().url(),
-  DATABASE_HTTP_AUTH_SECRET: z.string(),
+  DATABASE_HTTP_AUTH_HEADER: z.string(),
   NEXT_PUBLIC_HASHIDS_SALT: z.string(),
   AUTH_CALLBACK_BASE_URL: z.string().url(),
   NEXT_PUBLIC_FCM_VAPID_KEY: z.string(),

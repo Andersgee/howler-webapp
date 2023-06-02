@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { FirebaseCloudMessaging, requestNotificationPermission } from "./firebas-cloud-messaging";
 
 export function useServiceWorkerContext() {
   const ctx = useContext(Context);
@@ -21,18 +21,43 @@ export function ServiceWorkerProvider({ children }: { children: React.ReactNode 
   const [fcm, setFcm] = useState<FirebaseCloudMessaging | null>(null);
 
   useEffect(() => {
-    initSwAndFcm()
-      .then((f) => {
-        setFcm(f);
-      })
-      .catch((error) => {
-        console.log(error);
+    const setupNotificationMessaging = async () => {
+      const swRegistration = await registerSW();
+      if (!swRegistration) return null;
+
+      const fcm = new FirebaseCloudMessaging(swRegistration, (message) => {
+        console.log("message:", message);
       });
+
+      setFcm(fcm);
+    };
+
+    try {
+      setupNotificationMessaging();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
+
+  const notifyMe = useCallback(() => {
+    if (!fcm) return null;
+    if (fcm.fcmToken) return fcm.fcmToken;
+
+    try {
+      requestNotificationPermission().then((granted) => {
+        if (granted) {
+          return fcm.getFcmToken();
+        }
+      });
+    } catch (error) {
+      return null;
+    }
+  }, [fcm]);
 
   return <Context.Provider value={{ fcm }}>{children}</Context.Provider>;
 }
 
+/*
 async function initSwAndFcm() {
   const registration = await registerSW();
   if (!registration) return null;
@@ -41,6 +66,7 @@ async function initSwAndFcm() {
   console.log("fcmToken:", fcmToken);
   return fcm;
 }
+*/
 
 async function registerSW() {
   try {
