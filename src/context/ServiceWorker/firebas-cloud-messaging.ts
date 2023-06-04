@@ -1,5 +1,19 @@
 import { initializeApp, type FirebaseApp } from "firebase/app";
-import { getMessaging, type Messaging, getToken, onMessage, type MessagePayload } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import type { Messaging, MessagePayload } from "firebase/messaging";
+
+/**
+ * Note: The Firebase config object contains unique, but non-secret identifiers for your Firebase project.
+ * @see https://firebase.google.com/docs/web/learn-more#config-object
+ * */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAroe8n3vb7b9FooVuf8Q9UAXXcCIZ4SNI",
+  authDomain: "howler-67f34.firebaseapp.com",
+  projectId: "howler-67f34",
+  storageBucket: "howler-67f34.appspot.com",
+  messagingSenderId: "942074740899",
+  appId: "1:942074740899:web:f7b3aec1d8bead76b2ff16",
+};
 
 /**
  * simpler wrapper for interacting with Firebase cloud messaging service
@@ -10,14 +24,7 @@ export class FirebaseCloudMessaging {
   serviceWorkerRegistration: ServiceWorkerRegistration | null;
   fcmToken: string | null;
   constructor(serviceWorkerRegistration: ServiceWorkerRegistration, onMsg: (payload: MessagePayload) => void) {
-    this.app = initializeApp({
-      apiKey: "AIzaSyAroe8n3vb7b9FooVuf8Q9UAXXcCIZ4SNI",
-      authDomain: "howler-67f34.firebaseapp.com",
-      projectId: "howler-67f34",
-      storageBucket: "howler-67f34.appspot.com",
-      messagingSenderId: "942074740899",
-      appId: "1:942074740899:web:f7b3aec1d8bead76b2ff16",
-    });
+    this.app = initializeApp(FIREBASE_CONFIG);
     this.messaging = getMessaging(this.app);
     this.serviceWorkerRegistration = serviceWorkerRegistration;
     this.fcmToken = null;

@@ -50,7 +50,7 @@ figure out how notifications work
 
 - [x] separate package for building `sw.js` (0 dependency, single file)
 - [x] api for `firebase-admin/messaging` for sending notifications
-- [ ] initialize `sw.js` and `firebase/messaging` client side
+- [x] initialize `sw.js` and `firebase/messaging` client side
 - [ ] allow user to "join" to events
 - [ ] prompt for "alert me" on some button click, perhaps when joining an event
 - [ ] store fcmToken in db after user allows notifications
