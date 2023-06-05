@@ -8,7 +8,7 @@ import {
   addUser,
   getUserByEmail,
 } from "src/utils/auth";
-import { encodeParams, getBaseUrl } from "src/utils/url";
+import { absUrl, encodeParams } from "src/utils/url";
 import { createTokenFromUser, getSessionFromRequestCookie, verifyStateToken } from "src/utils/token";
 import { db } from "src/db";
 import type { TokenUser } from "src/utils/token/schema";
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
           client_secret: process.env.DISCORD_CLIENT_SECRET,
           grant_type: "authorization_code",
           code: code,
-          redirect_uri: `${process.env.AUTH_CALLBACK_BASE_URL}/discord`,
+          redirect_uri: absUrl("/api/auth/callback/discord"),
         }),
       }).then((res) => res.json())
     );
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `${getBaseUrl()}${state.route}`,
+        Location: absUrl(state.route),
         "Set-Cookie": `${USER_COOKIE_NAME}=${userCookie}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=2592000`,
       },
     });
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `${getBaseUrl()}`,
+        Location: absUrl(),
       },
     });
   }

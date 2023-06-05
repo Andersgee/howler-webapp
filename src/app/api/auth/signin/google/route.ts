@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { GOOGLE_OPENID_DISCOVERY_URL, GOOGLE_discoveryDocument } from "src/utils/auth";
 import { createStateToken, getSessionFromRequestCookie } from "src/utils/token";
-import { getBaseUrl, urlWithSearchparams } from "src/utils/url";
+import { absUrl, urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       client_id: process.env.GOOGLE_CLIENT_ID,
       response_type: "code",
       scope: "openid email profile",
-      redirect_uri: `${process.env.AUTH_CALLBACK_BASE_URL}/google`,
+      redirect_uri: absUrl("/api/auth/callback/google"),
       state: stateToken,
       nonce: crypto.randomUUID(),
     });
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `${getBaseUrl()}`,
+        Location: absUrl(),
       },
     });
   }

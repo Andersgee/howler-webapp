@@ -24,8 +24,10 @@ export function getBaseUrl() {
   return `http://localhost:${process.env.PORT ?? 3000}`; // for server in development
 }
 
-/** allow relative urls such as "/about", empty string just returns baseurl */
-export function absUrl(url: string) {
+/**
+ * allow relative urls such as "/about", empty string (default) just returns baseUrl
+ */
+export function absUrl(url = "") {
   const baseUrl = getBaseUrl();
   if (url === "" || url === "/") return baseUrl;
 

@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { DISCORD_AUTHORIZATION_URL } from "src/utils/auth";
 import { createStateToken, getSessionFromRequestCookie } from "src/utils/token";
-import { getBaseUrl, urlWithSearchparams } from "src/utils/url";
+import { absUrl, urlWithSearchparams } from "src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       client_id: process.env.DISCORD_CLIENT_ID,
       scope: "identify email",
       state: stateToken,
-      redirect_uri: `${process.env.AUTH_CALLBACK_BASE_URL}/discord`,
+      redirect_uri: absUrl("/api/auth/callback/discord"),
       prompt: "consent",
     });
 
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     return new Response(undefined, {
       status: 303,
       headers: {
-        Location: `${getBaseUrl()}`,
+        Location: absUrl(),
       },
     });
   }
