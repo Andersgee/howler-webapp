@@ -46,7 +46,13 @@ model User {
 
     events       Event[]
     joinedEvents UserEventPivot[]
-    fcmToken     String? // the getToken() from firebase/messaging
+    fcmToken     FcmToken[]
+}
+
+model FcmToken {
+    id     String @id //the getToken() from firebase/messaging
+    userId Int
+    User   User   @relation(fields: [userId], references: [id])
 }
 
 model Example {
@@ -81,8 +87,6 @@ model Event {
     placeId Int?
 
     joinedUsers UserEventPivot[]
-
-    //@@fulltext([what])
 }
 
 model Place {
