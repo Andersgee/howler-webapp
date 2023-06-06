@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build-sw": "rm -rf ./public/sw.js && tsc --project tsconfig-sw.json",
     "start": "next start",
     "lint": "next lint"
   },
