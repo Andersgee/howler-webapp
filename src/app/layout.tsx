@@ -2,7 +2,7 @@ import "./globals.css";
 import { UserProvider } from "src/context/UserContext";
 import { Inter } from "next/font/google";
 import { DialogProvider } from "src/context/DialogContext";
-import { ServiceWorkerProvider } from "src/context/ServiceWorker";
+import { NotificationsProvider } from "src/context/NotificationsContext";
 import { Topnav } from "./Topnav";
 import { seo } from "src/utils/seo";
 
@@ -20,14 +20,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ServiceWorkerProvider>
+        <NotificationsProvider>
           <UserProvider>
             <DialogProvider>
               <Topnav />
               {children}
             </DialogProvider>
           </UserProvider>
-        </ServiceWorkerProvider>
+        </NotificationsProvider>
       </body>
     </html>
   );

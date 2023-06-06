@@ -21,23 +21,27 @@ const FIREBASE_CONFIG = {
 export class FirebaseCloudMessaging {
   app: FirebaseApp;
   messaging: Messaging;
-  serviceWorkerRegistration: ServiceWorkerRegistration | null;
+  serviceWorkerRegistration: ServiceWorkerRegistration;
   fcmToken: string | null;
-  constructor(serviceWorkerRegistration: ServiceWorkerRegistration, onMsg: (payload: MessagePayload) => void) {
+  constructor(serviceWorkerRegistration: ServiceWorkerRegistration) {
     this.app = initializeApp(FIREBASE_CONFIG);
     this.messaging = getMessaging(this.app);
     this.serviceWorkerRegistration = serviceWorkerRegistration;
+    //this.serviceWorkerRegistration = null;
     this.fcmToken = null;
 
+    //onMessage(this.messaging, onMsg);
+  }
+
+  onMessage(onMsg: (payload: MessagePayload) => void) {
     onMessage(this.messaging, onMsg);
   }
 
   /**
-   * get fcm token but only if notifications already granted
-   * */
+   * get fcm token, will NOT ask for permission (meaning it returns null if permissions not already granted)
+   */
   async getFcmToken() {
     if (this.fcmToken) return this.fcmToken;
-    if (this.serviceWorkerRegistration === null) return null;
 
     //getToken() from firebase would prompt for permission if notifications are not already granted
     //but handle it manually
@@ -57,13 +61,13 @@ export class FirebaseCloudMessaging {
   }
 
   /**
-   * asks for notification permission if not already granted
+   * get fcm token, will ask for permission if not already granted
    */
   async requestFcmToken() {
     if (this.fcmToken) return this.fcmToken;
-    if (this.serviceWorkerRegistration === null) return null;
 
     try {
+      //getToken() asks for permission if not already granted
       const token = await getToken(this.messaging, {
         vapidKey: process.env.NEXT_PUBLIC_FCM_VAPID_KEY,
         serviceWorkerRegistration: this.serviceWorkerRegistration,
