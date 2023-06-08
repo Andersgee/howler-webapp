@@ -13,7 +13,6 @@ type Props = {
 export function NotifyMeButton({ className = "", eventhashid, action }: Props) {
   const { getMyFcmToken } = useNotificationsContext();
   let [isPending, startTransition] = useTransition();
-  //const [fcmToken, setFcmToken] = useState("");
 
   return (
     <button
