@@ -3,6 +3,8 @@ import { db } from "src/db";
 import { formatDate } from "src/utils/date";
 import { hashidFromId } from "src/utils/hashid";
 import { MessagingTest } from "./messaging-test";
+import { NewEventForm } from "./event/NewEventForm";
+import { IconArrowLink } from "src/icons/ArrowLink";
 
 export default async function Page() {
   const events = await db
@@ -14,29 +16,35 @@ export default async function Page() {
     .get({
       cache: "force-cache",
       next: {
-        tags: ["eventfirst10"],
+        tags: ["events", "eventfirst10"],
       },
     });
   return (
     <main className="">
-      <div className="container bg-orange-400">
-        <div>hello</div>
+      <div className="container">
+        <h2>Notificationstuff</h2>
         <MessagingTest />
-        <div>
-          <Link href="/event" className="px-3 py-2 bg-blue-500">
-            go to event
-          </Link>
-        </div>
+        <NewEventForm />
 
-        <div>
-          <ul>
-            {events.map((event) => (
-              <Link prefetch={false} key={event.id} href={`/event/${hashidFromId(event.id)}`}>
-                <li>{`what:${event.what} when:${formatDate(event.when)}`}</li>
+        <h2>Whats happening</h2>
+        <ul>
+          {events.map((event) => (
+            <li key={event.id}>
+              <Link
+                className="block border-b py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                prefetch={false}
+                href={`/event/${hashidFromId(event.id)}`}
+              >
+                <div className="flex justify-between px-4">
+                  <h3 className="capitalize-first flex-shrink truncate text-base font-normal">
+                    {event.what || "anything"}
+                  </h3>
+                  <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
+                </div>
               </Link>
-            ))}
-          </ul>
-        </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </main>
   );

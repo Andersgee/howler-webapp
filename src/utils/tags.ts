@@ -2,6 +2,10 @@ export function hasJoinedEventTag({ eventId, userId }: { eventId: number; userId
   return `hasjoinedevent-${eventId}-${userId}`;
 }
 
+export function eventsTag() {
+  return "events";
+}
+
 export function userTag({ userId }: { userId: number }) {
   return `user-${userId}`;
 }

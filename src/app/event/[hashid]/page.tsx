@@ -10,6 +10,8 @@ import { JoinButton } from "./JoinButton";
 import { IconArrowDown } from "src/icons/ArrowDown";
 import { seo } from "src/utils/seo";
 import type { PageProps } from "src/utils/typescript";
+import { NotifyMeButton } from "./NotifyMeButton";
+import { actionNotifyMeAboutEvent } from "./actions";
 
 export async function generateMetadata({ params }: PageProps) {
   const event = await getEvent(params.hashid);
@@ -64,6 +66,7 @@ export default async function Page({ params }: PageProps) {
             {/* @ts-expect-error Async Server Component */}
             {user ? <JoinButton eventHashid={params.hashid} user={user} /> : <JoinbuttonTriggerSignin />}
           </div>
+          <NotifyMeButton eventhashid={params.hashid} action={actionNotifyMeAboutEvent} />
         </div>
       </div>
     </div>

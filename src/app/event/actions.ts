@@ -4,8 +4,10 @@ import { redirect } from "next/navigation";
 import { db } from "src/db";
 import { utcDateFromDatetimelocalString } from "src/utils/date";
 import { protectedAction } from "src/utils/formdata";
+import { revalidateTag } from "next/cache";
 import { hashidFromId } from "src/utils/hashid";
 import { z } from "zod";
+import { eventsTag } from "src/utils/tags";
 
 const schema = z.object({
   what: z.string(),
@@ -36,6 +38,7 @@ export const actionCreateEvent = protectedAction(schema, async ({ data, user }) 
   console.log("insertresult", insertresult);
   const insertId = Number(insertresult.insertId);
   const hashid = hashidFromId(insertId);
+  revalidateTag(eventsTag());
 
   redirect(`/event/${hashid}`);
 });

@@ -7,11 +7,11 @@ import { idFromHashid } from "src/utils/hashid";
 import { hasJoinedEventTag } from "src/utils/tags";
 import { z } from "zod";
 
-const schema = z.object({
+const schemaJoinOrLeaveEvent = z.object({
   eventhashid: z.string().min(1),
 });
 
-export const actionJoinOrLeaveEvent = protectedAction(schema, async ({ data, user }) => {
+export const actionJoinOrLeaveEvent = protectedAction(schemaJoinOrLeaveEvent, async ({ data, user }) => {
   const eventId = idFromHashid(data.eventhashid);
   if (!eventId) {
     console.log("no eventId");
@@ -36,4 +36,23 @@ export const actionJoinOrLeaveEvent = protectedAction(schema, async ({ data, use
   }
 
   revalidateTag(hasJoinedEventTag({ eventId, userId: user.id }));
+});
+
+const schemaNotifyMeAboutEvent = z.object({
+  eventhashid: z.string().min(1),
+  fcmToken: z.string().min(1),
+});
+
+export const actionNotifyMeAboutEvent = protectedAction(schemaNotifyMeAboutEvent, async ({ data, user }) => {
+  const eventId = idFromHashid(data.eventhashid);
+  if (!eventId) {
+    console.log("no eventId");
+    return null;
+  }
+
+  console.log(
+    `call /notify endpoint here with eventId: ${eventId} and userId: ${user.id} and fcmToken: ${data.fcmToken}`
+  );
+
+  return null;
 });
