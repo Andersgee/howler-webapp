@@ -5,6 +5,7 @@ import { db } from "src/db";
 import { protectedAction } from "src/utils/formdata";
 import { idFromHashid } from "src/utils/hashid";
 import { hasJoinedEventTag } from "src/utils/tags";
+import { absUrl } from "src/utils/url";
 import { z } from "zod";
 
 const schemaJoinOrLeaveEvent = z.object({
@@ -48,6 +49,27 @@ export const actionNotifyMeAboutEvent = protectedAction(schemaNotifyMeAboutEvent
   if (!eventId) {
     console.log("no eventId");
     return null;
+  }
+
+  try {
+    const url = `${process.env.DATABASE_HTTP_URL}/notify`;
+    const r = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: process.env.DATABASE_HTTP_AUTH_HEADER,
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        fcmToken: data.fcmToken,
+        title: "some title",
+        body: "some body",
+        imageUrl: absUrl("/icons/favicon-48x48.png"),
+        linkUrl: absUrl(`/event/${data.eventhashid}`),
+      }),
+    }).then((res) => res.json());
+    console.log(r);
+  } catch (error) {
+    console.log(error);
   }
 
   console.log(
