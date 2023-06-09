@@ -8,7 +8,7 @@ import { db } from "src/db";
 import { utcDateFromDatetimelocalString } from "src/utils/date";
 import { protectedAction } from "src/utils/formdata";
 import { hashidFromId, idFromHashid } from "src/utils/hashid";
-import { tagEvents, tagHasJoinedEvent } from "src/utils/tags";
+import { tagEvents, tagHasJoinedEvent, tagIsFollowingUser } from "src/utils/tags";
 import { absUrl } from "src/utils/url";
 
 export const actionJoinOrLeaveEvent = protectedAction(
@@ -116,5 +116,37 @@ export const actionCreateEvent = protectedAction(
     revalidateTag(tagEvents());
 
     redirect(`/event/${hashid}`);
+  }
+);
+
+export const followOrUnfollowUser = protectedAction(
+  z.object({
+    otherUserHashId: z.string().min(1),
+  }),
+  async ({ data, user }) => {
+    const otherUserId = idFromHashid(data.otherUserHashId);
+    if (!otherUserId) {
+      console.log("no otherUserId");
+      return null;
+    }
+
+    const deleteResult = await db
+      .deleteFrom("Follow")
+      .where("followerId", "=", user.id)
+      .where("userId", "=", otherUserId)
+      .executeTakeFirst();
+
+    const numDeletedRows = Number(deleteResult.numDeletedRows);
+    if (!numDeletedRows) {
+      await db
+        .insertInto("Follow")
+        .values({
+          followerId: user.id,
+          userId: otherUserId,
+        })
+        .executeTakeFirst();
+    }
+
+    revalidateTag(tagIsFollowingUser({ myUserId: user.id, otherUserId: otherUserId }));
   }
 );

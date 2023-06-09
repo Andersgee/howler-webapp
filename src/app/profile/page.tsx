@@ -1,10 +1,12 @@
-import { getUserFromCookie } from "src/utils/token";
-import { hashidFromId } from "src/utils/hashid";
-import { db } from "src/db";
-import { SigninButtons } from "src/components/SigninButtons";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { SigninButtons } from "src/components/SigninButtons";
 import { UserImageLarge } from "src/components/UserImage";
+import { db } from "src/db";
+import { hashidFromId } from "src/utils/hashid";
 import { tagUserInfo } from "src/utils/tags";
+import { getUserFromCookie } from "src/utils/token";
 
 export const dynamic = "force-dynamic";
 
@@ -34,9 +36,7 @@ export default async function Page() {
       },
     });
 
-  if (!user) {
-    return <div>maybe return error or notfound instead</div>;
-  }
+  if (!user) notFound();
 
   return (
     <main className="container flex justify-center">

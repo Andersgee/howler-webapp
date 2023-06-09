@@ -3,19 +3,22 @@ import { notFound } from "next/navigation";
 
 import { db } from "src/db";
 import { idFromHashid } from "src/utils/hashid";
+import { tagUserInfo } from "src/utils/tags";
 
-export default async function Page({ params }: { params: { hashid: string } }) {
-  const id = idFromHashid(params.hashid);
-  if (id === undefined) notFound();
+import { FollowUserButton } from "./FollowUserButton";
+
+export default async function Page({ params }: { params: { userHashId: string } }) {
+  const userId = idFromHashid(params.userHashId);
+  if (userId === undefined) notFound();
 
   const user = await db
     .selectFrom("User")
     .select("User.name")
     .select("User.image")
-    .where("User.id", "=", id)
+    .where("User.id", "=", userId)
     .getFirst({
       next: {
-        tags: [`profile/${params.hashid}`],
+        tags: [tagUserInfo({ userId })],
       },
     });
   if (!user) notFound();
@@ -27,6 +30,7 @@ export default async function Page({ params }: { params: { hashid: string } }) {
           <Image src={user.image || ""} alt={user.name} width={48} height={48} /> <h1 className="ml-2">{user.name}</h1>
         </div>
         <div>public profile</div>
+        {/*<FollowUserButton />*/}
       </div>
     </main>
   );

@@ -44,9 +44,11 @@ model User {
     image         String?
     name          String
 
-    events       Event[]
-    joinedEvents UserEventPivot[]
-    fcmToken     FcmToken[]
+    events          Event[]
+    joinedEvents    UserEventPivot[]
+    fcmToken        FcmToken[]
+    sentFollows     Follow[]         @relation("sentFollows")
+    recievedFollows Follow[]         @relation("recievedFollows")
 }
 
 model FcmToken {
@@ -95,4 +97,13 @@ model Place {
     lng    Float
     lat    Float
     events Event[]
+}
+
+model Follow {
+    user       User @relation("recievedFollows", fields: [userId], references: [id], onDelete: Cascade)
+    userId     Int
+    follower   User @relation("sentFollows", fields: [followerId], references: [id], onDelete: Cascade)
+    followerId Int
+
+    @@id([userId, followerId])
 }

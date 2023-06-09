@@ -1,9 +1,10 @@
 import { IconWhat } from "src/icons/What";
-import { IconWhere } from "src/icons/Where";
 import { IconWhen } from "src/icons/When";
+import { IconWhere } from "src/icons/Where";
 import { IconWho } from "src/icons/Who";
-import { InputWhen } from "./InputWhen";
+
 import { HowlButton } from "./HowlButton";
+import { InputWhen } from "./InputWhen";
 
 const OPTIONS_WHO = {
   anyone: "anyone",
@@ -55,7 +56,6 @@ export function NewEventForm() {
           </div>
 
           <div className="flex justify-center my-2">
-            {/* @ts-expect-error Async Server Component */}
             <HowlButton />
           </div>
         </form>

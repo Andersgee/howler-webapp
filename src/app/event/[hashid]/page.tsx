@@ -1,17 +1,19 @@
 import { notFound } from "next/navigation";
-import { getEvent } from "./data";
-import { JoinbuttonTriggerSignin, WhenText } from "./components";
-import { IconWhat } from "src/icons/What";
-import { IconWhere } from "src/icons/Where";
-import { IconWhen } from "src/icons/When";
-import { IconWho } from "src/icons/Who";
-import { getUserFromCookie } from "src/utils/token";
-import { JoinButton } from "./JoinButton";
+
+import { actionNotifyMeAboutEvent } from "src/app/actions";
 import { IconArrowDown } from "src/icons/ArrowDown";
+import { IconWhat } from "src/icons/What";
+import { IconWhen } from "src/icons/When";
+import { IconWhere } from "src/icons/Where";
+import { IconWho } from "src/icons/Who";
 import { seo } from "src/utils/seo";
+import { getUserFromCookie } from "src/utils/token";
 import type { PageProps } from "src/utils/typescript";
+
+import { JoinButton } from "./JoinButton";
 import { NotifyMeButton } from "./NotifyMeButton";
-import { actionNotifyMeAboutEvent } from "./actions";
+import { JoinbuttonTriggerSignin, WhenText } from "./components";
+import { getEvent } from "./data";
 
 export async function generateMetadata({ params }: PageProps) {
   const event = await getEvent(params.hashid);
@@ -63,7 +65,6 @@ export default async function Page({ params }: PageProps) {
             </div>
           </div>
           <div className="flex justify-center my-2">
-            {/* @ts-expect-error Async Server Component */}
             {user ? <JoinButton eventHashid={params.hashid} user={user} /> : <JoinbuttonTriggerSignin />}
           </div>
           <NotifyMeButton eventhashid={params.hashid} action={actionNotifyMeAboutEvent} />
