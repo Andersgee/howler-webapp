@@ -4,7 +4,7 @@ import { db } from "src/db";
 import { SigninButtons } from "src/components/SigninButtons";
 import Link from "next/link";
 import { UserImageLarge } from "src/components/UserImage";
-import { userTag } from "src/utils/tags";
+import { tagUserInfo } from "src/utils/tags";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +30,7 @@ export default async function Page() {
     .getFirst({
       cache: "force-cache",
       next: {
-        tags: [userTag({ userId: tokenUser.id })],
+        tags: [tagUserInfo({ userId: tokenUser.id })],
       },
     });
 
