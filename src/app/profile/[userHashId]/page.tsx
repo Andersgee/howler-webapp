@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: { userHashId: string } 
           <Image src={user.image || ""} alt={user.name} width={48} height={48} /> <h1 className="ml-2">{user.name}</h1>
         </div>
         <div>public profile</div>
-        {/*<FollowUserButton />*/}
+        <FollowUserButton userId={userId} />
       </div>
     </main>
   );
