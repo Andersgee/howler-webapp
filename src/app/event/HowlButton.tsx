@@ -1,6 +1,7 @@
+import { actionCreateEvent } from "src/app/actions";
 import { IconHowler } from "src/icons/Howler";
-import { actionCreateEvent } from "./actions";
 import { getUserFromCookie } from "src/utils/token";
+
 import { HowlbuttonTriggerSignin } from "./components";
 
 export async function HowlButton() {

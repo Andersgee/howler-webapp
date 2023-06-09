@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { idFromHashid } from "src/utils/hashid";
 import { notFound } from "next/navigation";
+
 import { db } from "src/db";
+import { idFromHashid } from "src/utils/hashid";
 
 export default async function Page({ params }: { params: { hashid: string } }) {
   const id = idFromHashid(params.hashid);

@@ -1,12 +1,15 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
-import { db } from "src/db";
-import { protectedAction } from "src/utils/formdata";
-import { idFromHashid } from "src/utils/hashid";
-import { tagHasJoinedEvent } from "src/utils/tags";
-import { absUrl } from "src/utils/url";
+import { redirect } from "next/navigation";
 import { z } from "zod";
+
+import { db } from "src/db";
+import { utcDateFromDatetimelocalString } from "src/utils/date";
+import { protectedAction } from "src/utils/formdata";
+import { hashidFromId, idFromHashid } from "src/utils/hashid";
+import { tagEvents, tagHasJoinedEvent } from "src/utils/tags";
+import { absUrl } from "src/utils/url";
 
 export const actionJoinOrLeaveEvent = protectedAction(
   z.object({
@@ -78,5 +81,40 @@ export const actionNotifyMeAboutEvent = protectedAction(
     );
 
     return null;
+  }
+);
+
+export const actionCreateEvent = protectedAction(
+  z.object({
+    what: z.string(),
+    where: z.string(),
+    when: z.string(),
+    whenend: z.string(),
+    who: z.string(),
+    tzminuteoffset: z.coerce.number(),
+  }),
+  async ({ data, user }) => {
+    const whenDate = utcDateFromDatetimelocalString(data.when, data.tzminuteoffset);
+    const whenendDate = utcDateFromDatetimelocalString(data.whenend, data.tzminuteoffset);
+
+    const insertresult = await db
+      .insertInto("Event")
+      .values({
+        creatorId: user.id,
+        what: data.what,
+        where: data.where,
+        when: whenDate,
+        whenEnd: whenendDate,
+        who: data.who,
+        info: "no additional info added",
+      })
+      .executeTakeFirst();
+
+    console.log("insertresult", insertresult);
+    const insertId = Number(insertresult.insertId);
+    const hashid = hashidFromId(insertId);
+    revalidateTag(tagEvents());
+
+    redirect(`/event/${hashid}`);
   }
 );
