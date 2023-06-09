@@ -1,6 +1,6 @@
-import { actionCreateEvent } from "src/app/actions";
-import { IconHowler } from "src/icons/Howler";
-import { getUserFromCookie } from "src/utils/token";
+import { actionCreateEvent } from "#src/app/actions";
+import { IconHowler } from "#src/icons/Howler";
+import { getUserFromCookie } from "#src/utils/token";
 
 import { HowlbuttonTriggerSignin } from "./components";
 

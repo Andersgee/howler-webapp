@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
 
-import { actionNotifyMeAboutEvent } from "src/app/actions";
-import { IconArrowDown } from "src/icons/ArrowDown";
-import { IconWhat } from "src/icons/What";
-import { IconWhen } from "src/icons/When";
-import { IconWhere } from "src/icons/Where";
-import { IconWho } from "src/icons/Who";
-import { seo } from "src/utils/seo";
-import { getUserFromCookie } from "src/utils/token";
-import type { PageProps } from "src/utils/typescript";
+import { actionNotifyMeAboutEvent } from "#src/app/actions";
+import { IconArrowDown } from "#src/icons/ArrowDown";
+import { IconWhat } from "#src/icons/What";
+import { IconWhen } from "#src/icons/When";
+import { IconWhere } from "#src/icons/Where";
+import { IconWho } from "#src/icons/Who";
+import { seo } from "#src/utils/seo";
+import { getUserFromCookie } from "#src/utils/token";
+import type { PageProps } from "#src/utils/typescript";
 
 import { JoinButton } from "./JoinButton";
 import { NotifyMeButton } from "./NotifyMeButton";

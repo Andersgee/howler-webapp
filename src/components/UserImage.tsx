@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { hashidFromId } from "src/utils/hashid";
+import { hashidFromId } from "#src/utils/hashid";
 
 type ImageProps = {
   src: string;

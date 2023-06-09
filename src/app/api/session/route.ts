@@ -1,6 +1,7 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { SESSION_COOKIE_NAME } from "src/utils/auth";
-import { createSessionToken, getSessionFromRequestCookie, getUserFromRequestCookie } from "src/utils/token";
+import { type NextRequest, NextResponse } from "next/server";
+
+import { SESSION_COOKIE_NAME } from "#src/utils/auth";
+import { createSessionToken, getSessionFromRequestCookie, getUserFromRequestCookie } from "#src/utils/token";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";

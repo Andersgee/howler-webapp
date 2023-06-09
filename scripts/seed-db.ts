@@ -7,3 +7,5 @@ import { db } from "../src/db";
 const hmm = await db.selectFrom("User").selectAll().get();
 
 console.log(hmm);
+
+console.log("hmm");

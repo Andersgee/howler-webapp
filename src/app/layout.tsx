@@ -1,10 +1,12 @@
-import "./globals.css";
-import { UserProvider } from "src/context/UserContext";
 import { Inter } from "next/font/google";
-import { DialogProvider } from "src/context/DialogContext";
-import { NotificationsProvider } from "src/context/NotificationsContext";
+
+import { DialogProvider } from "#src/context/DialogContext";
+import { NotificationsProvider } from "#src/context/NotificationsContext";
+import { UserProvider } from "#src/context/UserContext";
+import { seo } from "#src/utils/seo";
+
 import { Topnav } from "./Topnav";
-import { seo } from "src/utils/seo";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 

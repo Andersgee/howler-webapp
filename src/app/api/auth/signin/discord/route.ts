@@ -1,7 +1,8 @@
 import { type NextRequest } from "next/server";
-import { DISCORD_AUTHORIZATION_URL } from "src/utils/auth";
-import { createStateToken, getSessionFromRequestCookie } from "src/utils/token";
-import { absUrl, urlWithSearchparams } from "src/utils/url";
+
+import { DISCORD_AUTHORIZATION_URL } from "#src/utils/auth";
+import { createStateToken, getSessionFromRequestCookie } from "#src/utils/token";
+import { absUrl, urlWithSearchparams } from "#src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";

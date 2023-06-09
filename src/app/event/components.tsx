@@ -1,7 +1,7 @@
 "use client";
 
-import { useDialogDispatch } from "src/context/DialogContext";
-import { IconHowler } from "src/icons/Howler";
+import { useDialogDispatch } from "#src/context/DialogContext";
+import { IconHowler } from "#src/icons/Howler";
 
 export function HowlbuttonTriggerSignin() {
   const dialogDispatch = useDialogDispatch();

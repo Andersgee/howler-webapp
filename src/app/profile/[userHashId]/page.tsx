@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { db } from "src/db";
-import { idFromHashid } from "src/utils/hashid";
-import { tagUserInfo } from "src/utils/tags";
+import { db } from "#src/db";
+import { idFromHashid } from "#src/utils/hashid";
+import { tagUserInfo } from "#src/utils/tags";
 
 import { FollowUserButton } from "./FollowUserButton";
 

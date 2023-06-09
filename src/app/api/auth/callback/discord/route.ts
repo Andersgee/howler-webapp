@@ -1,4 +1,6 @@
 import { type NextRequest } from "next/server";
+
+import { db } from "#src/db";
 import {
   DISCORD_TOKEN,
   DISCORD_TOKEN_URL,
@@ -7,11 +9,10 @@ import {
   USER_COOKIE_NAME,
   addUser,
   getUserByEmail,
-} from "src/utils/auth";
-import { absUrl, encodeParams } from "src/utils/url";
-import { createTokenFromUser, getSessionFromRequestCookie, verifyStateToken } from "src/utils/token";
-import { db } from "src/db";
-import type { TokenUser } from "src/utils/token/schema";
+} from "#src/utils/auth";
+import { createTokenFromUser, getSessionFromRequestCookie, verifyStateToken } from "#src/utils/token";
+import type { TokenUser } from "#src/utils/token/schema";
+import { absUrl, encodeParams } from "#src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";

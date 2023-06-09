@@ -1,8 +1,8 @@
-import { followOrUnfollowUser } from "src/app/actions";
-import { db } from "src/db";
-import { hashidFromId } from "src/utils/hashid";
-import { tagIsFollowingUser } from "src/utils/tags";
-import { getUserFromCookie } from "src/utils/token";
+import { followOrUnfollowUser } from "#src/app/actions";
+import { db } from "#src/db";
+import { hashidFromId } from "#src/utils/hashid";
+import { tagIsFollowingUser } from "#src/utils/tags";
+import { getUserFromCookie } from "#src/utils/token";
 
 type Props = {
   userId: number;

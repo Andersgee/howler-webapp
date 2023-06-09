@@ -10,8 +10,9 @@ import {
 } from "kysely";
 import { deserialize, serialize } from "superjson";
 
-//import { urlWithSearchparams } from "src/utils/url";
-import { urlWithSearchparams } from "../utils/url";
+//import { urlWithSearchparams } from "#src/utils/url";
+import { urlWithSearchparams } from "#src/utils/url";
+
 import type { DB } from "./types";
 
 //const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;

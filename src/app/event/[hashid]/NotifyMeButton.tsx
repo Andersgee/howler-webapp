@@ -1,8 +1,9 @@
 "use client";
 
-import { IconBell } from "src/icons/Bell";
-import { useNotificationsContext } from "src/context/NotificationsContext";
 import { useTransition } from "react";
+
+import { useNotificationsContext } from "#src/context/NotificationsContext";
+import { IconBell } from "#src/icons/Bell";
 
 type Props = {
   eventhashid: string;

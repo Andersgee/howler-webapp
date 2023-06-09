@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "howler-web",
   "version": "0.1.0",
   "private": true,
@@ -9,6 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "tsnode": "NODE_ENV=development node --experimental-specifier-resolution=node --loader ts-node/esm/transpile-only"
+  },
+  "imports": {
+    "#src/*": "./src/*"
   },
   "dependencies": {
     "@andersgee/kysely-fetch-driver": "^1.0.2",

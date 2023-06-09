@@ -1,8 +1,9 @@
 "use client";
 
 import { format, formatDistance } from "date-fns";
-import { useDialogDispatch } from "src/context/DialogContext";
-import { IconHowler } from "src/icons/Howler";
+
+import { useDialogDispatch } from "#src/context/DialogContext";
+import { IconHowler } from "#src/icons/Howler";
 
 type Props = {
   date: Date;

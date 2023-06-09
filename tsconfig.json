@@ -21,9 +21,15 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"]
+      "#src/*": ["./src/*"]
+    }
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext"
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.mjs", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "sw", "scripts"]
+  "exclude": ["node_modules", "scripts"]
 }

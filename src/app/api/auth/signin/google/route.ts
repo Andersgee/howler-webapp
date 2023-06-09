@@ -1,7 +1,8 @@
 import { type NextRequest } from "next/server";
-import { GOOGLE_OPENID_DISCOVERY_URL, GOOGLE_discoveryDocument } from "src/utils/auth";
-import { createStateToken, getSessionFromRequestCookie } from "src/utils/token";
-import { absUrl, urlWithSearchparams } from "src/utils/url";
+
+import { GOOGLE_OPENID_DISCOVERY_URL, GOOGLE_discoveryDocument } from "#src/utils/auth";
+import { createStateToken, getSessionFromRequestCookie } from "#src/utils/token";
+import { absUrl, urlWithSearchparams } from "#src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";

@@ -4,12 +4,12 @@ import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { db } from "src/db";
-import { utcDateFromDatetimelocalString } from "src/utils/date";
-import { protectedAction } from "src/utils/formdata";
-import { hashidFromId, idFromHashid } from "src/utils/hashid";
-import { tagEvents, tagHasJoinedEvent, tagIsFollowingUser } from "src/utils/tags";
-import { absUrl } from "src/utils/url";
+import { db } from "#src/db";
+import { utcDateFromDatetimelocalString } from "#src/utils/date";
+import { protectedAction } from "#src/utils/formdata";
+import { hashidFromId, idFromHashid } from "#src/utils/hashid";
+import { tagEvents, tagHasJoinedEvent, tagIsFollowingUser } from "#src/utils/tags";
+import { absUrl } from "#src/utils/url";
 
 export const actionJoinOrLeaveEvent = protectedAction(
   z.object({

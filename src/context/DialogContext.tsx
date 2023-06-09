@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useReducer } from "react";
-import type { Prettify } from "src/utils/typescript";
+
+import type { Prettify } from "#src/utils/typescript";
 
 export function useDialogContext() {
   const ctx = useContext(DialogContext);

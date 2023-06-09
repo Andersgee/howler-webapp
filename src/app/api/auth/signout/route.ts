@@ -1,6 +1,7 @@
 import { type NextRequest } from "next/server";
-import { USER_COOKIE_NAME } from "src/utils/auth";
-import { getBaseUrl } from "src/utils/url";
+
+import { USER_COOKIE_NAME } from "#src/utils/auth";
+import { getBaseUrl } from "#src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";

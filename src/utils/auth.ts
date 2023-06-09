@@ -1,7 +1,8 @@
-import type { DB } from "src/db/types";
 import type { InsertObjectOrList } from "kysely/dist/cjs/parser/insert-values-parser";
-import { db } from "src/db";
 import { z } from "zod";
+
+import { db } from "#src/db";
+import type { DB } from "#src/db/types";
 
 export const SESSION_COOKIE_NAME = "__Host-session";
 export const USER_COOKIE_NAME = "__Host-user";

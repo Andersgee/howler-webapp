@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { SigninButtons } from "src/components/SigninButtons";
-import { UserImageLarge } from "src/components/UserImage";
-import { db } from "src/db";
-import { hashidFromId } from "src/utils/hashid";
-import { tagUserInfo } from "src/utils/tags";
-import { getUserFromCookie } from "src/utils/token";
+import { SigninButtons } from "#src/components/SigninButtons";
+import { UserImageLarge } from "#src/components/UserImage";
+import { db } from "#src/db";
+import { hashidFromId } from "#src/utils/hashid";
+import { tagUserInfo } from "#src/utils/tags";
+import { getUserFromCookie } from "#src/utils/token";
 
 export const dynamic = "force-dynamic";
 

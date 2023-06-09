@@ -1,7 +1,8 @@
 import { type NextRequest } from "next/server";
-import { GITHUB_AUTHORIZATION_URL } from "src/utils/auth";
-import { createStateToken, getSessionFromRequestCookie } from "src/utils/token";
-import { absUrl, urlWithSearchparams } from "src/utils/url";
+
+import { GITHUB_AUTHORIZATION_URL } from "#src/utils/auth";
+import { createStateToken, getSessionFromRequestCookie } from "#src/utils/token";
+import { absUrl, urlWithSearchparams } from "#src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";

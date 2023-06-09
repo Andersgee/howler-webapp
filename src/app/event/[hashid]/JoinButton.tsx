@@ -1,7 +1,8 @@
-import { actionJoinOrLeaveEvent } from "src/app/actions";
-import type { TokenUser } from "src/utils/token/schema";
+import { actionJoinOrLeaveEvent } from "#src/app/actions";
+import { IconHowler } from "#src/icons/Howler";
+import type { TokenUser } from "#src/utils/token/schema";
+
 import { getHasJoinedEvent } from "./data";
-import { IconHowler } from "src/icons/Howler";
 
 type Props = {
   eventHashid: string;

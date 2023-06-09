@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { db } from "src/db";
-import { formatDate } from "src/utils/date";
-import { hashidFromId } from "src/utils/hashid";
-import { MessagingTest } from "./messaging-test";
+
+import { db } from "#src/db";
+import { IconArrowLink } from "#src/icons/ArrowLink";
+import { formatDate } from "#src/utils/date";
+import { hashidFromId } from "#src/utils/hashid";
+
 import { NewEventForm } from "./event/NewEventForm";
-import { IconArrowLink } from "src/icons/ArrowLink";
+import { MessagingTest } from "./messaging-test";
 
 export default async function Page() {
   const events = await db

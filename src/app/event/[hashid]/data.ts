@@ -1,8 +1,9 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
-import { db } from "src/db";
+
+import { db } from "#src/db";
 //import { jsonArrayFrom } from "kysely/helpers/mysql";
-import { idFromHashid } from "src/utils/hashid";
-import { tagHasJoinedEvent } from "src/utils/tags";
+import { idFromHashid } from "#src/utils/hashid";
+import { tagHasJoinedEvent } from "#src/utils/tags";
 
 export async function getEvent(eventHashid: string) {
   const eventId = idFromHashid(eventHashid);

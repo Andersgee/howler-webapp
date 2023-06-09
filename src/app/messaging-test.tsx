@@ -1,6 +1,6 @@
 "use client";
 
-import { useNotificationsContext } from "src/context/NotificationsContext";
+import { useNotificationsContext } from "#src/context/NotificationsContext";
 
 type Props = {
   className?: string;
