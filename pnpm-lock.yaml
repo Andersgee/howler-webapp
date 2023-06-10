@@ -18,6 +18,7 @@ specifiers:
   hashids: ^2.2.11
   jose: ^4.14.4
   kysely: ^0.24.2
+  lorem-ipsum: ^2.0.8
   next: 13.4.1
   postcss: 8.4.23
   prettier: ^2.8.8
@@ -60,6 +61,7 @@ devDependencies:
   dotenv: 16.1.4
   eslint-config-next: 13.4.1_6vi2gkvwlfwgplg2hmgmdmjnte
   eslint-config-prettier: 8.8.0_eslint@8.39.0
+  lorem-ipsum: 2.0.8
   prettier: 2.8.8
   prisma: 4.14.0
   prisma-kysely: 1.2.1
@@ -1908,6 +1910,11 @@ packages:
     engines: {node: '>= 6'}
     dev: false
 
+  /commander/9.5.0:
+    resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
+    engines: {node: ^12.20.0 || >=14}
+    dev: true
+
   /commondir/1.0.1:
     resolution: {integrity: sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==}
     dev: true
@@ -3487,6 +3494,14 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
+
+  /lorem-ipsum/2.0.8:
+    resolution: {integrity: sha512-5RIwHuCb979RASgCJH0VKERn9cQo/+NcAi2BMe9ddj+gp7hujl6BI+qdOG4nVsLDpwWEJwTVYXNKP6BGgbcoGA==}
+    engines: {node: '>= 8.x', npm: '>= 5.x'}
+    hasBin: true
+    dependencies:
+      commander: 9.5.0
+    dev: true
 
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
