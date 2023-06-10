@@ -6,7 +6,7 @@ import { type TokenUser } from "#src/utils/token/schema";
 
 const Context = createContext<TokenUser | null>(null);
 
-export function useUser() {
+export function useUserContext() {
   const ctx = useContext(Context);
   if (ctx === undefined) throw new Error("context does not have provider");
   return ctx;

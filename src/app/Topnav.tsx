@@ -7,7 +7,7 @@ import { SigninButtons } from "#src/components/SigninButtons";
 import { SignoutButton } from "#src/components/SignoutButton";
 import { UserImage } from "#src/components/UserImage";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
-import { useUser } from "#src/context/UserContext";
+import { useUserContext } from "#src/context/UserContext";
 import { useOnClickOutside } from "#src/hooks/useOnClickOutside";
 import { IconAvatar } from "#src/icons/Avatar";
 
@@ -25,7 +25,7 @@ function ProfileButton() {
   const dialogDispatch = useDialogDispatch();
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => dialogDispatch({ type: "hide", name: "signin" }));
-  const user = useUser();
+  const user = useUserContext();
 
   return (
     <div ref={ref}>
