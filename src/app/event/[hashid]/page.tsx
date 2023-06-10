@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { LinkUserImage } from "#src/components/UserImage";
 import { IconArrowDown } from "#src/icons/ArrowDown";
 import { IconWhat } from "#src/icons/What";
 import { IconWhen } from "#src/icons/When";
@@ -33,6 +34,10 @@ export default async function Page({ params }: PageProps) {
   return (
     <div className="container flex justify-center">
       <div className="">
+        <div className="flex items-center text-sm">
+          <div>created by </div>
+          <LinkUserImage src={event.creator.image!} alt={event.creator.name} userId={event.creator.id} />
+        </div>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-1">
             <IconWhat />

@@ -24,8 +24,6 @@ export default async function Page() {
   return (
     <main className="">
       <div className="container">
-        <h2>Notificationstuff</h2>
-        <MessagingTest />
         <NewEventForm />
 
         <h2>Whats happening</h2>
@@ -47,6 +45,8 @@ export default async function Page() {
             </li>
           ))}
         </ul>
+
+        <MessagingTest className="mt-4" />
       </div>
     </main>
   );

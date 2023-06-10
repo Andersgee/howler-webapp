@@ -1,6 +1,6 @@
-import { initializeApp, type FirebaseApp } from "firebase/app";
+import { type FirebaseApp, initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import type { Messaging, MessagePayload } from "firebase/messaging";
+import type { MessagePayload, Messaging } from "firebase/messaging";
 
 /**
  * Note: The Firebase config object contains unique, but non-secret identifiers for your Firebase project.
@@ -67,6 +67,8 @@ export class FirebaseCloudMessaging {
     if (this.fcmToken) return this.fcmToken;
 
     try {
+      const granted = await requestNotificationPermission();
+      if (!granted) return null;
       //getToken() asks for permission if not already granted
       const token = await getToken(this.messaging, {
         vapidKey: process.env.NEXT_PUBLIC_FCM_VAPID_KEY,
@@ -83,6 +85,15 @@ export class FirebaseCloudMessaging {
 
 export async function requestNotificationPermission() {
   if (!("Notification" in window)) return false;
+
+  if ("Notification" in window && Notification.permission === "denied") {
+    alert(
+      "Notifications are blocked. Please open your browser preferences or click the lock near the address bar to change your notification preferences."
+    );
+    return false;
+  }
+
+  if ("Notification" in window && Notification.permission === "granted") return true;
 
   const permission = await Notification.requestPermission();
   if (permission === "granted") return true;

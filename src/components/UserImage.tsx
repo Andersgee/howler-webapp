@@ -16,22 +16,22 @@ export function UserImageLarge({ src, alt }: ImageProps) {
 }
 
 type LinkProps = {
-  id: number;
+  userId: number;
   src: string;
   alt: string;
 };
 
-export function LinkUserImage({ id, src, alt }: LinkProps) {
+export function LinkUserImage({ userId, src, alt }: LinkProps) {
   return (
-    <Link href={`/profile/${hashidFromId(id)}`}>
+    <Link href={`/profile/${hashidFromId(userId)}`}>
       <UserImage src={src} alt={alt} />
     </Link>
   );
 }
 
-export function LinkUserImageLarge({ id, src, alt }: LinkProps) {
+export function LinkUserImageLarge({ userId, src, alt }: LinkProps) {
   return (
-    <Link href={`/profile/${hashidFromId(id)}`}>
+    <Link href={`/profile/${hashidFromId(userId)}`}>
       <UserImageLarge src={src} alt={alt} />
     </Link>
   );
