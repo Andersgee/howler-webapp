@@ -22,6 +22,7 @@ export type Example = {
 };
 export type FcmToken = {
   id: string;
+  createdAt: Generated<Timestamp>;
   userId: number;
 };
 export type Place = {
