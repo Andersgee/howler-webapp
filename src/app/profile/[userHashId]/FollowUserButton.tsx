@@ -10,10 +10,11 @@ type Props = {
 
 export async function FollowUserButton({ userId }: Props) {
   const tokenUser = await getUserFromCookie();
-  if (!tokenUser || tokenUser.id === userId) return null;
+  //if (!tokenUser || tokenUser.id === userId) return null;
+  if (!tokenUser) return null;
 
   const existingFollow = await db
-    .selectFrom("Follow")
+    .selectFrom("UserUserPivot")
     .select(["userId", "followerId"])
     .where("followerId", "=", tokenUser.id)
     .where("userId", "=", userId)
@@ -26,7 +27,7 @@ export async function FollowUserButton({ userId }: Props) {
 
   return (
     <form action={followOrUnfollowUser}>
-      <input name="otherUserHashId" hidden type="text" value={hashidFromId(userId)} />
+      <input name="otherUserHashId" hidden type="text" defaultValue={hashidFromId(userId)} />
       <button type="submit">{existingFollow ? "unfollow" : "follow"}</button>
     </form>
   );
