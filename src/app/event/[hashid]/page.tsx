@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 
-import { actionNotifyMeAboutEvent } from "#src/app/actions";
 import { IconArrowDown } from "#src/icons/ArrowDown";
 import { IconWhat } from "#src/icons/What";
 import { IconWhen } from "#src/icons/When";
@@ -11,7 +10,6 @@ import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
 
 import { JoinButton } from "./JoinButton";
-import { NotifyMeButton } from "./NotifyMeButton";
 import { JoinbuttonTriggerSignin, WhenText } from "./components";
 import { getEvent } from "./data";
 
@@ -67,7 +65,6 @@ export default async function Page({ params }: PageProps) {
           <div className="flex justify-center my-2">
             {user ? <JoinButton eventHashid={params.hashid} user={user} /> : <JoinbuttonTriggerSignin />}
           </div>
-          <NotifyMeButton eventhashid={params.hashid} action={actionNotifyMeAboutEvent} />
         </div>
       </div>
     </div>

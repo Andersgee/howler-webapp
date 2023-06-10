@@ -3,7 +3,7 @@ import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { db } from "#src/db";
 //import { jsonArrayFrom } from "kysely/helpers/mysql";
 import { idFromHashid } from "#src/utils/hashid";
-import { tagHasJoinedEvent } from "#src/utils/tags";
+import { tagHasJoinedEvent, tagIsSubscribedToEvent } from "#src/utils/tags";
 
 export async function getEvent(eventHashid: string) {
   const eventId = idFromHashid(eventHashid);
@@ -55,6 +55,25 @@ export async function getHasJoinedEvent(eventHashid: string, userId: number) {
       cache: "force-cache",
       next: {
         tags: [tagHasJoinedEvent({ eventId, userId })],
+      },
+    });
+
+  if (userEventPivot) return true;
+  return false;
+}
+
+export async function getIsSubscribedToEvent(eventHashid: string, userId: number) {
+  const eventId = idFromHashid(eventHashid);
+  if (!eventId) return false;
+  const userEventPivot = await db
+    .selectFrom("UserEventPivot")
+    .select("userId")
+    .where("userId", "=", userId)
+    .where("eventId", "=", eventId)
+    .getFirst({
+      cache: "force-cache",
+      next: {
+        tags: [tagIsSubscribedToEvent({ eventId, userId })],
       },
     });
 

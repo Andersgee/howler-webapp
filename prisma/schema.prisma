@@ -44,17 +44,19 @@ model User {
     image         String?
     name          String
 
-    events          Event[]
-    joinedEvents    UserEventPivot[]
-    fcmToken        FcmToken[]
-    sentFollows     Follow[]         @relation("sentFollows")
-    recievedFollows Follow[]         @relation("recievedFollows")
+    createdEvents Event[]
+    joinedEvents  UserEventPivot[]
+
+    fcmTokens       FcmToken[]
+    sentFollows     UserUserPivot[] @relation("sentFollows")
+    recievedFollows UserUserPivot[] @relation("recievedFollows")
 }
 
 model FcmToken {
-    id     String @id //the getToken() from firebase/messaging
-    userId Int
-    User   User   @relation(fields: [userId], references: [id])
+    id        String   @id //the getToken() from firebase/messaging
+    createdAt DateTime @default(now())
+    userId    Int
+    User      User     @relation(fields: [userId], references: [id])
 }
 
 model Example {
@@ -99,7 +101,7 @@ model Place {
     events Event[]
 }
 
-model Follow {
+model UserUserPivot {
     user       User @relation("recievedFollows", fields: [userId], references: [id], onDelete: Cascade)
     userId     Int
     follower   User @relation("sentFollows", fields: [followerId], references: [id], onDelete: Cascade)

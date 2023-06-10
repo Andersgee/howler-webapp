@@ -7,6 +7,10 @@ export function tagHasJoinedEvent({ eventId, userId }: { eventId: number; userId
   return `hasjoinedevent-${eventId}-${userId}`;
 }
 
+export function tagIsSubscribedToEvent({ eventId, userId }: { eventId: number; userId: number }) {
+  return `issusbscribedtoevent-${eventId}-${userId}`;
+}
+
 export function tagEvents() {
   return "events";
 }

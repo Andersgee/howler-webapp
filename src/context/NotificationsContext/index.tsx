@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { setupMessaging } from "./util";
-import type { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
 import type { MessagePayload } from "firebase/messaging";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+
+import type { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
+import { setupMessaging } from "./util";
 
 export function useNotificationsContext() {
   const ctx = useContext(Context);
@@ -14,7 +15,8 @@ export function useNotificationsContext() {
 /////////////////////////////////////////////////
 
 type Value = {
-  getMyFcmToken: () => Promise<string | null>;
+  fcmToken: string | null;
+  getFcmToken: () => Promise<string | null>;
   messages: MessagePayload[];
 };
 
@@ -24,6 +26,7 @@ const Context = createContext<undefined | Value>(undefined);
 export function NotificationsProvider({ children }: { children: React.ReactNode }) {
   const fcmRef = useRef<FirebaseCloudMessaging | null>(null);
   const [messages, setMessages] = useState<MessagePayload[]>([]);
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
 
   useEffect(() => {
     setupMessaging()
@@ -33,16 +36,21 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
           console.log("onMessage, payload:", payload);
           setMessages((msgs) => [...msgs, payload]);
         });
+        if (fcmRef.current.fcmToken) {
+          setFcmToken(fcmRef.current.fcmToken);
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  const getMyFcmToken = useCallback(async () => {
+  const getFcmToken = useCallback(async () => {
     if (!fcmRef.current) return null;
-    return fcmRef.current.requestFcmToken();
+    const token = await fcmRef.current.requestFcmToken();
+    setFcmToken(fcmRef.current.fcmToken);
+    return token;
   }, []);
 
-  return <Context.Provider value={{ getMyFcmToken, messages }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ fcmToken, getFcmToken, messages }}>{children}</Context.Provider>;
 }

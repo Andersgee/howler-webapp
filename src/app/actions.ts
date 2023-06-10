@@ -8,8 +8,7 @@ import { db } from "#src/db";
 import { utcDateFromDatetimelocalString } from "#src/utils/date";
 import { protectedAction } from "#src/utils/formdata";
 import { hashidFromId, idFromHashid } from "#src/utils/hashid";
-import { tagEvents, tagHasJoinedEvent, tagIsFollowingUser } from "#src/utils/tags";
-import { absUrl } from "#src/utils/url";
+import { tagEvents, tagHasJoinedEvent, tagIsFollowingUser, tagIsSubscribedToEvent } from "#src/utils/tags";
 
 export const actionJoinOrLeaveEvent = protectedAction(
   z.object({
@@ -43,7 +42,39 @@ export const actionJoinOrLeaveEvent = protectedAction(
   }
 );
 
-export const actionNotifyMeAboutEvent = protectedAction(
+export const followOrUnfollowUser = protectedAction(
+  z.object({
+    otherUserHashId: z.string().min(1),
+  }),
+  async ({ data, user }) => {
+    const otherUserId = idFromHashid(data.otherUserHashId);
+    if (!otherUserId) {
+      console.log("no otherUserId");
+      return null;
+    }
+
+    const deleteResult = await db
+      .deleteFrom("UserUserPivot")
+      .where("followerId", "=", user.id)
+      .where("userId", "=", otherUserId)
+      .executeTakeFirst();
+
+    const numDeletedRows = Number(deleteResult.numDeletedRows);
+    if (!numDeletedRows) {
+      await db
+        .insertInto("UserUserPivot")
+        .values({
+          followerId: user.id,
+          userId: otherUserId,
+        })
+        .executeTakeFirst();
+    }
+
+    revalidateTag(tagIsFollowingUser({ myUserId: user.id, otherUserId: otherUserId }));
+  }
+);
+
+export const actionSubscribeOrUnsubscribeToEvent = protectedAction(
   z.object({
     eventhashid: z.string().min(1),
     fcmToken: z.string().min(1),
@@ -55,32 +86,24 @@ export const actionNotifyMeAboutEvent = protectedAction(
       return null;
     }
 
-    try {
-      const url = `${process.env.DATABASE_HTTP_URL}/notify`;
-      const r = await fetch(url, {
-        method: "POST",
-        headers: {
-          Authorization: process.env.DATABASE_HTTP_AUTH_HEADER,
-        },
-        body: JSON.stringify({
+    const deleteResult = await db
+      .deleteFrom("FcmToken")
+      .where("id", "=", data.fcmToken)
+      .where("userId", "=", user.id)
+      .executeTakeFirst();
+
+    const numDeletedRows = Number(deleteResult.numDeletedRows);
+    if (!numDeletedRows) {
+      await db
+        .insertInto("FcmToken")
+        .values({
+          id: data.fcmToken,
           userId: user.id,
-          fcmToken: data.fcmToken,
-          title: "some title",
-          body: "some body",
-          imageUrl: absUrl("/icons/favicon-48x48.png"),
-          linkUrl: absUrl(`/event/${data.eventhashid}`),
-        }),
-      }).then((res) => res.json());
-      console.log(r);
-    } catch (error) {
-      console.log(error);
+        })
+        .executeTakeFirst();
     }
 
-    console.log(
-      `call /notify endpoint here with eventId: ${eventId} and userId: ${user.id} and fcmToken: ${data.fcmToken}`
-    );
-
-    return null;
+    revalidateTag(tagIsSubscribedToEvent({ eventId, userId: user.id }));
   }
 );
 
@@ -116,37 +139,5 @@ export const actionCreateEvent = protectedAction(
     revalidateTag(tagEvents());
 
     redirect(`/event/${hashid}`);
-  }
-);
-
-export const followOrUnfollowUser = protectedAction(
-  z.object({
-    otherUserHashId: z.string().min(1),
-  }),
-  async ({ data, user }) => {
-    const otherUserId = idFromHashid(data.otherUserHashId);
-    if (!otherUserId) {
-      console.log("no otherUserId");
-      return null;
-    }
-
-    const deleteResult = await db
-      .deleteFrom("Follow")
-      .where("followerId", "=", user.id)
-      .where("userId", "=", otherUserId)
-      .executeTakeFirst();
-
-    const numDeletedRows = Number(deleteResult.numDeletedRows);
-    if (!numDeletedRows) {
-      await db
-        .insertInto("Follow")
-        .values({
-          followerId: user.id,
-          userId: otherUserId,
-        })
-        .executeTakeFirst();
-    }
-
-    revalidateTag(tagIsFollowingUser({ myUserId: user.id, otherUserId: otherUserId }));
   }
 );
