@@ -16,8 +16,6 @@ export function NewEventForm() {
   return (
     <div className="container flex justify-center">
       <div className="">
-        <h1 className="text-center my-2">Make something happen!</h1>
-
         <form className="flex flex-col gap-3">
           <div className="flex items-center gap-1">
             <IconWhat />

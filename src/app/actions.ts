@@ -17,7 +17,7 @@ export const actionJoinOrLeaveEvent = protectedAction(
   async ({ data, user }) => {
     const eventId = idFromHashid(data.eventhashid);
     if (!eventId) {
-      console.log("no eventId");
+      //console.log("no eventId");
       return null;
     }
 
@@ -49,7 +49,7 @@ export const followOrUnfollowUser = protectedAction(
   async ({ data, user }) => {
     const otherUserId = idFromHashid(data.otherUserHashId);
     if (!otherUserId) {
-      console.log("no otherUserId");
+      //console.log("no otherUserId");
       return null;
     }
 
@@ -73,41 +73,6 @@ export const followOrUnfollowUser = protectedAction(
     revalidateTag(tagIsFollowingUser({ myUserId: user.id, otherUserId: otherUserId }));
   }
 );
-
-/*
-export const actionSubscribeOrUnsubscribeToEvent = protectedAction(
-  z.object({
-    eventhashid: z.string().min(1),
-    fcmToken: z.string().min(1),
-  }),
-  async ({ data, user }) => {
-    const eventId = idFromHashid(data.eventhashid);
-    if (!eventId) {
-      console.log("no eventId");
-      return null;
-    }
-
-    const deleteResult = await db
-      .deleteFrom("FcmToken")
-      .where("id", "=", data.fcmToken)
-      .where("userId", "=", user.id)
-      .executeTakeFirst();
-
-    const numDeletedRows = Number(deleteResult.numDeletedRows);
-    if (!numDeletedRows) {
-      await db
-        .insertInto("FcmToken")
-        .values({
-          id: data.fcmToken,
-          userId: user.id,
-        })
-        .executeTakeFirst();
-    }
-
-    revalidateTag(tagIsSubscribedToEvent({ eventId, userId: user.id }));
-  }
-);
-*/
 
 export const actionCreateEvent = protectedAction(
   z.object({
@@ -135,7 +100,7 @@ export const actionCreateEvent = protectedAction(
       })
       .executeTakeFirst();
 
-    console.log("insertresult", insertresult);
+    //console.log("insertresult", insertresult);
     const insertId = Number(insertresult.insertId);
     const hashid = hashidFromId(insertId);
     revalidateTag(tagEvents());

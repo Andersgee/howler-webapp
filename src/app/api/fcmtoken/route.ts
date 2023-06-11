@@ -18,14 +18,6 @@ export async function POST(request: NextRequest) {
     if (!user) return new Response(undefined, { status: 401 });
 
     const { fcmToken } = SCHEMA_REQUEST_BODY.parse(await request.json());
-    /*
-    const existingFcmToken = await db
-      .selectFrom("FcmToken")
-      .select(["id", "userId"])
-      .where("id", "=", fcmToken)
-      .executeTakeFirst();
-*/
-
     const insertResult = await db
       .insertInto("FcmToken")
       .ignore() //ignore the insert if already exists
@@ -34,7 +26,8 @@ export async function POST(request: NextRequest) {
         userId: user.id,
       })
       .executeTakeFirst();
-    console.log(insertResult);
+
+    console.log("/api/fcmtoken, insertResult:", insertResult);
 
     return new Response(undefined, { status: 200 });
   } catch (error) {

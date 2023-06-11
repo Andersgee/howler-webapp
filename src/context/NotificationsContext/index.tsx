@@ -60,10 +60,10 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     if (fcmToken) {
       postFcmToken(fcmToken)
-        .then((r) => {
+        .then((_r) => {
           //ignore
         })
-        .catch((err) => {
+        .catch((_err) => {
           //ignore
         });
     }
