@@ -22,14 +22,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NotificationsProvider>
-          <UserProvider>
+        <UserProvider>
+          <NotificationsProvider>
             <DialogProvider>
               <Topnav />
               {children}
             </DialogProvider>
-          </UserProvider>
-        </NotificationsProvider>
+          </NotificationsProvider>
+        </UserProvider>
       </body>
     </html>
   );
