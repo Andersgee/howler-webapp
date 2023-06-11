@@ -6,6 +6,7 @@ import { IconArrowLink } from "#src/icons/ArrowLink";
 import { formatDate } from "#src/utils/date";
 import { hashidFromId } from "#src/utils/hashid";
 import { tagEvents } from "#src/utils/tags";
+import { absUrl } from "#src/utils/url";
 
 import { NewEventForm } from "./event/NewEventForm";
 import { WhenText } from "./event/[hashid]/components";
@@ -63,6 +64,12 @@ export default async function Page() {
             </ul>
 
             <MessagingTest className="mt-4" />
+            <div>
+              {`absUrl():`} {absUrl()}
+            </div>
+            <div>
+              {`absUrl("/api/auth/callback/google")`}: {absUrl("/api/auth/callback/google")}
+            </div>
           </div>
         </div>
       </div>
