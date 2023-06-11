@@ -11,8 +11,6 @@ import { z } from "zod";
  */
 export const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
-  yoyox: z.string(),
-  NEXT_PUBLIC_HELLO: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
   DISCORD_CLIENT_ID: z.string(),
