@@ -22,6 +22,18 @@ type Value = {
 
 const Context = createContext<undefined | Value>(undefined);
 
+async function postFcmToken(fcmToken: string) {
+  const res = await fetch("/api/fcmtoken", {
+    method: "POST",
+    body: JSON.stringify({ fcmToken }),
+  });
+  if (res.status === 200) {
+    //saved it to db
+    return true;
+  }
+  return false;
+}
+
 /** setup service worker and firebase cloud messaging */
 export function NotificationsProvider({ children }: { children: React.ReactNode }) {
   const fcmRef = useRef<FirebaseCloudMessaging | null>(null);
@@ -45,10 +57,26 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
       });
   }, []);
 
+  useEffect(() => {
+    if (fcmToken) {
+      postFcmToken(fcmToken)
+        .then((r) => {
+          //ignore
+        })
+        .catch((err) => {
+          //ignore
+        });
+    }
+    //saveTokenToDb(fcmToken)
+  }, [fcmToken]);
+
   const getFcmToken = useCallback(async () => {
     if (!fcmRef.current) return null;
+    if (fcmRef.current.fcmToken) return fcmRef.current.fcmToken;
+
     const token = await fcmRef.current.requestFcmToken();
     setFcmToken(fcmRef.current.fcmToken);
+
     return token;
   }, []);
 

@@ -74,6 +74,7 @@ export const followOrUnfollowUser = protectedAction(
   }
 );
 
+/*
 export const actionSubscribeOrUnsubscribeToEvent = protectedAction(
   z.object({
     eventhashid: z.string().min(1),
@@ -106,6 +107,7 @@ export const actionSubscribeOrUnsubscribeToEvent = protectedAction(
     revalidateTag(tagIsSubscribedToEvent({ eventId, userId: user.id }));
   }
 );
+*/
 
 export const actionCreateEvent = protectedAction(
   z.object({
