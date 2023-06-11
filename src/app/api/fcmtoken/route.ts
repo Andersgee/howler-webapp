@@ -1,5 +1,4 @@
-import { jsonArrayFrom } from "kysely/helpers/mysql";
-import { type NextRequest, NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
 import { z } from "zod";
 
 import { db } from "#src/db";
@@ -27,7 +26,8 @@ export async function POST(request: NextRequest) {
       })
       .executeTakeFirst();
 
-    console.log("/api/fcmtoken, insertResult:", insertResult);
+    console.log("/api/fcmtoken, insertResult.numInsertedOrUpdatedRows:", Number(insertResult.numInsertedOrUpdatedRows));
+    console.log("/api/fcmtoken, insertResult.insertId:", Number(insertResult.insertId));
 
     return new Response(undefined, { status: 200 });
   } catch (error) {
