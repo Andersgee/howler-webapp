@@ -64,12 +64,6 @@ export default async function Page() {
             </ul>
 
             <MessagingTest className="mt-4" />
-            <div>
-              {`absUrl():`} {absUrl()}
-            </div>
-            <div>
-              {`absUrl("/api/auth/callback/google")`}: {absUrl("/api/auth/callback/google")}
-            </div>
           </div>
         </div>
       </div>

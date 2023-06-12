@@ -10,11 +10,14 @@ import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext"
 import { useUserContext } from "#src/context/UserContext";
 import { useOnClickOutside } from "#src/hooks/useOnClickOutside";
 import { IconAvatar } from "#src/icons/Avatar";
+import { IconHowler } from "#src/icons/Howler";
 
 export function Topnav() {
   return (
     <div className="flex justify-between">
-      <div></div>
+      <Link href="/">
+        <IconHowler className="h-8 w-8 m-2" />
+      </Link>
       <ProfileButton />
     </div>
   );
