@@ -1,6 +1,7 @@
 "use client";
 
 import { useNotificationsContext } from "#src/context/NotificationsContext";
+import { useUserContext } from "#src/context/UserContext";
 
 type Props = {
   className?: string;
@@ -8,6 +9,7 @@ type Props = {
 
 export function MessagingTest({ className = "" }: Props) {
   const { messages, getFcmToken, fcmToken } = useNotificationsContext();
+  const user = useUserContext();
   return (
     <div className={className}>
       <h2>Notification test</h2>
@@ -16,7 +18,8 @@ export function MessagingTest({ className = "" }: Props) {
         Background notifications (while app is closed or not active?) should be proper notifications and not shown here.
       </p>
       <p>If notifications are not even turned on there will be a button here instead.</p>
-      {!fcmToken && (
+      <p>also if not even signed in then dont show button either</p>
+      {user !== null && fcmToken === null && (
         <button
           className="bg-blue-500 px-3 py-2 font-semibold text-white"
           onClick={async () => {
