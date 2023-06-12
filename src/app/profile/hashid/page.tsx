@@ -7,8 +7,8 @@ import { tagUserInfo } from "#src/utils/tags";
 
 import { FollowUserButton } from "./FollowUserButton";
 
-export default async function Page({ params }: { params: { userHashId: string } }) {
-  const userId = idFromHashid(params.userHashId);
+export default async function Page({ params }: { params: { hashid: string } }) {
+  const userId = idFromHashid(params.hashid);
   if (userId === undefined) notFound();
 
   const user = await db
