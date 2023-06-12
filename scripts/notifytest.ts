@@ -15,10 +15,10 @@ type NotifyBody = {
 async function notifyUserId1() {
   const body: NotifyBody = {
     userId: 1,
-    title: "debug hello",
-    body: "some body here",
+    title: "yo title here",
+    body: "clicking this should link to /event",
     imageUrl: "https://howler.andyfx.net/icons/favicon-48x48.png",
-    linkUrl: "https://howler.andyfx.net/event/Omgkm",
+    linkUrl: "https://howler.andyfx.net/event",
   };
   const data = await fetch(`${process.env.DATABASE_HTTP_URL}/notify`, {
     method: "POST",
