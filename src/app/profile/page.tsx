@@ -25,9 +25,7 @@ export default async function Page() {
 
   const user = await db
     .selectFrom("User")
-    .select("User.id")
-    .select("User.name")
-    .select("User.image")
+    .select(["id", "name", "image"])
     .where("User.id", "=", tokenUser.id)
     .getFirst({
       cache: "force-cache",
