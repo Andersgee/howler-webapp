@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 
 import { db } from "#src/db";
 import { idFromHashid } from "#src/utils/hashid";
-import { tagUserInfo } from "#src/utils/tags";
 
+//import { tagUserInfo } from "#src/utils/tags";
 import { FollowUserButton } from "./FollowUserButton";
 
 export default async function Page({ params }: { params: { hashid: string } }) {
@@ -18,7 +18,8 @@ export default async function Page({ params }: { params: { hashid: string } }) {
     .where("User.id", "=", userId)
     .getFirst({
       next: {
-        tags: [tagUserInfo({ userId })],
+        revalidate: 10,
+        //tags: [tagUserInfo({ userId })],
       },
     });
   if (!user) notFound();
