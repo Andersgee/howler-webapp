@@ -11,20 +11,19 @@ type Props = {
 };
 
 /**
- * avoids hydration mismatch of date string (by changing date string in useEffect)
- * */
+ * avoids hydration mismatch of server/client rendered date string (by editing string on mount)
+ */
 function useFormatDate(date: Date) {
-  //const [datestr, setDatestr] = useState("");
-  const [datestr, setDatestr] = useState(formatDate(date));
+  const [value, setValue] = useState({ datestr: formatDate(date), isMounted: false });
   useEffect(() => {
-    setDatestr(formatDate(date));
+    setValue({ datestr: formatDate(date), isMounted: true });
   }, [date]);
-  return datestr;
+  return value;
 }
 
 export function WhenText({ date }: Props) {
-  const datestr = useFormatDate(date);
-  return <>{datestr}</>;
+  const { datestr, isMounted } = useFormatDate(date);
+  return <span className={isMounted ? "visible" : "invisible"}>{datestr}</span>;
 }
 
 export function JoinbuttonTriggerSignin() {
