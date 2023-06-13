@@ -105,6 +105,21 @@ export const actionCreateEvent = protectedAction(
     const hashid = hashidFromId(insertId);
     revalidateTag(tagEvents());
 
+    await notifyEventCreated({ eventId: insertId });
+
     redirect(`/event/${hashid}`);
   }
 );
+
+async function notifyEventCreated({ eventId }: { eventId: number }) {
+  const body = { eventId };
+  return fetch(`${process.env.DATABASE_HTTP_URL}/notifyeventcreated`, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: process.env.DATABASE_HTTP_AUTH_HEADER,
+    },
+    body: JSON.stringify(body),
+  });
+}

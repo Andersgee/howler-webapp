@@ -56,7 +56,7 @@ model FcmToken {
     id        String   @id //the getToken() from firebase/messaging
     createdAt DateTime @default(now())
     userId    Int
-    User      User     @relation(fields: [userId], references: [id])
+    User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Example {
@@ -66,9 +66,9 @@ model Example {
 }
 
 model UserEventPivot {
-    user     User     @relation(fields: [userId], references: [id])
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId   Int
-    event    Event    @relation(fields: [eventId], references: [id])
+    event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
     eventId  Int
     joinDate DateTime @default(now())
 

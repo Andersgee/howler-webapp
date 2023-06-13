@@ -8,8 +8,8 @@ type NotifyBody = {
   userId: number;
   title: string;
   body: string;
-  imageUrl: string;
   linkUrl: string;
+  imageUrl?: string;
 };
 
 async function notifyUserId1() {
@@ -17,8 +17,8 @@ async function notifyUserId1() {
     userId: 1,
     title: "yo title here",
     body: "clicking this should link to /event",
-    imageUrl: "https://howler.andyfx.net/icons/favicon-48x48.png",
     linkUrl: "https://howler.andyfx.net/event",
+    //imageUrl: "https://howler.andyfx.net/icons/favicon-48x48.png",
   };
   const data = await fetch(`${process.env.DATABASE_HTTP_URL}/notify`, {
     method: "POST",
