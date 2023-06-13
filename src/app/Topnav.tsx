@@ -26,9 +26,9 @@ export function Topnav() {
 function ProfileButton() {
   const dialog = useDialogContext();
   const dialogDispatch = useDialogDispatch();
+  const user = useUserContext();
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => dialogDispatch({ type: "hide", name: "signin" }));
-  const user = useUserContext();
 
   return (
     <div ref={ref}>
@@ -36,12 +36,12 @@ function ProfileButton() {
         {user ? <UserImage src={user.image} alt={user.name} /> : <IconAvatar className="h-8 w-8 m-2" />}
       </button>
       {dialog === "signin" && (
-        <div className="absolute right-0 top-12 z-10 border-2 bg-neutral-50 shadow-md p-4">
+        <div className="absolute right-0 top-12 z-10 border-2 shadow-md p-4">
           {user ? (
             <div>
               <div>
                 signed in as{" "}
-                <Link className="underline decoration-dotted" href={`/profile`}>
+                <Link className="underline decoration-dotted" href="/profile">
                   {user.name}
                 </Link>
               </div>
