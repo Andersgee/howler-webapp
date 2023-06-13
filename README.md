@@ -51,11 +51,18 @@ figure out how notifications work
 - [x] separate package for building `sw.js` (0 dependency, single file)
 - [x] api for `firebase-admin/messaging` for sending notifications
 - [x] initialize `sw.js` and `firebase/messaging` client side
-- [ ] allow user to "join" to events
-- [ ] prompt for "alert me" on some button click, perhaps when joining an event
-- [ ] store fcmToken in db after user allows notifications
-- [ ] send a notification to all users that are "attending" to a particular event id
-- [ ] test notifications when app is open (in foreground), perhaps show toast or something
-  - handle in js with onMessage from "firebase/messaging")
-- [ ] test notifications when app is not open (in background)
-  - handle with onBackgroundMessage in sw.js)
+- [x] allow user to "join" to events
+- [x] prompt for "alert me" on some button click, perhaps when joining an event
+- [x] store fcmToken in db after user allows notifications
+- [ ] send a notification to all users that are "attending" to a particular event id when its updated
+- [x] send a notification to everyone that follows a user when that user howls
+- [x] test notifications when app is open (in foreground), perhaps show toast or something
+  - handle in js with onMessage from "firebase/messaging"
+- [x] test notifications when app is not open (in background)
+  - ~~handle with onBackgroundMessage in sw.js~~
+  - actually, the onBackgroundMessage is for special handling of "data messages". Regular "notification messages" work normally by just instantiating firebase/messaging.
+
+more
+
+- [ ] seems like a user doesnt save the fcmToken do db the first time? eg if signing in and enabling notifications?
+  - investigate

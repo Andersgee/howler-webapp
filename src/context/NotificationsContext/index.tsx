@@ -67,7 +67,6 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
           //ignore
         });
     }
-    //saveTokenToDb(fcmToken)
   }, [fcmToken]);
 
   const getFcmToken = useCallback(async () => {
@@ -75,7 +74,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
     if (fcmRef.current.fcmToken) return fcmRef.current.fcmToken;
 
     const token = await fcmRef.current.requestFcmToken();
-    setFcmToken(fcmRef.current.fcmToken);
+    setFcmToken(token);
 
     return token;
   }, []);
