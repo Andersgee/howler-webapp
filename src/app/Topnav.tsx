@@ -36,7 +36,7 @@ function ProfileButton() {
         {user ? <UserImage src={user.image} alt={user.name} /> : <IconAvatar className="h-8 w-8 m-2" />}
       </button>
       {dialog === "signin" && (
-        <div className="absolute right-0 top-12 z-10 border-2 shadow-md p-4">
+        <div className="absolute right-0 top-12 z-10 border-2 shadow-md p-4 bg-white dark:bg-black">
           {user ? (
             <div>
               <div>
