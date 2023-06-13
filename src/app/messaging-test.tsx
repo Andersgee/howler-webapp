@@ -34,7 +34,9 @@ export function MessagingTest({ className = "" }: Props) {
         <ul>
           {messages.map((message) => (
             <li className="my-2" key={message.messageId}>
-              {JSON.stringify(message)}
+              <div>title: {message.notification?.title}</div>
+              <div>body: {message.notification?.body}</div>
+              {/*JSON.stringify({title: message.notification?.title, body: message.notification?.body}) */}
             </li>
           ))}
         </ul>
