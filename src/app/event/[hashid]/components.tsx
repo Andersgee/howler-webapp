@@ -1,20 +1,30 @@
 "use client";
 
-import { format, formatDistance } from "date-fns";
+import { useEffect, useState } from "react";
 
 import { useDialogDispatch } from "#src/context/DialogContext";
 import { IconHowler } from "#src/icons/Howler";
+import { formatDate } from "#src/utils/date";
 
 type Props = {
   date: Date;
 };
 
+/**
+ * avoids hydration mismatch of date string (by changing date string in useEffect)
+ * */
+function useFormatDate(date: Date) {
+  //const [datestr, setDatestr] = useState("");
+  const [datestr, setDatestr] = useState(formatDate(date));
+  useEffect(() => {
+    setDatestr(formatDate(date));
+  }, [date]);
+  return datestr;
+}
+
 export function WhenText({ date }: Props) {
-  return (
-    <>{`${format(date, "yyyy-MM-dd HH:mm")} (${formatDistance(date, Date.now(), {
-      addSuffix: true,
-    })})`}</>
-  );
+  const datestr = useFormatDate(date);
+  return <>{datestr}</>;
 }
 
 export function JoinbuttonTriggerSignin() {

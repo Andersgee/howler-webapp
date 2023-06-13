@@ -1,4 +1,4 @@
-import { addMinutes, format } from "date-fns";
+import { addMinutes, format, formatDistance } from "date-fns";
 
 /**
  * `<input type="datetime-local">` wants a particular string format in local time such as
@@ -22,8 +22,14 @@ function localIsoString(d: Date) {
   return date.toISOString();
 }
 
-export function formatDate(d: Date) {
+export function formatDateSimple(d: Date) {
   return format(d, "yyyy-MM-dd HH:mm");
+}
+
+export function formatDate(date: Date) {
+  return `${format(date, "yyyy-MM-dd HH:mm")} (${formatDistance(date, Date.now(), {
+    addSuffix: true,
+  })})`;
 }
 
 /**

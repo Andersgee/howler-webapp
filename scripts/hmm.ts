@@ -34,3 +34,7 @@ async function getListOfFcmtokensForFollowersOfEventCreator(eventId: number) {
 }
 
 getListOfFcmtokensForFollowersOfEventCreator(1);
+
+//async function findUserByEmail<T extends AnyColumn<DB, "User">>(email: string, fields: T[]) {
+//  return await db.selectFrom("User").select(fields).where("User.email", "=", email).executeTakeFirst();
+//}

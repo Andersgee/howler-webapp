@@ -3,10 +3,8 @@ import Link from "next/link";
 
 import { db } from "#src/db";
 import { IconArrowLink } from "#src/icons/ArrowLink";
-import { formatDate } from "#src/utils/date";
 import { hashidFromId } from "#src/utils/hashid";
 import { tagEvents } from "#src/utils/tags";
-import { absUrl } from "#src/utils/url";
 
 import { NewEventForm } from "./event/NewEventForm";
 import { WhenText } from "./event/[hashid]/components";
