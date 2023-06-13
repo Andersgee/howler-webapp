@@ -71,7 +71,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
 
   const getFcmToken = useCallback(async () => {
     if (!fcmRef.current) return null;
-    if (fcmRef.current.fcmToken) return fcmRef.current.fcmToken;
+    //if (fcmRef.current.fcmToken) return fcmRef.current.fcmToken;
 
     const token = await fcmRef.current.requestFcmToken();
     setFcmToken(token);
