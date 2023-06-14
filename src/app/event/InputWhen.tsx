@@ -1,7 +1,7 @@
 "use client";
 
 import { addHours, startOfHour, subHours } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { IconArrowDown } from "#src/icons/ArrowDown";
 import { datetimelocalString } from "#src/utils/date";
@@ -9,6 +9,11 @@ import { datetimelocalString } from "#src/utils/date";
 export function InputWhen() {
   const [dateWhen, setDateWhen] = useState(startOfHour(addHours(new Date(), 1)));
   const [dateWhenend, setDateWhenend] = useState(startOfHour(addHours(new Date(), 2)));
+
+  useEffect(() => {
+    setDateWhen(startOfHour(addHours(new Date(), 1)));
+    setDateWhenend(startOfHour(addHours(new Date(), 2)));
+  }, []);
 
   return (
     <div className="flex flex-col items-center bg-white dark:bg-black">
