@@ -7,13 +7,15 @@ import { IconArrowDown } from "#src/icons/ArrowDown";
 import { datetimelocalString } from "#src/utils/date";
 
 export function InputWhen() {
-  const [dateWhen, setDateWhen] = useState<Date | null>(null);
-  const [dateWhenend, setDateWhenend] = useState<Date | null>(null);
+  const [dateWhen, setDateWhen] = useState(startOfHour(addHours(new Date(), 1)));
+  const [dateWhenend, setDateWhenend] = useState(startOfHour(addHours(new Date(), 1)));
 
+  /*
   useEffect(() => {
     setDateWhen(startOfHour(addHours(new Date(), 1)));
     setDateWhenend(startOfHour(addHours(new Date(), 2)));
   }, []);
+  
 
   if (!dateWhen || !dateWhenend) {
     return (
@@ -24,6 +26,7 @@ export function InputWhen() {
       </div>
     );
   }
+  */
 
   return (
     <div className="flex flex-col items-center bg-white dark:bg-black">
