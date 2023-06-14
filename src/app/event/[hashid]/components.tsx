@@ -14,7 +14,7 @@ type Props = {
  * avoids hydration mismatch of server/client rendered date string (by editing string on mount)
  */
 function useFormatDate(date: Date) {
-  const [value, setValue] = useState({ datestr: formatDate(date), isMounted: false });
+  const [value, setValue] = useState({ datestr: "", isMounted: false });
   useEffect(() => {
     setValue({ datestr: formatDate(date), isMounted: true });
   }, [date]);
