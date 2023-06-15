@@ -10,6 +10,8 @@ import { NewEventForm } from "./event/NewEventForm";
 import { WhenText } from "./event/[hashid]/components";
 import { MessagingTest } from "./messaging-test";
 
+export const runtime = "edge";
+
 export default async function Page() {
   const events = await db
     .selectFrom("Event")
@@ -33,7 +35,6 @@ export default async function Page() {
     <main className="">
       <div className="container">
         <NewEventForm />
-
         <div className="flex justify-center">
           <div>
             <h2>Latest 10 created howls</h2>
@@ -60,7 +61,6 @@ export default async function Page() {
                 </li>
               ))}
             </ul>
-
             <MessagingTest className="mt-4" />
           </div>
         </div>

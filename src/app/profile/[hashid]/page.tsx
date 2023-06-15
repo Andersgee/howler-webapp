@@ -7,6 +7,8 @@ import { tagUserInfo } from "#src/utils/tags";
 
 import { FollowUserButton } from "./FollowUserButton";
 
+export const runtime = "edge";
+
 export default async function Page({ params }: { params: { hashid: string } }) {
   const userId = idFromHashid(params.hashid);
   if (userId === undefined) notFound();

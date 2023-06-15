@@ -12,6 +12,8 @@ const OPTIONS_WHO = {
   friendsOfFriends: "My friends and their friends",
 };
 
+export const runtime = "edge";
+
 export default async function Page() {
   return (
     <div className="container flex justify-center">

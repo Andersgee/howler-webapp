@@ -8,7 +8,7 @@ import { datetimelocalString } from "#src/utils/date";
 
 export function InputWhen() {
   const [dateWhen, setDateWhen] = useState(startOfHour(addHours(new Date(), 1)));
-  const [dateWhenend, setDateWhenend] = useState(startOfHour(addHours(new Date(), 1)));
+  const [dateWhenend, setDateWhenend] = useState(startOfHour(addHours(new Date(), 2)));
 
   /*
   useEffect(() => {
