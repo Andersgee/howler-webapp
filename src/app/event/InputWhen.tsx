@@ -1,7 +1,7 @@
 "use client";
 
 import { addHours, startOfHour, subHours } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { IconArrowDown } from "#src/icons/ArrowDown";
 import { datetimelocalString } from "#src/utils/date";
