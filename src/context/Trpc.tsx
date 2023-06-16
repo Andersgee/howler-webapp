@@ -9,7 +9,16 @@ import { api } from "#src/hooks/api";
 import { absUrl } from "#src/utils/url";
 
 export function TrpcProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
   const [trpcClient] = useState(() =>
     api.createClient({
       transformer: superjson,
