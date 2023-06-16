@@ -1,9 +1,6 @@
 import { Inter } from "next/font/google";
 
-import { DialogProvider } from "#src/context/DialogContext";
-import { NotificationsProvider } from "#src/context/NotificationsContext";
-import { TrpcProvider } from "#src/context/Trpc";
-import { UserProvider } from "#src/context/UserContext";
+import { Providers } from "#src/context";
 import { seo } from "#src/utils/seo";
 
 import { Topnav } from "./Topnav";
@@ -23,16 +20,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <UserProvider>
-          <NotificationsProvider>
-            <DialogProvider>
-              <TrpcProvider>
-                <Topnav />
-                {children}
-              </TrpcProvider>
-            </DialogProvider>
-          </NotificationsProvider>
-        </UserProvider>
+        <Providers>
+          <Topnav />
+          {children}
+        </Providers>
       </body>
     </html>
   );

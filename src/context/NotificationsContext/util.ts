@@ -26,7 +26,7 @@ async function registerSW() {
 
     //force update or not?
     //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update
-    //await registration.update() //force update unless the ?
+    //await registration.update() //force update unless the existing is identical
     console.log("registered service worker");
     return registration;
   } catch (e) {

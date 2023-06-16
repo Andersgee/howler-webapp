@@ -16,6 +16,7 @@ export function Stuff({ className = "" }: Props) {
       <div>posts via api.post.getAll.useQuery() </div>
       <div>posts.data: {JSON.stringify(posts.data)}</div>
       <div>hmm.data: {JSON.stringify(hmm.data)}</div>
+      {posts.data ? posts.data.fetchedAt.toISOString() : "no post"}
     </div>
   );
 }
