@@ -9,8 +9,9 @@ import { tagEvents } from "#src/utils/tags";
 import { NewEventForm } from "./event/NewEventForm";
 import { WhenText } from "./event/[hashid]/components";
 import { MessagingTest } from "./messaging-test";
+import { Stuff } from "./stuff";
 
-export const runtime = "edge";
+//export const runtime = "edge";
 
 export default async function Page() {
   const events = await db
@@ -62,6 +63,7 @@ export default async function Page() {
               ))}
             </ul>
             <MessagingTest className="mt-4" />
+            <Stuff />
           </div>
         </div>
       </div>

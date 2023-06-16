@@ -12,7 +12,7 @@ const OPTIONS_WHO = {
   friendsOfFriends: "My friends and their friends",
 };
 
-export const runtime = "edge";
+//export const runtime = "edge";
 
 export default async function Page() {
   return (

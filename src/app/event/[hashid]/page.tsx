@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps) {
   });
 }
 
-export const runtime = "edge";
+//export const runtime = "edge";
 
 export default async function Page({ params }: PageProps) {
   const event = await getEvent(params.hashid);

@@ -3,8 +3,14 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "#src/api/trpc";
 
 export const postRouter = createTRPCRouter({
-  currentUserLatest: protectedProcedure.query(async (opts) => {
-    return opts.ctx.db.selectFrom("Example").selectAll().orderBy("id", "desc").limit(1).executeTakeFirst();
+  protectedGetLatestExample: protectedProcedure.query(async (opts) => {
+    const examples = await opts.ctx.db
+      .selectFrom("Example")
+      .selectAll()
+      .orderBy("id", "desc")
+      .limit(1)
+      .executeTakeFirst();
+    return { examples, opts_ctx_user_name: opts.ctx.user.name };
   }),
 
   getAll: publicProcedure.query(async (opts) => {

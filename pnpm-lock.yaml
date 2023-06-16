@@ -5,7 +5,6 @@ specifiers:
   '@tanstack/react-query': ^4.29.13
   '@trivago/prettier-plugin-sort-imports': ^4.1.1
   '@trpc/client': ^10.30.0
-  '@trpc/next': ^10.30.0
   '@trpc/react-query': ^10.30.0
   '@trpc/server': ^10.30.0
   '@types/node': 20.0.0
@@ -42,7 +41,6 @@ dependencies:
   '@andersgee/kysely-fetch-driver': 1.0.2_kysely@0.24.2
   '@tanstack/react-query': 4.29.13_biqbaboplfbrettd7655fr4n2y
   '@trpc/client': 10.30.0_@trpc+server@10.30.0
-  '@trpc/next': 10.30.0_xkcbljg3ztfc4u5flphwv6akti
   '@trpc/react-query': 10.30.0_lkk2e44pdcu7vdoxb7zkns4lme
   '@trpc/server': 10.30.0
   '@types/node': 20.0.0
@@ -1235,27 +1233,6 @@ packages:
       '@trpc/server': 10.30.0
     dependencies:
       '@trpc/server': 10.30.0
-    dev: false
-
-  /@trpc/next/10.30.0_xkcbljg3ztfc4u5flphwv6akti:
-    resolution: {integrity: sha512-DhvEadQe5E6yFXkAS394OvCe7MKAnuK45Ni86Hg7B6Sq5nCX5aFm7YeNdJKxfuxaXzXuvK0XD2YGJFsf9+0j0Q==}
-    peerDependencies:
-      '@tanstack/react-query': ^4.18.0
-      '@trpc/client': 10.30.0
-      '@trpc/react-query': 10.30.0
-      '@trpc/server': 10.30.0
-      next: '*'
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-    dependencies:
-      '@tanstack/react-query': 4.29.13_biqbaboplfbrettd7655fr4n2y
-      '@trpc/client': 10.30.0_@trpc+server@10.30.0
-      '@trpc/react-query': 10.30.0_lkk2e44pdcu7vdoxb7zkns4lme
-      '@trpc/server': 10.30.0
-      next: 13.4.4_biqbaboplfbrettd7655fr4n2y
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      react-ssr-prepass: 1.5.0_react@18.2.0
     dev: false
 
   /@trpc/react-query/10.30.0_lkk2e44pdcu7vdoxb7zkns4lme:
@@ -4314,14 +4291,6 @@ packages:
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
     dev: true
-
-  /react-ssr-prepass/1.5.0_react@18.2.0:
-    resolution: {integrity: sha512-yFNHrlVEReVYKsLI5lF05tZoHveA5pGzjFbFJY/3pOqqjGOmMmqx83N4hIjN2n6E1AOa+eQEUxs3CgRnPmT0RQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
-    dev: false
 
   /react/18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}

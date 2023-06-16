@@ -9,7 +9,7 @@ import { tagUserInfo } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 
 export const dynamic = "force-dynamic";
-export const runtime = "edge";
+//export const runtime = "edge";
 
 export default async function Page() {
   const tokenUser = await getUserFromCookie();
