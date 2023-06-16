@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "#src/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const postRouter = createTRPCRouter({
   protectedGetLatestExample: protectedProcedure.query(async (opts) => {
