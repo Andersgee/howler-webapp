@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 
 import { DialogProvider } from "#src/context/DialogContext";
 import { NotificationsProvider } from "#src/context/NotificationsContext";
+import { TrpcProvider } from "#src/context/Trpc";
 import { UserProvider } from "#src/context/UserContext";
 import { seo } from "#src/utils/seo";
 
@@ -25,8 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <UserProvider>
           <NotificationsProvider>
             <DialogProvider>
-              <Topnav />
-              {children}
+              <TrpcProvider>
+                <Topnav />
+                {children}
+              </TrpcProvider>
             </DialogProvider>
           </NotificationsProvider>
         </UserProvider>

@@ -1,12 +1,12 @@
 "use client";
 
-import { api } from "#src/hooks/trpc";
+import { api } from "#src/hooks/api";
 
 type Props = {
   className?: string;
 };
 
 export function Stuff({ className = "" }: Props) {
-  const hmm = api.post.getAll.useQuery();
-  return <div className={className}>stufftsx</div>;
+  const posts = api.post.getAll.useQuery();
+  return <div className={className}>{JSON.stringify(posts.data)}</div>;
 }
