@@ -66,3 +66,4 @@ more
 
 - [ ] seems like a user doesnt save the fcmToken do db the first time? eg if signing in and enabling notifications?
   - investigate
+  - welp it does...
