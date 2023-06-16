@@ -25,7 +25,8 @@ export function getBaseUrl() {
 }
 
 /**
- * allow relative urls such as "/about", empty string (default) just returns baseUrl
+ * - for server environment: allow relative urls such as "/about", empty string (default) just returns baseUrl
+ * - for client environment: then this just returns the string you gave it
  */
 export function absUrl(url = "") {
   const baseUrl = getBaseUrl();
