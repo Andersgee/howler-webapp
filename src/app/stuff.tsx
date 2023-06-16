@@ -8,10 +8,14 @@ type Props = {
 
 export function Stuff({ className = "" }: Props) {
   const posts = api.post.getAll.useQuery();
+  const hmm = api.post.protectedGetLatestExample.useQuery();
+
   return (
-    <div>
+    <div className={className}>
+      <h2>trpc api Stuff</h2>
       <div>posts via api.post.getAll.useQuery() </div>
-      <div className={className}>{JSON.stringify(posts.data)}</div>
+      <div>posts.data: {JSON.stringify(posts.data)}</div>
+      <div>hmm.data: {JSON.stringify(hmm.data)}</div>
     </div>
   );
 }
