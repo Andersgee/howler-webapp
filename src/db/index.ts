@@ -9,7 +9,6 @@ import {
   type Simplify,
 } from "kysely";
 import { deserialize, serialize } from "superjson";
-//import { urlWithSearchparams } from "#src/utils/url";
 import { urlWithSearchparams } from "#src/utils/url";
 import type { DB } from "./types";
 
