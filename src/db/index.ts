@@ -15,6 +15,7 @@ import type { DB } from "./types";
 //const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
 
 declare module "kysely" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface SelectQueryBuilder<DB, TB extends keyof DB, O> {
     /**
      * Plays nice with the fetch cache that nextjs extends.
