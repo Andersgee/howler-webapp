@@ -45,7 +45,7 @@ export default async function Page() {
         </div>
         <div>Edit your profile information</div>
         <div>
-          <Link href={`/profile/${hashidFromId(user.id)}`} className="block px-3 py-2 bg-blue-500">
+          <Link href={`/profile/${hashidFromId(user.id)}`} className="block bg-blue-500 px-3 py-2">
             also, view your public profile here
           </Link>
         </div>

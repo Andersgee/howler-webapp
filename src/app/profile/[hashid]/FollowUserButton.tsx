@@ -28,7 +28,7 @@ export async function FollowUserButton({ userId }: Props) {
   return (
     <form action={followOrUnfollowUser}>
       <input name="otherUserHashId" hidden type="text" defaultValue={hashidFromId(userId)} />
-      <button type="submit" className="px-3 py-2 bg-blue-500 text-white font-semibold">
+      <button type="submit" className="bg-blue-500 px-3 py-2 font-semibold text-white">
         {existingFollow ? "unfollow" : "follow"}
       </button>
     </form>

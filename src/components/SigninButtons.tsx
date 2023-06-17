@@ -42,14 +42,14 @@ export function SigninButtons() {
       <p className="mt-3 w-64 text-center font-serif text-sm text-neutral-600 dark:text-neutral-600">
         By signing in, you agree to our <br />
         <Link
-          className="text-neutral-600 hover:text-neutral-500 dark:text-neutral-600 dark:hover:text-neutral-500 underline decoration-dotted"
+          className="text-neutral-600 underline decoration-dotted hover:text-neutral-500 dark:text-neutral-600 dark:hover:text-neutral-500"
           href="/terms"
         >
           Terms of Service
         </Link>{" "}
         and{" "}
         <Link
-          className="text-neutral-600 hover:text-neutral-500 dark:text-neutral-600 dark:hover:text-neutral-500 underline decoration-dotted"
+          className="text-neutral-600 underline decoration-dotted hover:text-neutral-500 dark:text-neutral-600 dark:hover:text-neutral-500"
           href="/privacy"
         >
           Privacy Policy

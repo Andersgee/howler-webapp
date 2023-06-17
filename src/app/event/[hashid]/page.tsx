@@ -43,33 +43,33 @@ export default async function Page({ params }: PageProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-1">
             <IconWhat />
-            <span className="pr-2 w-16">What?</span>
-            <div className="px-2 py-1 flex items-center bg-white dark:bg-black">{event.what || "anything"}</div>
+            <span className="w-16 pr-2">What?</span>
+            <div className="flex items-center bg-white px-2 py-1 dark:bg-black">{event.what || "anything"}</div>
           </div>
           <div className="flex items-center gap-1">
             <IconWhere />
-            <span className="pr-2 w-16">Where?</span>
-            <div className="px-2 py-1 bg-white dark:bg-black">{event.where || "anywhere"}</div>
+            <span className="w-16 pr-2">Where?</span>
+            <div className="bg-white px-2 py-1 dark:bg-black">{event.where || "anywhere"}</div>
           </div>
           <div className="flex items-center gap-1 ">
             <IconWho />
-            <span className="pr-2 w-16">Who?</span>
-            <div className="px-2 py-1 bg-white dark:bg-black">{event.who}</div>
+            <span className="w-16 pr-2">Who?</span>
+            <div className="bg-white px-2 py-1 dark:bg-black">{event.who}</div>
           </div>
           <div className="flex items-start gap-1">
             <IconWhen />
-            <span className="pr-2 w-16">When?</span>
+            <span className="w-16 pr-2">When?</span>
             <div className="flex flex-col items-center bg-white dark:bg-black">
-              <div className="px-2 py-1 bg-white dark:bg-black">
+              <div className="bg-white px-2 py-1 dark:bg-black">
                 <WhenText date={event.when} />
               </div>
               <IconArrowDown height={18} width={18} className="my-1" />
-              <div className="px-2 py-1 bg-white dark:bg-black">
+              <div className="bg-white px-2 py-1 dark:bg-black">
                 <WhenText date={event.whenEnd} />
               </div>
             </div>
           </div>
-          <div className="flex justify-center my-2">
+          <div className="my-2 flex justify-center">
             {user ? <JoinButton eventHashid={params.hashid} user={user} /> : <JoinbuttonTriggerSignin />}
           </div>
         </div>

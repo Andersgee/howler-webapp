@@ -16,7 +16,7 @@ export function Topnav() {
   return (
     <div className="flex justify-between">
       <Link href="/">
-        <IconHowler className="h-8 w-8 m-2" />
+        <IconHowler className="m-2 h-8 w-8" />
       </Link>
       <ProfileButton />
     </div>
@@ -33,10 +33,10 @@ function ProfileButton() {
   return (
     <div ref={ref}>
       <button onClick={() => dialogDispatch({ type: "toggle", name: "signin" })}>
-        {user ? <UserImage src={user.image} alt={user.name} /> : <IconAvatar className="h-8 w-8 m-2" />}
+        {user ? <UserImage src={user.image} alt={user.name} /> : <IconAvatar className="m-2 h-8 w-8" />}
       </button>
       {dialog === "signin" && (
-        <div className="absolute right-0 top-12 z-10 border-2 shadow-md p-4 bg-white dark:bg-black">
+        <div className="absolute right-0 top-12 z-10 border-2 bg-white p-4 shadow-md dark:bg-black">
           {user ? (
             <div>
               <div>

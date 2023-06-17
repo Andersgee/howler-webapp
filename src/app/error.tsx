@@ -18,7 +18,7 @@ export default function Error({
     <div className="container">
       <h2>Something went wrong!</h2>
       <button
-        className="px-3 py-2 bg-blue-500 font-bold text-white"
+        className="bg-blue-500 px-3 py-2 font-bold text-white"
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()

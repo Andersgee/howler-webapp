@@ -8,11 +8,11 @@ type ImageProps = {
   alt: string;
 };
 export function UserImage({ src, alt }: ImageProps) {
-  return <Image className="h-8 w-8 m-2 rounded-full shadow-imageborder" src={src} alt={alt} width={48} height={48} />;
+  return <Image className="shadow-imageborder m-2 h-8 w-8 rounded-full" src={src} alt={alt} width={48} height={48} />;
 }
 
 export function UserImageLarge({ src, alt }: ImageProps) {
-  return <Image className="h-12 w-12 rounded-full shadow-imageborder" src={src} alt={alt} width={48} height={48} />;
+  return <Image className="shadow-imageborder h-12 w-12 rounded-full" src={src} alt={alt} width={48} height={48} />;
 }
 
 type LinkProps = {

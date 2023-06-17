@@ -1,24 +1,21 @@
 import { FetchDriver } from "@andersgee/kysely-fetch-driver";
 import {
-  type CompiledQuery,
   Kysely,
   MysqlAdapter,
   MysqlIntrospector,
   MysqlQueryCompiler,
   SelectQueryBuilder,
+  type CompiledQuery,
   type Simplify,
 } from "kysely";
 import { deserialize, serialize } from "superjson";
-
 //import { urlWithSearchparams } from "#src/utils/url";
 import { urlWithSearchparams } from "#src/utils/url";
-
 import type { DB } from "./types";
 
 //const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
 
 declare module "kysely" {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface SelectQueryBuilder<DB, TB extends keyof DB, O> {
     /**
      * Plays nice with the fetch cache that nextjs extends.

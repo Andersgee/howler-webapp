@@ -47,9 +47,9 @@ export default async function Page() {
                     prefetch={false}
                     href={`/event/${hashidFromId(event.id)}`}
                   >
-                    <div className="flex justify-between items-center px-4">
+                    <div className="flex items-center justify-between px-4">
                       <div>
-                        <h3 className="capitalize-first flex-shrink truncate text-base font-normal">
+                        <h3 className="capitalize-first shrink truncate text-base font-normal">
                           {event.what || "anything"}
                         </h3>
                         <p>

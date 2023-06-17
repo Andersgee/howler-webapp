@@ -1,8 +1,6 @@
 import { Inter } from "next/font/google";
-
 import { Providers } from "#src/context";
 import { seo } from "#src/utils/seo";
-
 import { Topnav } from "./Topnav";
 import "./globals.css";
 
