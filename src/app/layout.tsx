@@ -3,6 +3,7 @@ import { Providers } from "#src/context";
 import { seo } from "#src/utils/seo";
 import { Topnav } from "./Topnav";
 import "./globals.css";
+import { Toaster } from "#src/context/Toaster";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Topnav />
           {children}
         </Providers>
+        <Toaster />
       </body>
     </html>
   );
