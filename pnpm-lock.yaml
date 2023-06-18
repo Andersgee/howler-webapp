@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@andersgee/kysely-fetch-driver': ^1.0.2
   '@ianvs/prettier-plugin-sort-imports': ^4.0.2
+  '@radix-ui/react-slot': ^1.0.2
   '@radix-ui/react-toast': ^1.1.4
   '@tanstack/react-query': ^4.29.13
   '@trpc/client': ^10.30.0
@@ -47,6 +48,7 @@ specifiers:
 
 dependencies:
   '@andersgee/kysely-fetch-driver': 1.0.2_kysely@0.24.2
+  '@radix-ui/react-slot': 1.0.2_xomkljxbsahfbuzbqqeyw47ndm
   '@radix-ui/react-toast': 1.1.4_2ejdisobb7q4dn5gvncpcai4wu
   '@tanstack/react-query': 4.29.13_biqbaboplfbrettd7655fr4n2y
   '@trpc/client': 10.30.0_@trpc+server@10.30.0
