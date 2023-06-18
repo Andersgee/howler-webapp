@@ -59,9 +59,9 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
         description: description,
         variant: "default",
         action: (
-          <a className={buttonVariants({ variant: "outline" })} onClick={() => dismiss()} href={link}>
+          <Link className={buttonVariants({ variant: "outline" })} onClick={() => dismiss()} href={link}>
             {linkText}
-          </a>
+          </Link>
         ),
       });
     },
