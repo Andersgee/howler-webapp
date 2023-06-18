@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { buttonVariants } from "#src/components/ui/Button";
 import { toast } from "#src/hooks/use-toast";
+import { cn } from "#src/utils/cn";
 import type { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
 import { setupMessaging } from "./util";
 
@@ -59,7 +60,11 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
         description: description,
         variant: "default",
         action: (
-          <Link className={buttonVariants({ variant: "outline" })} onClick={() => dismiss()} href={link}>
+          <Link
+            onClick={() => dismiss()}
+            href={link}
+            className={cn(buttonVariants({ variant: "outline" }), "whitespace-nowrap")}
+          >
             {linkText}
           </Link>
         ),
