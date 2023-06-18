@@ -12,7 +12,6 @@ export function Stuff({ className = "" }: Props) {
 
   return (
     <div className={className}>
-      <div className="bg-sometest">ccs variable color test here </div>
       <h2>trpc api Stuff:</h2>
       <div>posts via api.post.getAll.useQuery() </div>
       <div>posts.data: {JSON.stringify(posts.data)}</div>
