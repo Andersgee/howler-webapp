@@ -39,7 +39,7 @@ export function ShareButton({ className = "", title }: Props) {
         }
       }}
     >
-      <IconShare /> Share
+      <IconShare /> <span className="ml-2">Share</span>
     </Button>
   );
 }
