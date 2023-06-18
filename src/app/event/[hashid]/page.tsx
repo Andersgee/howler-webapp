@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-
+import { ShareButton } from "#src/components/ShareButton";
 import { LinkUserImage } from "#src/components/UserImage";
 import { IconArrowDown } from "#src/icons/ArrowDown";
 import { IconWhat } from "#src/icons/What";
@@ -9,10 +9,9 @@ import { IconWho } from "#src/icons/Who";
 import { seo } from "#src/utils/seo";
 import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
-
-import { JoinButton } from "./JoinButton";
 import { JoinbuttonTriggerSignin, WhenText } from "./components";
 import { getEvent } from "./data";
+import { JoinButton } from "./JoinButton";
 
 export async function generateMetadata({ params }: PageProps) {
   const event = await getEvent(params.hashid);
@@ -71,6 +70,9 @@ export default async function Page({ params }: PageProps) {
           </div>
           <div className="my-2 flex justify-center">
             {user ? <JoinButton eventHashid={params.hashid} user={user} /> : <JoinbuttonTriggerSignin />}
+          </div>
+          <div>
+            <ShareButton title={event.what} />
           </div>
         </div>
       </div>

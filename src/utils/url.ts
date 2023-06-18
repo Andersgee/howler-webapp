@@ -18,23 +18,21 @@ export function encodeParams(params: Record<string, string | number | boolean>) 
     .join("&");
 }
 
-export function getBaseUrl() {
-  if (typeof window !== "undefined") return ""; // browser should use relative url
-  if (process.env.DOMAIN_URL) return `https://${process.env.DOMAIN_URL}`; //for server in production
-  return `http://localhost:${process.env.PORT ?? 3000}`; // for server in development
+/**
+ * utility for relative urls such as "/about"
+ *
+ * (for either server or client environment)
+ */
+export function absUrl(url = "") {
+  const path = url === "/" ? "" : url;
+  if (process.env.NEXT_PUBLIC_DOMAIN_URL) return `https://${process.env.NEXT_PUBLIC_DOMAIN_URL}${path}`;
+  return `http://localhost:${process.env.PORT ?? 3000}${path}`;
 }
 
 /**
- * - for server environment: allow relative urls such as "/about", empty string (default) just returns baseUrl
- * - for client environment: then this just returns the string you gave it
+ * use this instead of `absUrl()` if browser should use relative url but server should use absolute
  */
-export function absUrl(url = "") {
-  const baseUrl = getBaseUrl();
-  if (url === "" || url === "/") return baseUrl;
-
-  if (url.startsWith("/")) {
-    return `${baseUrl}${url}`;
-  } else {
-    return url;
-  }
+export function baseUrl(url = "") {
+  if (typeof window !== "undefined") return url;
+  return absUrl(url);
 }

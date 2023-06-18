@@ -5,7 +5,7 @@ import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
 import superjson from "superjson";
 import { api } from "#src/hooks/api";
-import { absUrl } from "#src/utils/url";
+import { baseUrl } from "#src/utils/url";
 
 export function TrpcProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -23,7 +23,7 @@ export function TrpcProvider({ children }: { children: React.ReactNode }) {
       transformer: superjson,
       links: [
         httpBatchLink({
-          url: absUrl("/api/trpc"),
+          url: baseUrl("/api/trpc"),
         }),
       ],
     })

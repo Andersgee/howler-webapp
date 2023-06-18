@@ -1,7 +1,6 @@
 import { type NextRequest } from "next/server";
-
 import { USER_COOKIE_NAME } from "#src/utils/auth";
-import { getBaseUrl } from "#src/utils/url";
+import { absUrl } from "#src/utils/url";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -12,7 +11,7 @@ export function GET(request: NextRequest) {
   return new Response(undefined, {
     status: 303,
     headers: {
-      Location: `${getBaseUrl()}${route}`,
+      Location: absUrl(route),
       "Set-Cookie": `${USER_COOKIE_NAME}=null; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0`,
     },
   });
