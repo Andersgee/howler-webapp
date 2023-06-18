@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useToast } from "#src/hooks/use-toast";
+import { toast } from "#src/hooks/use-toast";
 import { IconShare } from "#src/icons/Share";
 import { absUrl } from "#src/utils/url";
 import { Button } from "./ui/Button";
@@ -13,7 +13,6 @@ type Props = {
 
 export function ShareButton({ className = "", title }: Props) {
   const pathName = usePathname();
-  const { toast } = useToast();
   return (
     <Button
       variant="secondary"
@@ -47,7 +46,7 @@ export function ShareButton({ className = "", title }: Props) {
 
 async function copyToClipboard(text: string) {
   if ("clipboard" in navigator) {
-    navigator.clipboard.writeText(text).then(
+    return navigator.clipboard.writeText(text).then(
       () => {
         /* clipboard successfully set */
         return true;
