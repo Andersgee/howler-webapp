@@ -1,11 +1,9 @@
-import { Inter } from "next/font/google";
 import { Providers } from "#src/context";
 import { seo } from "#src/utils/seo";
 import { Topnav } from "./Topnav";
 import "./globals.css";
 import { Toaster } from "#src/context/Toaster";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+import { fontSans } from "#src/utils/font";
 
 export const metadata = seo({
   title: "Howler",
@@ -18,7 +16,7 @@ export const metadata = seo({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={fontSans.variable}>
         <Providers>
           <Topnav />
           {children}

@@ -1,8 +1,8 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import plugin from "tailwindcss/plugin";
 
 export default {
-  darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     container: {
@@ -11,13 +11,13 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", ...fontFamily.sans],
+        sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       boxShadow: {
         imageborder: "inset 0 2px 4px 0 hsla(0, 0%, 0%, .2)",
       },
-
       colors: {
+        sometest: "hsl(var(--sometest))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -73,5 +73,17 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        ".mainwidth": {
+          "@apply w-full sm:max-w-[436px] md:max-w-[520px] lg:max-w-[620px]": {},
+        },
+        ".text-tweet": {
+          "@apply whitespace-pre-wrap break-words": {},
+        },
+      });
+    }),
+  ],
 } satisfies Config;

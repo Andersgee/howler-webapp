@@ -63,7 +63,6 @@ export default async function Page() {
             </ul>
             <MessagingTest className="mt-4" />
             <Stuff />
-            <ToastWithAction />
           </div>
         </div>
       </div>

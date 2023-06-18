@@ -32,8 +32,21 @@ export function formatDate(date: Date) {
   })})`;
 }
 
+export function prettyDate(date: Date) {
+  //"Saturday, June 17, 2023 at 20:55"
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short", hour12: false }).format(Date.now());
+
+  //undefined to use browsers default locale
+  //return new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "short", hour12: false }).format(Date.now());
+
+  //"Saturday, June 17, 2023 at 8:49 PM"
+  //return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short" }).format(date);
+}
+
 /**
- * use on server side to parse the <input type"datetime-local"> value send from form
+ * use on server side to parse the <input type"datetime-local"> value sent from form
+ *
+ * only for server components, if client component we can just send the date itself instead of a raw string
  *
  * note to self:
  * the datetime-local string we get from form is in the users local time (without any timezone info)

@@ -1,8 +1,9 @@
 "use client";
 
 import type { MessagePayload } from "firebase/messaging";
+import Link from "next/link";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-
+import { toast } from "#src/hooks/use-toast";
 import type { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
 import { setupMessaging } from "./util";
 
@@ -40,12 +41,48 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   const [messages, setMessages] = useState<MessagePayload[]>([]);
   const [fcmToken, setFcmToken] = useState<string | null>(null);
 
+  const onMessage = useCallback(
+    ({
+      title,
+      description,
+      link,
+      linkText,
+    }: {
+      title: string;
+      description: string;
+      link: string;
+      linkText: string;
+    }) => {
+      const { dismiss } = toast({
+        title: title,
+        description: description,
+        variant: "default",
+        action: (
+          <a onClick={() => dismiss()} href={link} className="">
+            {linkText}
+          </a>
+        ),
+      });
+    },
+    []
+  );
+
   useEffect(() => {
+    console.log("running setupMessaging effect");
     setupMessaging()
       .then((fcm) => {
         fcmRef.current = fcm;
         fcmRef.current.onMessage((payload) => {
-          console.log("onMessage, payload:", payload);
+          if (payload.notification?.title && payload.notification?.body && payload.fcmOptions?.link) {
+            onMessage({
+              title: payload.notification.title,
+              description: payload.notification.body,
+              link: payload.fcmOptions.link,
+              linkText: "Show me",
+            });
+          } else {
+            console.log("couldnt toast.. onMessage, payload:", payload);
+          }
           setMessages((msgs) => [...msgs, payload]);
         });
         if (fcmRef.current.fcmToken) {
@@ -55,7 +92,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [onMessage]);
 
   useEffect(() => {
     if (fcmToken) {
