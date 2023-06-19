@@ -45,6 +45,9 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
+      // simulate a slow db call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const insertresult = await ctx.db
         .insertInto("Event")
         .values({
@@ -61,9 +64,9 @@ export const eventRouter = createTRPCRouter({
       const insertId = Number(insertresult.insertId);
       const hashid = hashidFromId(insertId);
 
-      await notifyEventCreated({ eventId: insertId });
+      //await notifyEventCreated({ eventId: insertId });
 
       //redirect(`/event/${hashid}`);
-      return { hashid };
+      return { eventId: insertId, eventHashId: hashid };
     }),
 });

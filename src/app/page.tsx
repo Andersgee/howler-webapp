@@ -1,5 +1,6 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
 import Link from "next/link";
+import { CreateEventForm } from "#src/components/CreateEventForm";
 import { db } from "#src/db";
 import { IconArrowLink } from "#src/icons/ArrowLink";
 import { hashidFromId } from "#src/utils/hashid";
@@ -33,6 +34,7 @@ export default async function Page() {
   return (
     <main className="">
       <div className="container">
+        <CreateEventForm />
         <NewEventForm />
         <div className="flex justify-center">
           <div>
