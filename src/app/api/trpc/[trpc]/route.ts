@@ -1,11 +1,14 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { type NextRequest } from "next/server";
-
 import { trpcRouter } from "#src/api";
 import { createTRPCContext } from "#src/api/trpc";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
+
+//https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#preferredregion
+//https://vercel.com/docs/concepts/edge-network/regions#region-list
+export const preferredRegion = ["arn1"];
 
 const handler = (req: NextRequest) =>
   fetchRequestHandler({
