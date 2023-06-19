@@ -1,17 +1,17 @@
 import { revalidateTag } from "next/cache";
 import { type NextRequest } from "next/server";
-
 import { db } from "#src/db";
 import {
+  addUser,
+  getUserByEmail,
   GITHUB_EMAILINFO,
   GITHUB_EMAILS_URL,
   GITHUB_TOKEN,
   GITHUB_TOKEN_URL,
   GITHUB_USERINFO,
   GITHUB_USERINFO_URL,
+  USER_COOKIE_MAXAGE,
   USER_COOKIE_NAME,
-  addUser,
-  getUserByEmail,
 } from "#src/utils/auth";
 import { tagUserInfo } from "#src/utils/tags";
 import { createTokenFromUser, getSessionFromRequestCookie, verifyStateToken } from "#src/utils/token";
@@ -116,7 +116,7 @@ export async function GET(request: NextRequest) {
       status: 303,
       headers: {
         Location: absUrl(state.route),
-        "Set-Cookie": `${USER_COOKIE_NAME}=${userCookie}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=2592000`,
+        "Set-Cookie": `${USER_COOKIE_NAME}=${userCookie}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=${USER_COOKIE_MAXAGE}`,
       },
     });
   } catch (error) {
