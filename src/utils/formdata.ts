@@ -1,6 +1,6 @@
 import type { z } from "zod";
-import type { TokenUser } from "./token/schema";
 import { getUserFromCookie } from "./token";
+import type { TokenUser } from "./token/schema";
 
 /**
  * validates that formData matches schema, also adds `user` as argument to action call
@@ -13,11 +13,10 @@ export function protectedAction<T extends z.ZodTypeAny>(
     const user = await getUserFromCookie();
     const parsedFormData = schema.safeParse(Object.fromEntries(formData));
     if (!parsedFormData.success) {
-      console.log(parsedFormData.error);
+      console.warn(parsedFormData.error);
       return null;
     }
     if (!user) {
-      console.log("no user");
       return null;
     }
 

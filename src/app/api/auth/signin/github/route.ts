@@ -1,5 +1,4 @@
 import { type NextRequest } from "next/server";
-
 import { GITHUB_AUTHORIZATION_URL } from "#src/utils/auth";
 import { createStateToken, getSessionFromRequestCookie } from "#src/utils/token";
 import { absUrl, urlWithSearchparams } from "#src/utils/url";
@@ -36,7 +35,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.log(error);
+    //console.error(errorMessageFromUnkown(error));
     return new Response(undefined, {
       status: 303,
       headers: {

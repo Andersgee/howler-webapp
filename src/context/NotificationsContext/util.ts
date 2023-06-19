@@ -6,10 +6,7 @@ export async function setupMessaging() {
 
   const fcm = new FirebaseCloudMessaging(swRegistration);
 
-  const token = await fcm.getFcmToken();
-  if (token) {
-    console.log("notification permission already granted, token:", token);
-  }
+  const _token = await fcm.getFcmToken();
   return fcm;
 }
 
@@ -27,10 +24,10 @@ async function registerSW() {
     //force update or not?
     //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update
     //await registration.update() //force update unless the existing is identical
-    console.log("registered service worker");
+    //console.debug("registered service worker");
     return registration;
-  } catch (e) {
-    console.log("registering service worker failed:", e);
+  } catch (error) {
+    //console.error(errorMessageFromUnkown(error));
     return null;
   }
 }

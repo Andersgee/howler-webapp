@@ -3,7 +3,6 @@
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-
 import { db } from "#src/db";
 import { utcDateFromDatetimelocalString } from "#src/utils/date";
 import { protectedAction } from "#src/utils/formdata";
@@ -17,7 +16,6 @@ export const actionJoinOrLeaveEvent = protectedAction(
   async ({ data, user }) => {
     const eventId = idFromHashid(data.eventhashid);
     if (!eventId) {
-      //console.log("no eventId");
       return null;
     }
 
@@ -49,7 +47,6 @@ export const followOrUnfollowUser = protectedAction(
   async ({ data, user }) => {
     const otherUserId = idFromHashid(data.otherUserHashId);
     if (!otherUserId) {
-      //console.log("no otherUserId");
       return null;
     }
 
@@ -100,7 +97,6 @@ export const actionCreateEvent = protectedAction(
       })
       .executeTakeFirst();
 
-    //console.log("insertresult", insertresult);
     const insertId = Number(insertresult.insertId);
     const hashid = hashidFromId(insertId);
     revalidateTag(tagEvents());

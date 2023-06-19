@@ -1,8 +1,8 @@
+import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { type NextRequest } from "next/server";
-import { type TokenUser, TokenUserSchema, TokenSessionSchema, TokenStateSchema } from "./schema";
-import { USER_COOKIE_NAME, SESSION_COOKIE_NAME } from "../auth";
-import { SignJWT, jwtVerify } from "jose";
+import { SESSION_COOKIE_NAME, USER_COOKIE_NAME } from "../auth";
+import { TokenSessionSchema, TokenStateSchema, TokenUserSchema, type TokenUser } from "./schema";
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 

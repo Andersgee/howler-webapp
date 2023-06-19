@@ -87,7 +87,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
               linkText: "Show me",
             });
           } else {
-            console.log("couldnt toast.. onMessage, payload:", payload);
+            console.warn("couldnt toast.. onMessage, payload:", payload);
           }
           setMessages((msgs) => [...msgs, payload]);
         });
@@ -95,8 +95,8 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
           setFcmToken(fcmRef.current.fcmToken);
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((_error) => {
+        //console.error(errorMessageFromUnkown(error));
       });
   }, [onMessage]);
 
@@ -107,7 +107,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
           //ignore
         })
         .catch((_err) => {
-          //ignore
+          //console.error(errorMessageFromUnkown(error));
         });
     }
   }, [fcmToken]);

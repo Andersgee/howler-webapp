@@ -120,7 +120,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.log(error);
+    //console.error(errorMessageFromUnkown(error));
     return new Response(undefined, {
       status: 303,
       headers: {

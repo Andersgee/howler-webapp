@@ -1,4 +1,4 @@
-import { type FirebaseApp, initializeApp } from "firebase/app";
+import { initializeApp, type FirebaseApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import type { MessagePayload, Messaging } from "firebase/messaging";
 
@@ -39,6 +39,8 @@ export class FirebaseCloudMessaging {
 
   /**
    * get fcm token, will NOT ask for permission (meaning it returns null if permissions not already granted)
+   *
+   * will get a token if we dont already have one **and** permissions are already granted
    */
   async getFcmToken() {
     if (this.fcmToken) return this.fcmToken;
@@ -55,7 +57,7 @@ export class FirebaseCloudMessaging {
       this.fcmToken = token;
       return this.fcmToken;
     } catch (error) {
-      console.log(error);
+      //console.error(errorMessageFromUnkown(error));
       return null;
     }
   }
@@ -77,7 +79,7 @@ export class FirebaseCloudMessaging {
       this.fcmToken = token;
       return this.fcmToken;
     } catch (error) {
-      console.log(error);
+      //console.error(errorMessageFromUnkown(error));
       return null;
     }
   }
@@ -104,30 +106,3 @@ export function notificationsAlreadyGranted() {
   if ("Notification" in window && Notification.permission === "granted") return true;
   return false;
 }
-
-/**
- * returns the "device id" basically. Use this id later (on server side) to send messages to it
- *
- * can also subscribe it to "topics" and send a topicMessage (instead of tokenMessage)
- *
- * TODO: find out if this changes everytime you open the app or what? do I need to keep track of if different tokens are actually same user?
- * or is this just 'for a single registration to a topic'? or a single session or what
- *
- * the docstring sais it subscribes the messaging instance to push notifications
- */
-/*
-async function getFcmRegistrationToken(messaging: Messaging, serviceWorkerRegistration: ServiceWorkerRegistration) {
-  try {
-    const token = await getToken(messaging, {
-      vapidKey: process.env.NEXT_PUBLIC_FCM_VAPID_KEY,
-      serviceWorkerRegistration,
-    });
-    // Send the token to your server and update the UI if necessary
-    return token;
-  } catch (error) {
-    //use clicked "no" on accept notifications
-    console.log("need to ask for permission again probably, they clicked DONT allow notifications.");
-    return undefined;
-  }
-}
-*/

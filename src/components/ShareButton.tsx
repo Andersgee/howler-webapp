@@ -35,7 +35,7 @@ export function ShareButton({ className = "", title }: Props) {
             }
           }
         } catch (error) {
-          console.log(error);
+          //console.error(errorMessageFromUnkown(error));
         }
       }}
     >

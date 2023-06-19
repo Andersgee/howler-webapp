@@ -63,12 +63,9 @@ export async function GET(request: NextRequest) {
     // TLDR; no need to validate since we used client_secret and response came directly from google
     // so just grab the payload part of the Base64-encoded object
     const userInfo = GOOGLE_USERINFO.parse(JSON.parse(Buffer.from(token.id_token.split(".")[1], "base64").toString()));
-    //console.log("debug, api/google/callback, userInfo:", userInfo);
 
     // Authenticate the user
-
     const existingUser = await getUserByEmail(userInfo.email);
-    //console.log("debug, api/google/callback, existingUser:", existingUser);
 
     let tokenUser: TokenUser | undefined = undefined;
 
@@ -108,8 +105,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.log(error);
-    //const msg = error instanceof Error ? `${error.name}: ${error.message}` : "no error message";
+    //console.error(errorMessageFromUnkown(error));
 
     //might want to go to an error page and show the error
     return new Response(undefined, {

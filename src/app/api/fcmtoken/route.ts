@@ -1,6 +1,5 @@
 import { type NextRequest } from "next/server";
 import { z } from "zod";
-
 import { db } from "#src/db";
 import { getUserFromRequestCookie } from "#src/utils/token";
 
@@ -17,7 +16,7 @@ export async function POST(request: NextRequest) {
     if (!user) return new Response(undefined, { status: 401 });
 
     const { fcmToken } = SCHEMA_REQUEST_BODY.parse(await request.json());
-    const insertResult = await db
+    const _insertResult = await db
       .insertInto("FcmToken")
       .ignore() //ignore the insert if already exists
       .values({
@@ -25,9 +24,6 @@ export async function POST(request: NextRequest) {
         userId: user.id,
       })
       .executeTakeFirst();
-
-    console.log("/api/fcmtoken, insertResult.numInsertedOrUpdatedRows:", Number(insertResult.numInsertedOrUpdatedRows));
-    console.log("/api/fcmtoken, insertResult.insertId:", Number(insertResult.insertId));
 
     return new Response(undefined, { status: 200 });
   } catch (error) {

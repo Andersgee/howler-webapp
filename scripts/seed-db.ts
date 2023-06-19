@@ -1,7 +1,5 @@
 import "dotenv/config";
-
 import { db } from "#src/db";
-
 import { randomWord } from "./lorem";
 
 //put `"type": "module"` in package.json for this to work...
@@ -26,7 +24,5 @@ async function seed() {
 }
 
 //const hmm = await db.selectFrom("User").selectAll().get();
-
-//console.log(hmm);
 
 seed();
