@@ -2,8 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { toast } from "#src/hooks/use-toast";
-import { IconShare } from "#src/icons/Share";
+import { cn } from "#src/utils/cn";
 import { absUrl } from "#src/utils/url";
+import { IconShare } from "./Icons";
 import { Button } from "./ui/Button";
 
 type Props = {
@@ -11,12 +12,12 @@ type Props = {
   className?: string;
 };
 
-export function ShareButton({ className = "", title }: Props) {
+export function ShareButton({ className, title }: Props) {
   const pathName = usePathname();
   return (
     <Button
       variant="secondary"
-      className={className}
+      className={cn("font-semibold", className)}
       onClick={async () => {
         const url = absUrl(pathName);
         try {

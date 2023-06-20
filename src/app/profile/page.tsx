@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
 import { SigninButtons } from "#src/components/SigninButtons";
 import { UserImageLarge } from "#src/components/UserImage";
 import { db } from "#src/db";
@@ -23,18 +22,7 @@ export default async function Page() {
       </main>
     );
   }
-
-  const user = await db
-    .selectFrom("User")
-    .select(["id", "name", "image"])
-    .where("User.id", "=", tokenUser.id)
-    .getFirst({
-      cache: "force-cache",
-      next: {
-        tags: [tagUserInfo({ userId: tokenUser.id })],
-      },
-    });
-
+  const user = await getUser({ userId: tokenUser.id });
   if (!user) notFound();
 
   return (
@@ -52,4 +40,17 @@ export default async function Page() {
       </div>
     </main>
   );
+}
+
+async function getUser({ userId }: { userId: number }) {
+  return await db
+    .selectFrom("User")
+    .select(["id", "name", "image"])
+    .where("User.id", "=", userId)
+    .getFirst({
+      cache: "force-cache",
+      next: {
+        tags: [tagUserInfo({ userId })],
+      },
+    });
 }

@@ -1,13 +1,13 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
 import Link from "next/link";
+import { ActivateNotificationsButton } from "#src/components/ActivateNotificationsButton";
 import { CreateEventForm } from "#src/components/CreateEventForm";
 import { db } from "#src/db";
 import { IconArrowLink } from "#src/icons/ArrowLink";
 import { hashidFromId } from "#src/utils/hashid";
 import { tagEvents } from "#src/utils/tags";
-import { WhenText } from "./event/[hashid]/components";
+import { WhenText } from "./event/[hashid]/WhenText";
 import { NewEventForm } from "./event/NewEventForm";
-import { MessagingTest } from "./messaging-test";
 import { Stuff } from "./stuff";
 
 //export const runtime = "edge";
@@ -62,7 +62,7 @@ export default async function Page() {
                 </li>
               ))}
             </ul>
-            <MessagingTest className="mt-4" />
+            <ActivateNotificationsButton />
             <Stuff />
           </div>
         </div>

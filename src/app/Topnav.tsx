@@ -2,15 +2,13 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-
+import { IconAvatar, IconHowler } from "#src/components/Icons";
 import { SigninButtons } from "#src/components/SigninButtons";
 import { SignoutButton } from "#src/components/SignoutButton";
 import { UserImage } from "#src/components/UserImage";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
 import { useUserContext } from "#src/context/UserContext";
 import { useOnClickOutside } from "#src/hooks/useOnClickOutside";
-import { IconAvatar } from "#src/icons/Avatar";
-import { IconHowler } from "#src/icons/Howler";
 
 export function Topnav() {
   return (
