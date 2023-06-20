@@ -2,8 +2,8 @@ import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { hashidFromId, idFromHashid } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
-import { tagHasJoinedEvent } from "#src/utils/tags";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
   join: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
@@ -67,6 +67,7 @@ export const eventRouter = createTRPCRouter({
       //await notifyEventCreated({ eventId: insertId });
 
       //redirect(`/event/${hashid}`);
+      revalidateTag(tagEvents());
       return { eventId: insertId, eventHashId: hashid };
     }),
 });

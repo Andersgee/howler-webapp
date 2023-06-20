@@ -1,6 +1,6 @@
 import { Providers } from "#src/context";
 import { seo } from "#src/utils/seo";
-import { Topnav } from "./Topnav";
+import { Topnav } from "../components/Topnav";
 import "./globals.css";
 import { Toaster } from "#src/context/Toaster";
 import { fontSans } from "#src/utils/font";

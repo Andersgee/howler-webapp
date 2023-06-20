@@ -1,41 +1,20 @@
-import { jsonObjectFrom } from "kysely/helpers/mysql";
 import Link from "next/link";
 import { ActivateNotificationsButton } from "#src/components/ActivateNotificationsButton";
 import { CreateEventForm } from "#src/components/CreateEventForm";
-import { db } from "#src/db";
-import { IconArrowLink } from "#src/icons/ArrowLink";
+import { IconArrowLink } from "#src/components/Icons";
+import { WhenText } from "#src/components/WhenText";
 import { hashidFromId } from "#src/utils/hashid";
-import { tagEvents } from "#src/utils/tags";
-import { WhenText } from "./event/[hashid]/WhenText";
-import { NewEventForm } from "./event/NewEventForm";
-import { Stuff } from "./stuff";
+import { getEventsLatest10 } from "#src/utils/tags";
 
 //export const runtime = "edge";
 
 export default async function Page() {
-  const events = await db
-    .selectFrom("Event")
-    .selectAll()
-    .select((eb) => [
-      jsonObjectFrom(
-        eb.selectFrom("User").select(["User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
-      ).as("creator"),
-    ])
-    .orderBy("id", "desc")
-    .offset(0)
-    .limit(10)
-    .get({
-      cache: "force-cache",
-      next: {
-        tags: [tagEvents(), "eventslatest10"],
-      },
-    });
+  const events = await getEventsLatest10();
 
   return (
     <main className="">
       <div className="container">
         <CreateEventForm />
-        <NewEventForm />
         <div className="flex justify-center">
           <div>
             <h2>Latest 10 created howls</h2>
@@ -63,7 +42,6 @@ export default async function Page() {
               ))}
             </ul>
             <ActivateNotificationsButton />
-            <Stuff />
           </div>
         </div>
       </div>

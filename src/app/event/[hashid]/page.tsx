@@ -1,19 +1,16 @@
-import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { notFound } from "next/navigation";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "#src/components/Icons";
-import { JoinLeaveEventButton } from "#src/components/JoinEventButton";
+import { JoinEventButton } from "#src/components/JoinEventButton";
 import { ShareButton } from "#src/components/ShareButton";
 import { LinkUserImage } from "#src/components/UserImage";
 import { WhenText } from "#src/components/WhenText";
-import { db } from "#src/db";
-import { idFromHashid } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
-import { tagEventInfo, tagHasJoinedEvent } from "#src/utils/tags";
+import { getEventInfo, getHasJoinedEvent } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
 
 export async function generateMetadata({ params }: PageProps) {
-  const event = await getEvent(params.hashid);
+  const event = await getEventInfo(params.hashid);
   if (!event) notFound();
 
   return seo({
@@ -25,9 +22,10 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 //export const runtime = "edge";
+//export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: PageProps) {
-  const event = await getEvent(params.hashid);
+  const event = await getEventInfo(params.hashid);
   if (!event) notFound();
   const user = await getUserFromCookie();
   const hasJoinedEvent = user ? await getHasJoinedEvent(params.hashid, user.id) : false;
@@ -69,7 +67,7 @@ export default async function Page({ params }: PageProps) {
             </div>
           </div>
           <div className="my-2 flex justify-center">
-            <JoinLeaveEventButton eventHashId={params.hashid} isJoined={hasJoinedEvent} />
+            <JoinEventButton eventHashId={params.hashid} isJoined={hasJoinedEvent} />
           </div>
           <div>
             <ShareButton title={event.what} />
@@ -78,44 +76,4 @@ export default async function Page({ params }: PageProps) {
       </div>
     </div>
   );
-}
-
-async function getEvent(eventHashid: string) {
-  const eventId = idFromHashid(eventHashid);
-  if (!eventId) return undefined;
-
-  return db
-    .selectFrom("Event")
-    .selectAll("Event")
-    .where("Event.id", "=", eventId)
-    .select((eb) => [
-      jsonObjectFrom(
-        eb.selectFrom("User").select(["User.id", "User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
-      ).as("creator"),
-    ])
-    .getFirst({
-      cache: "force-cache",
-      next: {
-        tags: [tagEventInfo({ eventId })],
-      },
-    });
-}
-
-async function getHasJoinedEvent(eventHashid: string, userId: number) {
-  const eventId = idFromHashid(eventHashid);
-  if (!eventId) return false;
-  const userEventPivot = await db
-    .selectFrom("UserEventPivot")
-    .select("userId")
-    .where("userId", "=", userId)
-    .where("eventId", "=", eventId)
-    .getFirst({
-      cache: "force-cache",
-      next: {
-        tags: [tagHasJoinedEvent({ eventId, userId })],
-      },
-    });
-
-  if (userEventPivot) return true;
-  return false;
 }

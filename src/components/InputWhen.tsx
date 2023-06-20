@@ -2,8 +2,7 @@
 
 import { addHours, startOfHour, subHours } from "date-fns";
 import { useState } from "react";
-
-import { IconArrowDown } from "#src/icons/ArrowDown";
+import { IconArrowDown } from "#src/components/Icons";
 import { datetimelocalString } from "#src/utils/date";
 
 export function InputWhen() {
