@@ -67,3 +67,10 @@ more
 - [ ] seems like a user doesnt save the fcmToken do db the first time? eg if signing in and enabling notifications?
   - investigate
   - welp it does...
+
+other
+
+- server actions are... not the best developer experience currently
+  - stay with cache stack for server components
+  - go with trpc api for client components but populate initial value from nextjs fetch cache
+  - main idea is pretty much to avoid real database query on page visit, will often result in force dynamic server components though since reading from cookie
