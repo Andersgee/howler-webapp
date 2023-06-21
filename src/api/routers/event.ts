@@ -1,14 +1,13 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { hashidFromId, idFromHashid } from "#src/utils/hashid";
+import { hashidFromId, idFromHashid, idFromHashidOrThrow } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
 import { tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
   join: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
-    const eventId = idFromHashid(input.eventHashId);
-    if (!eventId) return false;
+    const eventId = idFromHashidOrThrow(input.eventHashId);
 
     const _insertResult = await ctx.db
       .insertInto("UserEventPivot")
@@ -18,12 +17,11 @@ export const eventRouter = createTRPCRouter({
       })
       .executeTakeFirst();
 
-    revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
-    return true;
+    //revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
+    return { eventId, userId: ctx.user.id };
   }),
   leave: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
-    const eventId = idFromHashid(input.eventHashId);
-    if (!eventId) return false;
+    const eventId = idFromHashidOrThrow(input.eventHashId);
 
     const _deleteResult = await ctx.db
       .deleteFrom("UserEventPivot")
@@ -31,8 +29,8 @@ export const eventRouter = createTRPCRouter({
       .where("eventId", "=", eventId)
       .executeTakeFirst();
 
-    revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
-    return true;
+    //revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
+    return { eventId, userId: ctx.user.id };
   }),
   create: protectedProcedure
     .input(

@@ -1,11 +1,12 @@
-import { notFound } from "next/navigation";
+import { revalidateTag } from "next/cache";
+import { notFound, redirect } from "next/navigation";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "#src/components/Icons";
 import { JoinEventButton } from "#src/components/JoinEventButton";
 import { ShareButton } from "#src/components/ShareButton";
 import { LinkUserImage } from "#src/components/UserImage";
 import { WhenText } from "#src/components/WhenText";
 import { seo } from "#src/utils/seo";
-import { getEventInfo, getHasJoinedEvent } from "#src/utils/tags";
+import { getEventInfo, getHasJoinedEvent, tagHasJoinedEvent } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
 

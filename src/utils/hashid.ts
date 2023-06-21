@@ -10,3 +10,11 @@ export function idFromHashid(s: string) {
   const decoded = hashids.decode(s);
   return decoded[0] as number | undefined;
 }
+
+export function idFromHashidOrThrow(s: string) {
+  const decoded = hashids.decode(s);
+  if (decoded[0] === undefined) {
+    throw new Error("bad hashid");
+  }
+  return decoded[0] as number;
+}
