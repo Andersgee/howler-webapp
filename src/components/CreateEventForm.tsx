@@ -5,22 +5,24 @@ import { api } from "#src/hooks/api";
 
 export function CreateEventForm() {
   const router = useRouter();
-  const { mutate: createEvent, isLoading } = api.event.create.useMutation({
+  const eventCreate = api.event.create.useMutation({
     onSuccess: ({ eventHashId }) => {
       router.push(`/event/${eventHashId}`);
     },
   });
+  const when = new Date();
+  const whenEnd = new Date();
 
   return (
     <div className="">
       <button
-        disabled={isLoading}
+        disabled={eventCreate.isLoading}
         className="bg-green-500 disabled:bg-red-500"
         onClick={() => {
-          createEvent({
+          eventCreate.mutate({
             what: "new debug what",
-            when: new Date(),
-            whenEnd: new Date(),
+            when: when,
+            whenEnd: whenEnd,
             where: "new debug where",
             who: "new debug who",
           });

@@ -16,12 +16,12 @@ export function JoinEventButton({ isJoined, eventHashId }: Props) {
   let [isPending, startTransition] = useTransition();
   const user = useUserContext();
   const dialogDispatch = useDialogDispatch();
-  const { mutate: joinEvent, isLoading: isLoadingCreateEvent } = api.event.join.useMutation({
+  const eventJoin = api.event.join.useMutation({
     onSuccess: async ({ eventId, userId }) => {
       startTransition(async () => await revalidateHasJoinedEvent({ eventId, userId }));
     },
   });
-  const { mutate: leaveEvent, isLoading: isLoadingLeaveEvent } = api.event.leave.useMutation({
+  const eventLeave = api.event.leave.useMutation({
     onSuccess: async ({ eventId, userId }) => {
       startTransition(async () => await revalidateHasJoinedEvent({ eventId, userId }));
     },
@@ -29,15 +29,15 @@ export function JoinEventButton({ isJoined, eventHashId }: Props) {
 
   return (
     <Button
-      disabled={isLoadingCreateEvent || isLoadingLeaveEvent || isPending}
+      disabled={eventJoin.isLoading || eventLeave.isLoading || isPending}
       variant="default"
       onClick={async () => {
         if (!user) {
           dialogDispatch({ type: "show", name: "signin" });
         } else if (isJoined) {
-          leaveEvent({ eventHashId });
+          eventLeave.mutate({ eventHashId });
         } else {
-          joinEvent({ eventHashId });
+          eventJoin.mutate({ eventHashId });
         }
       }}
     >
