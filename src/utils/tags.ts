@@ -45,11 +45,9 @@ export async function getHasJoinedEvent(eventHashid: string, userId: number) {
   return false;
 }
 
-export function tagIsSubscribedToEvent({ eventId, userId }: { eventId: number; userId: number }) {
-  return `issusbscribedtoevent-${eventId}-${userId}`;
+export function tagEventInfo({ eventId }: { eventId: number }) {
+  return `event-${eventId}`;
 }
-
-export const tagEventInfo = ({ eventId }: { eventId: number }) => `event-${eventId}`;
 export async function getEventInfo(eventHashid: string) {
   const eventId = idFromHashid(eventHashid);
   if (!eventId) return undefined;
@@ -71,7 +69,9 @@ export async function getEventInfo(eventHashid: string) {
     });
 }
 
-export const tagEvents = () => "events";
+export function tagEvents() {
+  return "events";
+}
 export async function getEventsLatest10() {
   return await db
     .selectFrom("Event")
@@ -92,7 +92,9 @@ export async function getEventsLatest10() {
     });
 }
 
-export const tagUserInfo = ({ userId }: { userId: number }) => `userinfo-${userId}`;
+export function tagUserInfo({ userId }: { userId: number }) {
+  return `userinfo-${userId}`;
+}
 export async function getUserInfo({ userId }: { userId: number }) {
   return await db
     .selectFrom("User")
