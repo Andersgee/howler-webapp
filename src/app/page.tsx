@@ -4,9 +4,18 @@ import { CreateEventForm } from "#src/components/CreateEventForm";
 import { IconArrowLink } from "#src/components/Icons";
 import { WhenText } from "#src/components/WhenText";
 import { hashidFromId } from "#src/utils/hashid";
+import { seo } from "#src/utils/seo";
 import { getEventsLatest10 } from "#src/utils/tags";
 
 //export const runtime = "edge";
+
+export const metadata = seo({
+  title: "Howler",
+  description:
+    "Looking for something to do in real life? A place to quickly find/plan stuff to do with friends, or with anyone really.",
+  url: "/",
+  image: "/icons/favicon-512x512.png",
+});
 
 export default async function Page() {
   const events = await getEventsLatest10();

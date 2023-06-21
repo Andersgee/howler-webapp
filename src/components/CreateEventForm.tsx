@@ -4,25 +4,26 @@ import { useRouter } from "next/navigation";
 import { api } from "#src/hooks/api";
 
 export function CreateEventForm() {
-  const router = useRouter();
+  //const router = useRouter();
   const eventCreate = api.event.create.useMutation({
-    onSuccess: ({ eventHashId }) => {
-      router.push(`/event/${eventHashId}`);
+    //onSuccess: ({ eventHashId }) => {
+    //  router.push(`/event/${eventHashId}`);
+    //},
+    onSuccess: (res) => {
+      console.log(res);
     },
   });
-  const when = new Date();
-  const whenEnd = new Date();
 
   return (
     <div className="">
       <button
-        disabled={eventCreate.isLoading}
+        //disabled={eventCreate.isLoading}
         className="bg-green-500 disabled:bg-red-500"
         onClick={() => {
           eventCreate.mutate({
-            what: "new debug what",
-            when: when,
-            whenEnd: whenEnd,
+            what: "hmm new debug what",
+            when: new Date().getTime(),
+            whenEnd: new Date().getTime(),
             where: "new debug where",
             who: "new debug who",
           });
