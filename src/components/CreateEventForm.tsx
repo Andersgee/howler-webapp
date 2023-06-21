@@ -18,11 +18,11 @@ export function CreateEventForm() {
         className="bg-green-500 disabled:bg-red-500"
         onClick={() => {
           createEvent({
-            what: "debug what",
+            what: "new debug what",
             when: new Date(),
             whenEnd: new Date(),
-            where: "debug where",
-            who: "debug who",
+            where: "new debug where",
+            who: "new debug who",
           });
         }}
       >

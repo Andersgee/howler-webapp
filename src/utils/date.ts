@@ -34,7 +34,7 @@ export function formatDate(date: Date) {
 
 export function prettyDate(date: Date) {
   //"Saturday, June 17, 2023 at 20:55"
-  return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short", hour12: false }).format(Date.now());
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short", hour12: false }).format(date);
 
   //undefined to use browsers default locale
   //return new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "short", hour12: false }).format(Date.now());
