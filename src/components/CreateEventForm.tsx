@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { api } from "#src/hooks/api";
 
 export function CreateEventForm() {
-  //const router = useRouter();
+  const router = useRouter();
   const eventCreate = api.event.create.useMutation({
-    //onSuccess: ({ eventHashId }) => {
-    //  router.push(`/event/${eventHashId}`);
-    //},
-    onSuccess: (res) => {
-      console.log(res);
+    onSuccess: ({ eventHashId }) => {
+      router.push(`/event/${eventHashId}`);
     },
+    //onSuccess: (res) => {
+    //  console.log(res);
+    //},
   });
 
   return (
@@ -22,8 +22,8 @@ export function CreateEventForm() {
         onClick={() => {
           eventCreate.mutate({
             what: "hmm new debug what",
-            when: new Date().getTime(),
-            whenEnd: new Date().getTime(),
+            when: new Date(),
+            whenEnd: new Date(),
             where: "new debug where",
             who: "new debug who",
           });

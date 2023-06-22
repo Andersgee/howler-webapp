@@ -1,10 +1,10 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import type { NextRequest } from "next/server";
-import superjson from "superjson";
 import { ZodError } from "zod";
 import { db } from "#src/db";
 import { getUserFromRequestCookie } from "#src/utils/token";
+import { transformer } from "./transformer";
 
 export const createTRPCContext = async (opts: FetchCreateContextFnOptions, nextRequest: NextRequest) => {
   const user = await getUserFromRequestCookie(nextRequest);
@@ -17,7 +17,7 @@ export const createTRPCContext = async (opts: FetchCreateContextFnOptions, nextR
 };
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
-  //transformer: superjson,
+  transformer: transformer,
   errorFormatter({ shape, error }) {
     return {
       ...shape,

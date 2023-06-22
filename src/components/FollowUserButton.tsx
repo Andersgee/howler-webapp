@@ -13,20 +13,20 @@ type Props = {
 export function FollowUserButton({ isFollowing, userHashId }: Props) {
   const user = useUserContext();
   const dialogDispatch = useDialogDispatch();
-  const { mutate: followUser, isLoading: isLoadinFollow } = api.user.follow.useMutation();
-  const { mutate: unFollowUser, isLoading: isLoadingUnFollow } = api.user.unFollow.useMutation();
+  const userFollow = api.user.follow.useMutation();
+  const userUnFollow = api.user.unFollow.useMutation();
 
   return (
     <Button
-      disabled={isLoadinFollow || isLoadingUnFollow}
+      disabled={userFollow.isLoading || userUnFollow.isLoading}
       variant="default"
       onClick={async () => {
         if (!user) {
           dialogDispatch({ type: "show", name: "signin" });
         } else if (isFollowing) {
-          unFollowUser({ userHashId });
+          userUnFollow.mutate({ userHashId });
         } else {
-          followUser({ userHashId });
+          userFollow.mutate({ userHashId });
         }
       }}
     >

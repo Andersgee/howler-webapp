@@ -40,43 +40,30 @@ export const eventRouter = createTRPCRouter({
       z.object({
         what: z.string(),
         where: z.string(),
-        when: z.number(),
-        whenEnd: z.number(),
+        when: z.date(),
+        whenEnd: z.date(),
         who: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       // simulate a slow db call
       //await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log({ input });
 
-      const creatorId = ctx.user.id;
-      const when = new Date(input.when);
-      const whenEnd = new Date(input.whenEnd);
-      console.log("typeof when:", typeof when);
-      console.log("typeof whenEnd:", typeof whenEnd);
-      console.log({ creatorId, when, whenEnd });
-
-      try {
-        const values = {
+      const insertresult = await db
+        .insertInto("Event")
+        .values({
           creatorId: ctx.user.id,
           what: input.what,
           where: input.where,
-          when: when,
-          whenEnd: whenEnd,
+          when: input.when,
+          whenEnd: input.whenEnd,
           who: input.who,
           info: "no info",
-        };
-        console.log({ values });
-        console.log("before execute");
-        const insertresult = await db.insertInto("Event").values(values).executeTakeFirstOrThrow();
+        })
+        .executeTakeFirst();
 
-        console.log("after execute");
-        console.log({ insertresult });
-      } catch (err) {
-        console.log("insertResponse error:", err);
-      }
-      /*
+      console.log("after execute");
+      console.log({ insertresult });
 
       const insertId = Number(insertresult.insertId);
       const hashid = hashidFromId(insertId);
@@ -85,11 +72,6 @@ export const eventRouter = createTRPCRouter({
 
       //await notifyEventCreated({ eventId: insertId });
 
-      //redirect(`/event/${hashid}`);
-      //revalidateTag(tagEvents());
-      //return { eventId: insertId, eventHashId: hashid };
-
-      */
-      return "hello";
+      return { eventId: insertId, eventHashId: hashid };
     }),
 });

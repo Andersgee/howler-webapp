@@ -74,8 +74,13 @@ SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(init?: Request
 };
 
 async function executeWithFetchGet(compiledQuery: CompiledQuery, init?: RequestInit) {
+  //no need to send compiledQuery.query
+  const body = {
+    sql: compiledQuery.sql,
+    parameters: compiledQuery.parameters,
+  };
   const url = urlWithSearchparams(process.env.DATABASE_HTTP_URL, {
-    q: stringify(compiledQuery),
+    q: stringify(body),
   });
   return fetch(url, {
     method: "GET",

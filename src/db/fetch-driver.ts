@@ -95,6 +95,11 @@ class FetchConnection implements DatabaseConnection {
   }
 
   async executeQuery<O>(compiledQuery: CompiledQuery): Promise<QueryResult<O>> {
+    //no need to send compiledQuery.query
+    const body = {
+      sql: compiledQuery.sql,
+      parameters: compiledQuery.parameters,
+    };
     const res = await fetch(this.config.url, {
       method: "POST",
       cache: "no-store",
@@ -103,7 +108,7 @@ class FetchConnection implements DatabaseConnection {
         "Content-Type": "text/plain",
         Authorization: this.config.authorization,
       },
-      body: stringify(compiledQuery),
+      body: stringify(body),
     });
 
     if (res.ok) {
