@@ -1,8 +1,8 @@
+import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { z } from "zod";
-import { db } from "#src/db";
 import { hashidFromId, idFromHashidOrThrow } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
   join: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
@@ -49,7 +49,7 @@ export const eventRouter = createTRPCRouter({
       // simulate a slow db call
       //await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const insertresult = await db
+      const insertresult = await ctx.db
         .insertInto("Event")
         .values({
           creatorId: ctx.user.id,
@@ -74,4 +74,24 @@ export const eventRouter = createTRPCRouter({
 
       return { eventId: insertId, eventHashId: hashid };
     }),
+
+  info: publicProcedure.input(z.object({ eventHashId: z.string().min(1) })).query(async ({ input, ctx }) => {
+    const eventId = idFromHashidOrThrow(input.eventHashId);
+
+    const event = await ctx.db
+      .selectFrom("Event")
+      .selectAll("Event")
+      .where("Event.id", "=", eventId)
+      .select((eb) => [
+        jsonObjectFrom(
+          eb
+            .selectFrom("User")
+            .select(["User.id", "User.name", "User.image"])
+            .whereRef("User.id", "=", "Event.creatorId")
+        ).as("creator"),
+      ])
+      .executeTakeFirst();
+
+    return event;
+  }),
 });
