@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { db } from "#src/db";
 import { hashidFromId, idFromHashidOrThrow } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -52,22 +53,25 @@ export const eventRouter = createTRPCRouter({
       const creatorId = ctx.user.id;
       const when = new Date(input.when);
       const whenEnd = new Date(input.whenEnd);
+      console.log("typeof when:", typeof when);
+      console.log("typeof whenEnd:", typeof whenEnd);
       console.log({ creatorId, when, whenEnd });
 
       try {
-        const insertresult = await ctx.db
-          .insertInto("Event")
-          .values({
-            creatorId: ctx.user.id,
-            what: input.what,
-            where: input.where,
-            when: when,
-            whenEnd: whenEnd,
-            who: input.who,
-            info: "no info",
-          })
-          .executeTakeFirstOrThrow();
+        const values = {
+          creatorId: ctx.user.id,
+          what: input.what,
+          where: input.where,
+          when: when,
+          whenEnd: whenEnd,
+          who: input.who,
+          info: "no info",
+        };
+        console.log({ values });
+        console.log("before execute");
+        const insertresult = await db.insertInto("Event").values(values).executeTakeFirstOrThrow();
 
+        console.log("after execute");
         console.log({ insertresult });
       } catch (err) {
         console.log("insertResponse error:", err);

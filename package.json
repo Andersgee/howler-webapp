@@ -30,6 +30,7 @@
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
+    "devalue": "^4.3.2",
     "firebase": "^9.22.0",
     "hashids": "^2.2.11",
     "jose": "^4.14.4",
