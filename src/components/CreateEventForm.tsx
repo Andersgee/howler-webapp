@@ -9,9 +9,6 @@ export function CreateEventForm() {
     onSuccess: ({ eventHashId }) => {
       router.push(`/event/${eventHashId}`);
     },
-    //onSuccess: (res) => {
-    //  console.log(res);
-    //},
   });
 
   return (

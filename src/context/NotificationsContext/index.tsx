@@ -74,7 +74,6 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   );
 
   useEffect(() => {
-    console.log("running setupMessaging effect");
     setupMessaging()
       .then((fcm) => {
         fcmRef.current = fcm;
@@ -86,8 +85,6 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
               link: payload.fcmOptions.link,
               linkText: "Show me",
             });
-          } else {
-            console.warn("couldnt toast.. onMessage, payload:", payload);
           }
           setMessages((msgs) => [...msgs, payload]);
         });

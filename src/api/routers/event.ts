@@ -14,9 +14,8 @@ export const eventRouter = createTRPCRouter({
         eventId: eventId,
         userId: ctx.user.id,
       })
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
 
-    console.log({ _insertResult });
     //revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
 
     return { eventId, userId: ctx.user.id };
@@ -28,9 +27,7 @@ export const eventRouter = createTRPCRouter({
       .deleteFrom("UserEventPivot")
       .where("userId", "=", ctx.user.id)
       .where("eventId", "=", eventId)
-      .executeTakeFirst();
-
-    console.log({ _deleteResult });
+      .executeTakeFirstOrThrow();
 
     //revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
     return { eventId, userId: ctx.user.id };
@@ -60,15 +57,10 @@ export const eventRouter = createTRPCRouter({
           who: input.who,
           info: "no info",
         })
-        .executeTakeFirst();
-
-      console.log("after execute");
-      console.log({ insertresult });
+        .executeTakeFirstOrThrow();
 
       const insertId = Number(insertresult.insertId);
       const hashid = hashidFromId(insertId);
-
-      console.log({ insertId, hashid });
 
       //await notifyEventCreated({ eventId: insertId });
 
@@ -90,7 +82,7 @@ export const eventRouter = createTRPCRouter({
             .whereRef("User.id", "=", "Event.creatorId")
         ).as("creator"),
       ])
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
 
     return event;
   }),
