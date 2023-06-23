@@ -1,4 +1,3 @@
-//import { deserialize, serialize } from "superjson";
 import { parse, stringify } from "devalue";
 import type { CompiledQuery, DatabaseConnection, Driver, QueryResult } from "kysely";
 
@@ -17,40 +16,6 @@ export interface FetchDriverConfig {
   authorization: string;
 }
 
-/**
- * This driver uses post requests with `fetch()` to a webserver that responds with the query result instead of querying the database directly.
- *
- * requires `superjson` dependency.
- *
- * # Example
- * ```ts
- * const kysely = new Kysely<DB>({
- *   dialect: {
- *     createAdapter: () => new MysqlAdapter(),
- *     createIntrospector: (db) => new MysqlIntrospector(db),
- *     createQueryCompiler: () => new MysqlQueryCompiler(),
- *     createDriver: () =>
- *       new FetchDriver({
- *         url: "http://localhost:4000",
- *         authorization: "Basic SOMESECRET",
- *       }),
- *  },
- * });
- * ```
- *
- * # Webserver
- *
- * You need to have a webserver located at `url` that handles the post requests for this driver to work. The webserver should handle requests like this:
- *
- * ```ts
- * import {serialize, deserialize} from "superjson";
- *
- * async function handler(request) {
- *  const result = await kysely.executeQuery(deserialize(request.body))
- *  return serialize(result)
- * }
- * ```
- * */
 export class FetchDriver implements Driver {
   config: FetchDriverConfig;
 
@@ -104,7 +69,6 @@ class FetchConnection implements DatabaseConnection {
       method: "POST",
       cache: "no-store",
       headers: {
-        //"Content-Type": "application/json",
         "Content-Type": "text/plain",
         Authorization: this.config.authorization,
       },
@@ -115,7 +79,7 @@ class FetchConnection implements DatabaseConnection {
       try {
         return parse(await res.text());
       } catch (error) {
-        throw new Error("failed to deserialize response.json(), webserver should return superjson.serialize(result)");
+        throw new Error("failed to parse response");
       }
     } else {
       throw new Error(`${res.status} ${res.statusText}`);

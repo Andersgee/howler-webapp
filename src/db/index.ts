@@ -1,6 +1,3 @@
-//import { FetchDriver } from "@andersgee/kysely-fetch-driver";
-
-//import { deserialize, serialize } from "superjson";
 import { parse, stringify } from "devalue";
 import {
   Kysely,
@@ -53,7 +50,7 @@ SelectQueryBuilder.prototype.get = async function <O>(init?: RequestInit): Promi
       const result = parse(await res.text()) as any;
       return result.rows;
     } catch (error) {
-      throw new Error("failed to deserialize response.json(), webserver should return superjson.serialize(result)");
+      throw new Error("failed to parse response");
     }
   } else {
     throw new Error(`${res.status} ${res.statusText}`);

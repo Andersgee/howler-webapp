@@ -1,7 +1,6 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@andersgee/kysely-fetch-driver': ^1.0.2
   '@ianvs/prettier-plugin-sort-imports': ^4.0.2
   '@radix-ui/react-slot': ^1.0.2
   '@radix-ui/react-toast': ^1.1.4
@@ -39,7 +38,6 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   sharp: ^0.32.1
-  superjson: ^1.12.3
   tailwind-merge: ^1.13.2
   tailwindcss: 3.3.2
   tailwindcss-animate: ^1.0.6
@@ -48,7 +46,6 @@ specifiers:
   zod: ^3.21.4
 
 dependencies:
-  '@andersgee/kysely-fetch-driver': 1.0.2_kysely@0.24.2
   '@radix-ui/react-slot': 1.0.2_xomkljxbsahfbuzbqqeyw47ndm
   '@radix-ui/react-toast': 1.1.4_2ejdisobb7q4dn5gvncpcai4wu
   '@tanstack/react-query': 4.29.13_biqbaboplfbrettd7655fr4n2y
@@ -73,7 +70,6 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   sharp: 0.32.1
-  superjson: 1.12.3
   tailwind-merge: 1.13.2
   tailwindcss: 3.3.2_ts-node@10.9.1
   tailwindcss-animate: 1.0.6_tailwindcss@3.3.2
@@ -109,15 +105,6 @@ packages:
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.18
     dev: true
-
-  /@andersgee/kysely-fetch-driver/1.0.2_kysely@0.24.2:
-    resolution: {integrity: sha512-emwcHmBNXuf3sIHZA9zHiBPccCAa6Est7Yw3BG/Rl7xXSW16H8o+lxNT40BtP5ffDhNvkKXaWrmI8xlfE5P94w==}
-    peerDependencies:
-      kysely: '>=0.24.2'
-    dependencies:
-      kysely: 0.24.2
-      superjson: 1.12.3
-    dev: false
 
   /@babel/code-frame/7.22.5:
     resolution: {integrity: sha512-Xmwn266vad+6DAqEB2A6V/CcZVp62BbwVmcOJc2RPuwih1kw02TjQvWVWlcKGbBPd+8/0V5DEkOcizRGYsspYQ==}
@@ -2371,13 +2358,6 @@ packages:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
     dev: true
 
-  /copy-anything/3.0.4:
-    resolution: {integrity: sha512-MaQ9FwzlZ/KLeVCLhzI3rZw0EhrIryfZa3AyT4agVybR0DjlkDHA8898lamLD6kfkf9MMn8D+zDAUR4+GxaymQ==}
-    engines: {node: '>=12.13'}
-    dependencies:
-      is-what: 4.1.9
-    dev: false
-
   /core-util-is/1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
     dev: true
@@ -3777,11 +3757,6 @@ packages:
       get-intrinsic: 1.2.0
     dev: true
 
-  /is-what/4.1.9:
-    resolution: {integrity: sha512-I3FU0rkVvwhgLLEs6iITwZ/JaLXe7tQcHyzupXky8jigt1vu4KM0UOqDr963j36JRvJ835EATVIm6MnGz/i1/g==}
-    engines: {node: '>=12.13'}
-    dev: false
-
   /is-windows/1.0.2:
     resolution: {integrity: sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==}
     engines: {node: '>=0.10.0'}
@@ -5163,13 +5138,6 @@ packages:
       mz: 2.7.0
       pirates: 4.0.5
       ts-interface-checker: 0.1.13
-
-  /superjson/1.12.3:
-    resolution: {integrity: sha512-0j+U70KUtP8+roVPbwfqkyQI7lBt7ETnuA7KXbTDX3mCKiD/4fXs2ldKSMdt0MCfpTwiMxo20yFU3vu6ewETpQ==}
-    engines: {node: '>=10'}
-    dependencies:
-      copy-anything: 3.0.4
-    dev: false
 
   /supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
