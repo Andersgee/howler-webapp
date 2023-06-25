@@ -1,7 +1,9 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { hashidFromId, idFromHashidOrThrow } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
+import { tagEvents } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
@@ -63,6 +65,7 @@ export const eventRouter = createTRPCRouter({
       const hashid = hashidFromId(insertId);
 
       //await notifyEventCreated({ eventId: insertId });
+      revalidateTag(tagEvents());
 
       return { eventId: insertId, eventHashId: hashid };
     }),

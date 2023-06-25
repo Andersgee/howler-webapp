@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { IconAvatar, IconHowler } from "#src/components/Icons";
+import { IconAvatar, IconBell, IconHowler, IconSettings } from "#src/components/Icons";
 import { SigninButtons } from "#src/components/SigninButtons";
 import { SignoutButton } from "#src/components/SignoutButton";
 import { UserImage } from "#src/components/UserImage";
@@ -16,7 +16,10 @@ export function Topnav() {
       <Link href="/">
         <IconHowler className="m-2 h-8 w-8" />
       </Link>
-      <ProfileButton />
+      <div className="flex gap-2">
+        {/*<NotificationsButton />*/}
+        <ProfileButton />
+      </div>
     </div>
   );
 }
@@ -30,11 +33,15 @@ function ProfileButton() {
 
   return (
     <div ref={ref}>
-      <button onClick={() => dialogDispatch({ type: "toggle", name: "signin" })}>
-        {user ? <UserImage src={user.image} alt={user.name} /> : <IconAvatar className="m-2 h-8 w-8" />}
+      <button className="" onClick={() => dialogDispatch({ type: "toggle", name: "signin" })}>
+        {user ? (
+          <UserImage src={user.image} alt={user.name} />
+        ) : (
+          <IconAvatar className="hover:bg-accent h-12 w-12 rounded-full p-3" />
+        )}
       </button>
       {dialog === "signin" && (
-        <div className="absolute right-0 top-12 z-10 border-2 bg-white p-4 shadow-md dark:bg-black">
+        <TopnavDialogShell>
           {user ? (
             <div>
               <div>
@@ -48,8 +55,43 @@ function ProfileButton() {
           ) : (
             <SigninButtons />
           )}
-        </div>
+        </TopnavDialogShell>
       )}
     </div>
   );
+}
+
+function NotificationsButton() {
+  const user = useUserContext();
+  const dialog = useDialogContext();
+  const dialogDispatch = useDialogDispatch();
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref, () => dialogDispatch({ type: "hide", name: "notifications" }));
+
+  if (!user) return null;
+  return (
+    <div ref={ref}>
+      <button onClick={() => dialogDispatch({ type: "toggle", name: "notifications" })}>
+        <IconBell className="hover:bg-accent h-12 w-12 rounded-full p-3" />
+      </button>
+      {dialog === "notifications" && (
+        <TopnavDialogShell>
+          <div>
+            <div className="flex justify-between">
+              <span>Settings</span>
+              <Link href="/notifications">
+                <IconSettings />
+              </Link>
+            </div>
+            <hr />
+            <div>list here</div>
+          </div>
+        </TopnavDialogShell>
+      )}
+    </div>
+  );
+}
+
+function TopnavDialogShell({ children }: { children: React.ReactNode }) {
+  return <div className="absolute right-0 top-12 z-10 border-2 bg-white p-4 shadow-md dark:bg-black">{children}</div>;
 }
