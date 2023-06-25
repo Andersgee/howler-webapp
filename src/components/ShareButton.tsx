@@ -27,7 +27,7 @@ export function ShareButton({ className, title }: Props) {
               url: url,
             });
           } else {
-            //just copy link instead of native sharing not available
+            //just copy link if native sharing not available
             const ok = await copyToClipboard(url);
             if (ok) {
               toast({
@@ -36,6 +36,10 @@ export function ShareButton({ className, title }: Props) {
             }
           }
         } catch (error) {
+          //toast({
+          //  variant: "destructive",
+          //  description: errorMessageFromUnkown(error)
+          //})
           //console.error(errorMessageFromUnkown(error));
         }
       }}
