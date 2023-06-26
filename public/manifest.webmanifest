@@ -21,5 +21,8 @@
       "purpose": "maskable"
     }
   ],
-  "splash_pages": null
+  "splash_pages": null,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }
