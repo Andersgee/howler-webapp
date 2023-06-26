@@ -33,7 +33,8 @@ export function JoinEventButton({ initialIsJoined, eventHashId }: Props) {
   return (
     <Button
       disabled={eventJoin.isLoading || eventLeave.isLoading}
-      variant="default"
+      size="lg"
+      variant="optimisticdefault"
       onClick={async () => {
         if (!user) {
           dialogDispatch({ type: "show", name: "signin" });

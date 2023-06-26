@@ -17,7 +17,9 @@ export default async function Page({ params }: { params: { hashid: string } }) {
 
   const user = await getUserFromCookie();
 
-  const isFollowing = user ? await getIsFollowingUser({ myUserId: user.id, otherUserId: profileUserId }) : false;
+  const isFollowing = user
+    ? await getIsFollowingUser({ myUserId: user.id, otherUserHashId: profileUserHashId })
+    : false;
 
   return (
     <main className="container flex justify-center">
@@ -27,7 +29,7 @@ export default async function Page({ params }: { params: { hashid: string } }) {
           <h1 className="ml-2">{profileUser.name}</h1>
         </div>
         <div>public profile</div>
-        <FollowUserButton userHashId={profileUserHashId} isFollowing={isFollowing} />
+        <FollowUserButton userHashId={profileUserHashId} initialIsFollowing={isFollowing} />
       </div>
     </main>
   );

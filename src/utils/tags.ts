@@ -6,7 +6,10 @@ import { idFromHashid } from "./hashid";
 export function tagIsFollowingUser({ myUserId, otherUserId }: { myUserId: number; otherUserId: number }) {
   return `isfollowing-${myUserId}-${otherUserId}`;
 }
-export async function getIsFollowingUser({ myUserId, otherUserId }: { myUserId: number; otherUserId: number }) {
+export async function getIsFollowingUser({ myUserId, otherUserHashId }: { myUserId: number; otherUserHashId: string }) {
+  const otherUserId = idFromHashid(otherUserHashId);
+  if (!otherUserId) return false;
+
   const userUserPivot = await db
     .selectFrom("UserUserPivot")
     .select(["userId", "followerId"])
