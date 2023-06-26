@@ -79,4 +79,4 @@ other
 
 - when clicking link on messenger, if in settings they dont have "open links in default browser" (inside "Photos and media" settings)... then the facebook/messenger browser is used which is not considered secure by google and thus cant sign in
   - just toggle to use default browser and all is good
-  - perhaps detect if such a browser is used when signin and redirect to a "use a better browser page" instead of the default google signin error message which sais something like "app is insecure" but in fact the real reason is "browser is insecure"
+  - perhaps detect if such a browser is used when signin and redirect to a "use a better browser page" instead of the default google signin error message which sais something like "app is insecure" but in fact the real reason is "browser is insecure".
