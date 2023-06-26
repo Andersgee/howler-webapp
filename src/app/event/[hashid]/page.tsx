@@ -1,16 +1,13 @@
-import { revalidateTag } from "next/cache";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "#src/components/Icons";
 import { JoinEventButton } from "#src/components/JoinEventButton";
 import { ShareButton } from "#src/components/ShareButton";
 import { LinkUserImage } from "#src/components/UserImage";
 import { WhenText } from "#src/components/WhenText";
-import { hashidFromId } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
-import { getEventInfo, getHasJoinedEvent, tagHasJoinedEvent } from "#src/utils/tags";
+import { getEventInfo, getHasJoinedEvent } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
-import { DynamicEventInfo } from "./DynamicEventInfo";
 
 export async function generateMetadata({ params }: PageProps) {
   const event = await getEventInfo(params.hashid);
@@ -31,7 +28,7 @@ export default async function Page({ params }: PageProps) {
   const event = await getEventInfo(params.hashid);
   if (!event) notFound();
   const user = await getUserFromCookie();
-  const hasJoinedEvent = user ? await getHasJoinedEvent(params.hashid, user.id) : false;
+  const hasJoinedEvent = user ? await getHasJoinedEvent({ eventHashid: params.hashid, userId: user.id }) : false;
 
   return (
     <>
@@ -71,7 +68,7 @@ export default async function Page({ params }: PageProps) {
               </div>
             </div>
             <div className="my-2 flex justify-center">
-              <JoinEventButton eventHashId={params.hashid} isJoined={hasJoinedEvent} />
+              <JoinEventButton eventHashId={params.hashid} initialIsJoined={hasJoinedEvent} />
             </div>
             <div>
               <ShareButton title={event.what} />
@@ -79,7 +76,6 @@ export default async function Page({ params }: PageProps) {
           </div>
         </div>
       </div>
-      <DynamicEventInfo eventHashId={hashidFromId(event.id)} />
     </>
   );
 }

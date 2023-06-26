@@ -3,10 +3,15 @@ import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { hashidFromId, idFromHashidOrThrow } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
-import { tagEvents } from "#src/utils/tags";
+import { getHasJoinedEvent, tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
+  isJoined: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).query(async ({ input, ctx }) => {
+    const hasJoined = await getHasJoinedEvent({ eventHashid: input.eventHashId, userId: ctx.user.id });
+
+    return hasJoined;
+  }),
   join: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
     const eventId = idFromHashidOrThrow(input.eventHashId);
 
@@ -18,7 +23,7 @@ export const eventRouter = createTRPCRouter({
       })
       .executeTakeFirstOrThrow();
 
-    //revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
+    revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
 
     return { eventId, userId: ctx.user.id };
   }),
@@ -31,7 +36,7 @@ export const eventRouter = createTRPCRouter({
       .where("eventId", "=", eventId)
       .executeTakeFirstOrThrow();
 
-    //revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
+    revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
     return { eventId, userId: ctx.user.id };
   }),
   create: protectedProcedure

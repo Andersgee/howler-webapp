@@ -26,7 +26,7 @@ export async function getIsFollowingUser({ myUserId, otherUserId }: { myUserId: 
 export function tagHasJoinedEvent({ eventId, userId }: { eventId: number; userId: number }) {
   return `hasjoinedevent-${eventId}-${userId}`;
 }
-export async function getHasJoinedEvent(eventHashid: string, userId: number) {
+export async function getHasJoinedEvent({ eventHashid, userId }: { eventHashid: string; userId: number }) {
   const eventId = idFromHashid(eventHashid);
   if (!eventId) return false;
   const userEventPivot = await db

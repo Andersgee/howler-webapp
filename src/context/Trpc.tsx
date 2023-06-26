@@ -14,6 +14,7 @@ export function TrpcProvider({ children }: { children: React.ReactNode }) {
         defaultOptions: {
           queries: {
             refetchOnWindowFocus: false,
+            staleTime: Infinity,
           },
         },
       })

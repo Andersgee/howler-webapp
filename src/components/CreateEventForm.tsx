@@ -1,7 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { api } from "#src/hooks/api";
+import { IconWhat } from "./Icons";
+import { Input } from "./ui/Input";
 
 export function CreateEventForm() {
   const router = useRouter();
@@ -15,7 +18,7 @@ export function CreateEventForm() {
     <div className="">
       <button
         //disabled={eventCreate.isLoading}
-        className="bg-green-500 disabled:bg-red-500"
+        className="block bg-green-500 disabled:bg-red-500"
         onClick={() => {
           eventCreate.mutate({
             what: "hmm new debug what",
@@ -28,6 +31,13 @@ export function CreateEventForm() {
       >
         CREATE EVENT
       </button>
+      <div className="flex items-center gap-1">
+        <IconWhat />
+        <span className="w-16 pr-2">What?</span>
+        <div className="flex items-center bg-white dark:bg-black">
+          <Input name="what" type="text" placeholder="anything" />
+        </div>
+      </div>
     </div>
   );
 }

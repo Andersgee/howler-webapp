@@ -1,35 +1,38 @@
 "use client";
 
-import { useTransition } from "react";
-import { revalidateHasJoinedEvent } from "#src/app/actions";
 import { useDialogDispatch } from "#src/context/DialogContext";
 import { useUserContext } from "#src/context/UserContext";
 import { api } from "#src/hooks/api";
 import { Button } from "./ui/Button";
 
 type Props = {
-  isJoined: boolean;
+  initialIsJoined: boolean;
   eventHashId: string;
 };
 
-export function JoinEventButton({ isJoined, eventHashId }: Props) {
-  let [isPending, startTransition] = useTransition();
+export function JoinEventButton({ initialIsJoined, eventHashId }: Props) {
   const user = useUserContext();
+  const utils = api.useContext();
   const dialogDispatch = useDialogDispatch();
+
+  const { data: isJoined } = api.event.isJoined.useQuery(
+    { eventHashId },
+    {
+      initialData: initialIsJoined,
+      //staleTime: Infinity, //set this as default option on queryClient instead
+    }
+  );
+
   const eventJoin = api.event.join.useMutation({
-    onSuccess: async ({ eventId, userId }) => {
-      startTransition(async () => await revalidateHasJoinedEvent({ eventId, userId }));
-    },
+    onMutate: () => utils.event.isJoined.setData({ eventHashId }, () => true),
   });
   const eventLeave = api.event.leave.useMutation({
-    onSuccess: async ({ eventId, userId }) => {
-      startTransition(async () => await revalidateHasJoinedEvent({ eventId, userId }));
-    },
+    onMutate: () => utils.event.isJoined.setData({ eventHashId }, () => false),
   });
 
   return (
     <Button
-      disabled={eventJoin.isLoading || eventLeave.isLoading || isPending}
+      disabled={eventJoin.isLoading || eventLeave.isLoading}
       variant="default"
       onClick={async () => {
         if (!user) {
