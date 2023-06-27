@@ -12,7 +12,7 @@ export function SigninButtons() {
   const pathname = usePathname();
 
   return (
-    <div>
+    <div className="bg-white">
       <div>
         <a
           href={`/api/auth/signin/google?route=${pathname}`}

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { type TokenUser } from "#src/utils/token/schema";
+import type { TokenUser } from "#src/utils/token/schema";
 
 const Context = createContext<TokenUser | null>(null);
 

@@ -13,7 +13,10 @@ const SCHEMA_REQUEST_BODY = z.object({
 export async function POST(request: NextRequest) {
   try {
     const user = await getUserFromRequestCookie(request);
-    if (!user) return new Response(undefined, { status: 401 });
+    if (!user) {
+      //return new Response(undefined, { status: 401 });
+      return new Response(undefined, { status: 204 });
+    }
 
     const { fcmToken } = SCHEMA_REQUEST_BODY.parse(await request.json());
     const _insertResult = await db

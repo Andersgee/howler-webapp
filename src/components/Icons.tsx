@@ -2,6 +2,11 @@ import type { ComponentProps } from "react";
 import { cn } from "#src/utils/cn";
 
 type IconProps = ComponentProps<"svg">;
+type IconClickableProps = { clickable?: boolean } & IconProps;
+
+//size area should be atleast 48x48 if clickable
+//also padding an svg shrinks it so set size to 48 and shrink to the 24x24 they are designed for
+const clickableStyles = "w-12 h-12 p-3 rounded-full hover:bg-secondary";
 
 export function IconArrowDown({ className, ...props }: IconProps) {
   return (
@@ -39,9 +44,28 @@ export function IconArrowLink({ className, ...props }: IconProps) {
   );
 }
 
+export function IconUser({ className, ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn("h-6 w-6", className)}
+      {...props}
+    >
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  );
+}
+
 export function IconAvatar({ className, ...props }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" className={cn("h-6 w-6", className)} {...props}>
+    <svg viewBox="0 0 24 24" stroke="currentColor" className={cn("h-6 w-6", className)} {...props}>
       <circle cx="12" cy="8" r="4" />
       <path d="M12 12 m0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
     </svg>
@@ -268,7 +292,7 @@ export function IconWho({ className, ...props }: IconProps) {
   );
 }
 
-export function IconBell({ className, ...props }: IconProps) {
+export function IconBell({ className, clickable, ...props }: IconClickableProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -278,7 +302,7 @@ export function IconBell({ className, ...props }: IconProps) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn("h-6 w-6", className)}
+      className={cn("h-6 w-6", clickable && clickableStyles, className)}
       {...props}
     >
       <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
@@ -287,17 +311,17 @@ export function IconBell({ className, ...props }: IconProps) {
   );
 }
 
-export function IconSettings({ className, ...props }: IconProps) {
+export function IconSettings({ className, clickable, ...props }: IconClickableProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className={cn("h-6 w-6", className)}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn("h-6 w-6", clickable && clickableStyles, className)}
       {...props}
     >
       <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
