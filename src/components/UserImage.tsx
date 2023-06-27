@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import { hashidFromId } from "#src/utils/hashid";
 
 type ImageProps = {
@@ -23,7 +22,7 @@ type LinkProps = {
 
 export function LinkUserImage({ userId, src, alt }: LinkProps) {
   return (
-    <Link href={`/profile/${hashidFromId(userId)}`}>
+    <Link href={`/u/${hashidFromId(userId)}`}>
       <UserImage src={src} alt={alt} />
     </Link>
   );
@@ -31,7 +30,7 @@ export function LinkUserImage({ userId, src, alt }: LinkProps) {
 
 export function LinkUserImageLarge({ userId, src, alt }: LinkProps) {
   return (
-    <Link href={`/profile/${hashidFromId(userId)}`}>
+    <Link href={`/u/${hashidFromId(userId)}`}>
       <UserImageLarge src={src} alt={alt} />
     </Link>
   );

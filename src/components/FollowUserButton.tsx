@@ -15,13 +15,7 @@ export function FollowUserButton({ initialIsFollowing, userHashId }: Props) {
   const utils = api.useContext();
   const dialogDispatch = useDialogDispatch();
 
-  const { data: isFollowing } = api.user.isFollowing.useQuery(
-    { userHashId },
-    {
-      initialData: initialIsFollowing,
-      //staleTime: Infinity, //set this as default option on queryClient instead
-    }
-  );
+  const { data: isFollowing } = api.user.isFollowing.useQuery({ userHashId }, { initialData: initialIsFollowing });
 
   const userFollow = api.user.follow.useMutation({
     onMutate: () => utils.user.isFollowing.setData({ userHashId }, () => true),

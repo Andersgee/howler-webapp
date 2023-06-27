@@ -15,13 +15,7 @@ export function JoinEventButton({ initialIsJoined, eventHashId }: Props) {
   const utils = api.useContext();
   const dialogDispatch = useDialogDispatch();
 
-  const { data: isJoined } = api.event.isJoined.useQuery(
-    { eventHashId },
-    {
-      initialData: initialIsJoined,
-      //staleTime: Infinity, //set this as default option on queryClient instead
-    }
-  );
+  const { data: isJoined } = api.event.isJoined.useQuery({ eventHashId }, { initialData: initialIsJoined });
 
   const eventJoin = api.event.join.useMutation({
     onMutate: () => utils.event.isJoined.setData({ eventHashId }, () => true),
