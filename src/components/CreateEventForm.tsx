@@ -27,7 +27,7 @@ export function CreateEventForm() {
   const [whenEnd, setWhenEnd] = useState(startOfHour(addHours(new Date(), 2)));
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-2">
       {/* What */}
       <div className="flex items-center">
         <div className="flex w-24">
@@ -79,11 +79,11 @@ export function CreateEventForm() {
 
       {/* When */}
       <div className="flex">
-        <div className="mt-1.5 flex w-24">
+        <div className="mt-1.5 flex w-24 grow-0">
           <IconWhen />
           <span className="ml-2">When?</span>
         </div>
-        <div className="">
+        <div className="grow">
           <Input
             type="datetime-local"
             name="when"
