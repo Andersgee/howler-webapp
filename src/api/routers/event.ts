@@ -69,7 +69,7 @@ export const eventRouter = createTRPCRouter({
       const insertId = Number(insertresult.insertId);
       const hashid = hashidFromId(insertId);
 
-      //await notifyEventCreated({ eventId: insertId });
+      await notifyEventCreated({ eventId: insertId });
       revalidateTag(tagEvents());
 
       return { eventId: insertId, eventHashId: hashid };
