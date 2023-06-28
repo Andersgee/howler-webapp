@@ -4,6 +4,7 @@ import { addHours, startOfHour, subHours } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IconArrowDown, IconHowler, IconWhat, IconWhen, IconWhere, IconWho } from "#src/components/Icons";
+import { useDialogDispatch } from "#src/context/DialogContext";
 import { api } from "#src/hooks/api";
 import { datetimelocalString } from "#src/utils/date";
 import { Button } from "./ui/Button";
@@ -11,10 +12,12 @@ import { Input } from "./ui/Input";
 
 export function CreateEventForm() {
   const router = useRouter();
+  const dialogDispatch = useDialogDispatch();
   const eventCreate = api.event.create.useMutation({
     onSuccess: ({ eventHashId }) => {
       router.push(`/event/${eventHashId}`);
     },
+    onError: () => dialogDispatch({ type: "show", name: "signin" }),
   });
   const [what, setWhat] = useState("");
   const [where, setWhere] = useState("");
