@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
 import type { TokenUser } from "#src/utils/token/schema";
@@ -12,15 +13,16 @@ import { Separator } from "./ui/Separator";
 import { UserImage } from "./UserImage";
 
 export function ProfileButton({ user }: { user: TokenUser }) {
+  const [open, setOpen] = useState(false);
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={(x) => setOpen(x)}>
       <PopoverTrigger>
         <UserImage src={user.image} alt={user.name} clickable />
       </PopoverTrigger>
       <PopoverContent className="">
         <div className="flex items-center justify-between">
           <h2>{user.name}</h2>
-          <Link href="/account">
+          <Link href="/account" onClick={() => setOpen(false)}>
             <IconSettings clickable />
           </Link>
         </div>
@@ -52,15 +54,16 @@ export function SigninButton() {
 }
 
 export function NotificationsButton() {
+  const [open, setOpen] = useState(false);
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={(x) => setOpen(x)}>
       <PopoverTrigger>
         <IconBell clickable />
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex items-center justify-between">
           <h2>Notifications</h2>
-          <Link href="/account/notifications">
+          <Link href="/account/notifications" onClick={() => setOpen(false)}>
             <IconSettings clickable />
           </Link>
         </div>

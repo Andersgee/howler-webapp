@@ -10,7 +10,7 @@ export default function Layout({ children }: Props) {
   return (
     <div className="container">
       <div className="flex gap-4">
-        <div>
+        <div className="border-r pr-4">
           <h1>Settings</h1>
           <div className="">
             <Link href="/account" className="block">
