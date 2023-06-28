@@ -1,14 +1,19 @@
+import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { hashidFromId, idFromHashid } from "#src/utils/hashid";
+import { hashidFromId, idFromHashidOrThrow } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
-import { tagHasJoinedEvent } from "#src/utils/tags";
+import { getHasJoinedEvent, tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
+  isJoined: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).query(async ({ input, ctx }) => {
+    const hasJoined = await getHasJoinedEvent({ eventHashid: input.eventHashId, userId: ctx.user.id });
+
+    return hasJoined;
+  }),
   join: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
-    const eventId = idFromHashid(input.eventHashId);
-    if (!eventId) return false;
+    const eventId = idFromHashidOrThrow(input.eventHashId);
 
     const _insertResult = await ctx.db
       .insertInto("UserEventPivot")
@@ -16,23 +21,23 @@ export const eventRouter = createTRPCRouter({
         eventId: eventId,
         userId: ctx.user.id,
       })
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
 
     revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
-    return true;
+
+    return { eventId, userId: ctx.user.id };
   }),
   leave: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
-    const eventId = idFromHashid(input.eventHashId);
-    if (!eventId) return false;
+    const eventId = idFromHashidOrThrow(input.eventHashId);
 
     const _deleteResult = await ctx.db
       .deleteFrom("UserEventPivot")
       .where("userId", "=", ctx.user.id)
       .where("eventId", "=", eventId)
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
 
     revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
-    return true;
+    return { eventId, userId: ctx.user.id };
   }),
   create: protectedProcedure
     .input(
@@ -45,6 +50,9 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
+      // simulate a slow db call
+      //await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const insertresult = await ctx.db
         .insertInto("Event")
         .values({
@@ -54,16 +62,36 @@ export const eventRouter = createTRPCRouter({
           when: input.when,
           whenEnd: input.whenEnd,
           who: input.who,
-          info: "",
+          info: "no info",
         })
-        .executeTakeFirst();
+        .executeTakeFirstOrThrow();
 
       const insertId = Number(insertresult.insertId);
       const hashid = hashidFromId(insertId);
 
-      await notifyEventCreated({ eventId: insertId });
+      //await notifyEventCreated({ eventId: insertId });
+      revalidateTag(tagEvents());
 
-      //redirect(`/event/${hashid}`);
-      return { hashid };
+      return { eventId: insertId, eventHashId: hashid };
     }),
+
+  info: publicProcedure.input(z.object({ eventHashId: z.string().min(1) })).query(async ({ input, ctx }) => {
+    const eventId = idFromHashidOrThrow(input.eventHashId);
+
+    const event = await ctx.db
+      .selectFrom("Event")
+      .selectAll("Event")
+      .where("Event.id", "=", eventId)
+      .select((eb) => [
+        jsonObjectFrom(
+          eb
+            .selectFrom("User")
+            .select(["User.id", "User.name", "User.image"])
+            .whereRef("User.id", "=", "Event.creatorId")
+        ).as("creator"),
+      ])
+      .executeTakeFirstOrThrow();
+
+    return event;
+  }),
 });

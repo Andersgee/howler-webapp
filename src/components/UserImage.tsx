@@ -1,14 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import { cn } from "#src/utils/cn";
 import { hashidFromId } from "#src/utils/hashid";
 
 type ImageProps = {
   src: string;
   alt: string;
+  clickable?: boolean;
+  className?: string;
 };
-export function UserImage({ src, alt }: ImageProps) {
-  return <Image className="shadow-imageborder m-2 h-8 w-8 rounded-full" src={src} alt={alt} width={48} height={48} />;
+
+const clickableStyles = "h-12 w-12 p-3 hover:bg-secondary";
+
+export function UserImage({ src, alt, clickable, className }: ImageProps) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={24}
+      height={24}
+      sizes="24px"
+      className={cn("shadow-imageborder h-6 w-6 rounded-full", clickable && clickableStyles, className)}
+    />
+  );
 }
 
 export function UserImageLarge({ src, alt }: ImageProps) {
@@ -23,7 +37,7 @@ type LinkProps = {
 
 export function LinkUserImage({ userId, src, alt }: LinkProps) {
   return (
-    <Link href={`/profile/${hashidFromId(userId)}`}>
+    <Link href={`/u/${hashidFromId(userId)}`}>
       <UserImage src={src} alt={alt} />
     </Link>
   );
@@ -31,7 +45,7 @@ export function LinkUserImage({ userId, src, alt }: LinkProps) {
 
 export function LinkUserImageLarge({ userId, src, alt }: LinkProps) {
   return (
-    <Link href={`/profile/${hashidFromId(userId)}`}>
+    <Link href={`/u/${hashidFromId(userId)}`}>
       <UserImageLarge src={src} alt={alt} />
     </Link>
   );

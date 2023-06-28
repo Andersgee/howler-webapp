@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-
 import { absUrl } from "./url";
 
 type Config = {

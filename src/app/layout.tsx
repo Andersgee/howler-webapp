@@ -2,6 +2,7 @@ import { Providers } from "#src/context";
 import { seo } from "#src/utils/seo";
 import { Topnav } from "./Topnav";
 import "./globals.css";
+import { ScreenSizeIndicator } from "#src/components/ScreenSizeIndicator";
 import { Toaster } from "#src/context/Toaster";
 import { fontSans } from "#src/utils/font";
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Topnav />
           {children}
         </Providers>
+        <ScreenSizeIndicator />
         <Toaster />
       </body>
     </html>

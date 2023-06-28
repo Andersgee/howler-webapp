@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useReducer } from "react";
-
 import type { Prettify } from "#src/utils/typescript";
 
 export function useDialogContext() {
@@ -36,14 +35,14 @@ export function DialogProvider({ children }: { children: React.ReactNode }) {
 //probably overkill to use reducer here but...
 
 type Type = "show" | "hide" | "toggle";
-type Name = "signin" | "warning";
+type Name = "signin" | "notifications" | "warning";
 type Value = Prettify<"none" | Name>;
 type Action = { type: Type; name: Name };
 
 function reducer(value: Value, action: Action): Value {
-  const t = action.type;
-  if (t === "show" || (t === "toggle" && value === "none")) {
+  if (action.type === "show" || (action.type === "toggle" && action.name !== value)) {
     return action.name;
+  } else {
+    return "none";
   }
-  return "none";
 }

@@ -1,47 +1,37 @@
-import { jsonObjectFrom } from "kysely/helpers/mysql";
 import Link from "next/link";
-import { db } from "#src/db";
-import { IconArrowLink } from "#src/icons/ArrowLink";
+import { ActivateNotificationsButton } from "#src/components/buttons/ActivateNotificationsButton";
+import { CreateEventForm } from "#src/components/CreateEventForm";
+import { IconArrowLink } from "#src/components/Icons";
+import { WhenText } from "#src/components/WhenText";
 import { hashidFromId } from "#src/utils/hashid";
-import { tagEvents } from "#src/utils/tags";
-import { WhenText } from "./event/[hashid]/components";
-import { NewEventForm } from "./event/NewEventForm";
-import { MessagingTest } from "./messaging-test";
-import { Stuff } from "./stuff";
+import { seo } from "#src/utils/seo";
+import { getEventsLatest10 } from "#src/utils/tags";
 
 //export const runtime = "edge";
 
+export const metadata = seo({
+  title: "Howler",
+  description:
+    "Looking for something to do in real life? A place to quickly find/plan stuff to do with friends, or with anyone really.",
+  url: "/",
+  image: "/icons/favicon-512x512.png",
+});
+
 export default async function Page() {
-  const events = await db
-    .selectFrom("Event")
-    .selectAll()
-    .select((eb) => [
-      jsonObjectFrom(
-        eb.selectFrom("User").select(["User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
-      ).as("creator"),
-    ])
-    .orderBy("id", "desc")
-    .offset(0)
-    .limit(10)
-    .get({
-      cache: "force-cache",
-      next: {
-        tags: [tagEvents(), "eventslatest10"],
-      },
-    });
+  const events = await getEventsLatest10();
 
   return (
     <main className="">
       <div className="container">
-        <NewEventForm />
-        <div className="flex justify-center">
+        <CreateEventForm />
+        <div className="mt-8 flex justify-center">
           <div>
             <h2>Latest 10 created howls</h2>
             <ul className="max-w-md">
               {events.map((event) => (
                 <li key={event.id}>
                   <Link
-                    className="block border-b py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                    className="hover:bg-secondary block border-b py-4 transition-colors"
                     prefetch={false}
                     href={`/event/${hashidFromId(event.id)}`}
                   >
@@ -60,8 +50,7 @@ export default async function Page() {
                 </li>
               ))}
             </ul>
-            <MessagingTest className="mt-4" />
-            <Stuff />
+            <ActivateNotificationsButton />
           </div>
         </div>
       </div>

@@ -67,3 +67,16 @@ more
 - [ ] seems like a user doesnt save the fcmToken do db the first time? eg if signing in and enabling notifications?
   - investigate
   - welp it does...
+
+other
+
+- server actions are... not the best developer experience currently
+  - stay with cache stack for server components
+  - go with trpc api for client components but populate initial value from nextjs fetch cache
+  - main idea is pretty much to avoid real database query on page visit, will often result in force dynamic server components though since reading from cookie
+
+## Sign in issue with unsafe browsers
+
+- when clicking link on messenger, if in settings they dont have "open links in default browser" (inside "Photos and media" settings)... then the facebook/messenger browser is used which is not considered secure by google and thus cant sign in
+  - just toggle to use default browser and all is good
+  - perhaps detect if such a browser is used when signin and redirect to a "use a better browser page" instead of the default google signin error message which sais something like "app is insecure" but in fact the real reason is "browser is insecure".

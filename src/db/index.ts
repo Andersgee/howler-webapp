@@ -1,4 +1,4 @@
-import { FetchDriver } from "@andersgee/kysely-fetch-driver";
+import { parse, stringify } from "devalue";
 import {
   Kysely,
   MysqlAdapter,
@@ -8,8 +8,8 @@ import {
   type CompiledQuery,
   type Simplify,
 } from "kysely";
-import { deserialize, serialize } from "superjson";
 import { urlWithSearchparams } from "#src/utils/url";
+import { FetchDriver } from "./fetch-driver";
 import type { DB } from "./types";
 
 //const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
@@ -47,10 +47,10 @@ SelectQueryBuilder.prototype.get = async function <O>(init?: RequestInit): Promi
 
   if (res.ok) {
     try {
-      const result = deserialize(await res.json()) as any;
+      const result = parse(await res.text()) as any;
       return result.rows;
     } catch (error) {
-      throw new Error("failed to deserialize response.json(), webserver should return superjson.serialize(result)");
+      throw new Error("failed to parse response");
     }
   } else {
     throw new Error(`${res.status} ${res.statusText}`);
@@ -71,14 +71,13 @@ SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(init?: Request
 };
 
 async function executeWithFetchGet(compiledQuery: CompiledQuery, init?: RequestInit) {
-  const queryString = JSON.stringify(
-    serialize({
-      sql: compiledQuery.sql,
-      parameters: compiledQuery.parameters,
-    })
-  );
+  //no need to send compiledQuery.query
+  const body = {
+    sql: compiledQuery.sql,
+    parameters: compiledQuery.parameters,
+  };
   const url = urlWithSearchparams(process.env.DATABASE_HTTP_URL, {
-    q: queryString,
+    q: stringify(body),
   });
   return fetch(url, {
     method: "GET",

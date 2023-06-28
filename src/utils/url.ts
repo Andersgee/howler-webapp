@@ -19,7 +19,7 @@ export function encodeParams(params: Record<string, string | number | boolean>) 
 }
 
 /**
- * utility for relative urls such as "/about"
+ * utility for absolute url from relative urls such as "/about"
  *
  * (for either server or client environment)
  */
