@@ -5,8 +5,6 @@ import { idFromHashid } from "#src/utils/hashid";
 import { getIsFollowingUser, getUserInfoPublic } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 
-//export const runtime = "edge";
-
 export default async function Page({ params }: { params: { hashid: string } }) {
   const profileUserHashId = params.hashid;
   const profileUserId = idFromHashid(profileUserHashId);

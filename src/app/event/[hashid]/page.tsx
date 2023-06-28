@@ -21,7 +21,6 @@ export async function generateMetadata({ params }: PageProps) {
   });
 }
 
-//export const runtime = "edge";
 //export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: PageProps) {

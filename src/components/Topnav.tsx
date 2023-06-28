@@ -40,18 +40,17 @@ export function ProfileButton({ user }: { user: TokenUser }) {
       <PopoverTrigger>
         <UserImage src={user.image} alt={user.name} />
       </PopoverTrigger>
-      <PopoverContent className="bg-white">
-        <div>
-          <p>
-            signed in as{" "}
-            <Link className="" href="/account">
-              {user.name}
-            </Link>
-          </p>
-          <Separator />
-          <div className="flex justify-end">
-            <SignoutLink>sign out</SignoutLink>
-          </div>
+      <PopoverContent className="">
+        <div className="flex items-center justify-between">
+          <h2>{user.name}</h2>
+          <Link href="/account">
+            <IconSettings clickable />
+          </Link>
+        </div>
+
+        <Separator />
+        <div className="flex justify-end">
+          <SignoutLink>sign out</SignoutLink>
         </div>
       </PopoverContent>
     </Popover>
