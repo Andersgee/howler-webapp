@@ -8,13 +8,21 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="">
-      <h1>account settings</h1>
-      <div className="">
-        <Link href="/account">account</Link>
-        <Link href="/account/notifications">notifications</Link>
+    <div className="container">
+      <div className="flex gap-4">
+        <div>
+          <h1>Settings</h1>
+          <div className="">
+            <Link href="/account" className="block">
+              Account
+            </Link>
+            <Link href="/account/notifications" className="block">
+              Notifications
+            </Link>
+          </div>
+        </div>
+        <div className="flex grow justify-center">{children}</div>
       </div>
-      {children}
     </div>
   );
 }

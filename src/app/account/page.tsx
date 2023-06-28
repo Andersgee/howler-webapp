@@ -14,12 +14,9 @@ export default async function Page(props: Props) {
   const tokenUser = await getUserFromCookie();
   if (!tokenUser) {
     return (
-      <div className="container">
-        <div className="flex flex-col items-center">
-          <h1>Account</h1>
-          <Separator />
-          <SigninButtons />
-        </div>
+      <div>
+        <h1>Sign in </h1>
+        <SigninButtons />
       </div>
     );
   }
@@ -27,12 +24,10 @@ export default async function Page(props: Props) {
   if (!user) notFound();
 
   return (
-    <div className="container flex justify-center">
-      <div className="flex flex-col items-center">
-        <h1>Account</h1>
-        <p>signed in as {tokenUser.name}</p>
-        <p>todo</p>
-      </div>
+    <div>
+      <h1>Account</h1>
+      <p>signed in as {tokenUser.name}</p>
+      <p>todo</p>
     </div>
   );
 }

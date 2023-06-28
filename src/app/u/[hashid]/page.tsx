@@ -28,7 +28,6 @@ export default async function Page({ params }: { params: { hashid: string } }) {
           <UserImage src={profileUser.image || ""} alt={profileUser.name} />
           <h1 className="ml-2">{profileUser.name}</h1>
         </div>
-        <div>public profile</div>
         <FollowUserButton userHashId={profileUserHashId} initialIsFollowing={isFollowing} />
       </div>
     </main>

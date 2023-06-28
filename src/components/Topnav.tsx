@@ -80,7 +80,7 @@ export function NotificationsButton() {
       <PopoverContent>
         <div className="flex items-center justify-between">
           <h2>Notifications</h2>
-          <Link href="/account-notifications">
+          <Link href="/account/notifications">
             <IconSettings clickable />
           </Link>
         </div>
