@@ -10,7 +10,7 @@ type ImageProps = {
   className?: string;
 };
 
-const clickableStyles = "hover:bg-secondary h-12 w-12 p-3";
+const clickableStyles = "h-12 w-12 p-3 hover:bg-secondary";
 
 export function UserImage({ src, alt, clickable, className }: ImageProps) {
   return (
@@ -20,7 +20,7 @@ export function UserImage({ src, alt, clickable, className }: ImageProps) {
       width={24}
       height={24}
       sizes="24px"
-      className={cn("shadow-imageborder rounded-full", clickable && clickableStyles, className)}
+      className={cn("shadow-imageborder h-6 w-6 rounded-full", clickable && clickableStyles, className)}
     />
   );
 }
