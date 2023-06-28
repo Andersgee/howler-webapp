@@ -2,43 +2,19 @@
 
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
-import { useUserContext } from "#src/context/UserContext";
 import type { TokenUser } from "#src/utils/token/schema";
-import { IconBell, IconHowler, IconSettings } from "./Icons";
+import { IconBell, IconSettings } from "./Icons";
 import { SigninButtons } from "./SigninButtons";
 import { SignoutLink } from "./SignoutLink";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
 import { UserImage } from "./UserImage";
 
-export function Topnav() {
-  const user = useUserContext();
-  return (
-    <div className="container">
-      <div className="flex justify-between">
-        <Link href="/">
-          <IconHowler className="m-2 h-8 w-8" />
-        </Link>
-        {user ? (
-          <div className="flex">
-            <NotificationsButton />
-            <ProfileButton user={user} />
-          </div>
-        ) : (
-          <div>
-            <SigninButton />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export function ProfileButton({ user }: { user: TokenUser }) {
   return (
     <Popover>
       <PopoverTrigger>
-        <UserImage src={user.image} alt={user.name} />
+        <UserImage src={user.image} alt={user.name} clickable />
       </PopoverTrigger>
       <PopoverContent className="">
         <div className="flex items-center justify-between">

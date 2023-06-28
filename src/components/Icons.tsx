@@ -171,13 +171,13 @@ export function IconTwitter({ className, ...props }: IconProps) {
   );
 }
 
-export function IconHowler({ className, ...props }: IconProps) {
+export function IconHowler({ className, clickable, ...props }: IconClickableProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 475 475"
       fill="none"
-      className={cn("h-6 w-6", className)}
+      className={cn("h-6 w-6", clickable && clickableStyles, className)}
       {...props}
     >
       <title>Howler icon</title>
