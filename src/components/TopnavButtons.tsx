@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
+import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
 import type { TokenUser } from "#src/utils/token/schema";
 import { IconBell, IconSettings } from "./Icons";
 import { SigninButtons } from "./SigninButtons";
@@ -34,8 +35,12 @@ export function ProfileButton({ user }: { user: TokenUser }) {
 }
 
 export function SigninButton() {
+  const dialog = useDialogContext();
+  const dialogDispatch = useDialogDispatch();
+
+  //controlled popover, to trigger this from other places
   return (
-    <Popover>
+    <Popover open={dialog === "signin"} onOpenChange={() => dialogDispatch({ type: "toggle", name: "signin" })}>
       <PopoverTrigger asChild>
         <Button className="my-1">sign in</Button>
       </PopoverTrigger>

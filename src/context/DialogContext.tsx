@@ -40,10 +40,9 @@ type Value = Prettify<"none" | Name>;
 type Action = { type: Type; name: Name };
 
 function reducer(value: Value, action: Action): Value {
-  const t = action.type;
-
-  if (t === "show" || (t === "toggle" && value === "none")) {
+  if (action.type === "show" || (action.type === "toggle" && action.name !== value)) {
     return action.name;
+  } else {
+    return "none";
   }
-  return "none";
 }
