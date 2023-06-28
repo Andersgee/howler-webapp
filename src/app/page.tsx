@@ -24,14 +24,14 @@ export default async function Page() {
     <main className="">
       <div className="container">
         <CreateEventForm />
-        <div className="flex justify-center">
+        <div className="mt-8 flex justify-center">
           <div>
             <h2>Latest 10 created howls</h2>
             <ul className="max-w-md">
               {events.map((event) => (
                 <li key={event.id}>
                   <Link
-                    className="block border-b py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                    className="hover:bg-secondary block border-b py-4 transition-colors"
                     prefetch={false}
                     href={`/event/${hashidFromId(event.id)}`}
                   >
