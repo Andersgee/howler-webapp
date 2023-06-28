@@ -51,7 +51,7 @@ export default async function Page({ params }: PageProps) {
             <div className="flex items-center gap-1 ">
               <IconWho />
               <span className="w-16 pr-2">Who?</span>
-              <div className="bg-white px-2 py-1 dark:bg-black">{event.who}</div>
+              <div className="bg-white px-2 py-1 dark:bg-black">{event.who || "anyone"}</div>
             </div>
             <div className="flex items-start gap-1">
               <IconWhen />
