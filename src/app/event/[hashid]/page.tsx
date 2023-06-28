@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
+import { JoinEventButton } from "#src/components/buttons/JoinEventButton";
+import { ShareButton } from "#src/components/buttons/ShareButton";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "#src/components/Icons";
-import { JoinEventButton } from "#src/components/JoinEventButton";
-import { ShareButton } from "#src/components/ShareButton";
 import { LinkUserImage } from "#src/components/UserImage";
 import { WhenText } from "#src/components/WhenText";
 import { seo } from "#src/utils/seo";

@@ -1,6 +1,5 @@
-import { Separator } from "@radix-ui/react-separator";
 import { notFound } from "next/navigation";
-import { SigninButtons } from "#src/components/SigninButtons";
+import { SigninButtons } from "#src/components/buttons/SigninButtons";
 import { getUserInfo } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 

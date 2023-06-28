@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import { toast } from "#src/hooks/use-toast";
 import { cn } from "#src/utils/cn";
 import { absUrl } from "#src/utils/url";
-import { IconShare } from "./Icons";
-import { Button } from "./ui/Button";
+import { IconShare } from "../Icons";
+import { Button } from "../ui/Button";
 
 type Props = {
   title: string;
@@ -50,17 +50,16 @@ export function ShareButton({ className, title }: Props) {
 }
 
 async function copyToClipboard(text: string) {
-  if ("clipboard" in navigator) {
-    return navigator.clipboard.writeText(text).then(
-      () => {
-        /* clipboard successfully set */
-        return true;
-      },
-      () => {
-        /* clipboard write failed */
-        return false;
-      }
-    );
-  }
-  return false;
+  if (!("clipboard" in navigator)) return false;
+
+  return navigator.clipboard.writeText(text).then(
+    () => {
+      /* clipboard successfully set */
+      return true;
+    },
+    () => {
+      /* clipboard write failed */
+      return false;
+    }
+  );
 }

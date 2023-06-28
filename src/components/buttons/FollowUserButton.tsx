@@ -3,7 +3,7 @@
 import { useDialogDispatch } from "#src/context/DialogContext";
 import { useUserContext } from "#src/context/UserContext";
 import { api } from "#src/hooks/api";
-import { Button } from "./ui/Button";
+import { Button } from "../ui/Button";
 
 type Props = {
   initialIsFollowing: boolean;

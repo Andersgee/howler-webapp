@@ -2,11 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconDiscord, IconGithub, IconGoogle } from "./Icons";
-
-//import { IconDiscord } from "#src/icons/Discord";
-//import { IconGithub } from "#src/icons/Github";
-//import { IconGoogle } from "#src/icons/Google";
+import { IconDiscord, IconGithub, IconGoogle } from "../Icons";
 
 export function SigninButtons() {
   const pathname = usePathname();

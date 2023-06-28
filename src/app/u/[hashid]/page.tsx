@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { FollowUserButton } from "#src/components/FollowUserButton";
+import { FollowUserButton } from "#src/components/buttons/FollowUserButton";
 import { UserImage } from "#src/components/UserImage";
 import { idFromHashid } from "#src/utils/hashid";
 import { getIsFollowingUser, getUserInfoPublic } from "#src/utils/tags";

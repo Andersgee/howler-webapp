@@ -4,9 +4,9 @@ import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
 import type { TokenUser } from "#src/utils/token/schema";
+import { SigninButtons } from "./buttons/SigninButtons";
+import { SignoutButton } from "./buttons/SignoutButton";
 import { IconBell, IconSettings } from "./Icons";
-import { SigninButtons } from "./SigninButtons";
-import { SignoutLink } from "./SignoutLink";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
 import { UserImage } from "./UserImage";
@@ -27,7 +27,7 @@ export function ProfileButton({ user }: { user: TokenUser }) {
 
         <Separator />
         <div className="flex justify-end">
-          <SignoutLink>sign out</SignoutLink>
+          <SignoutButton>sign out</SignoutButton>
         </div>
       </PopoverContent>
     </Popover>

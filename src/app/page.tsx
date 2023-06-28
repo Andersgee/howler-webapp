@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ActivateNotificationsButton } from "#src/components/ActivateNotificationsButton";
+import { ActivateNotificationsButton } from "#src/components/buttons/ActivateNotificationsButton";
 import { CreateEventForm } from "#src/components/CreateEventForm";
 import { IconArrowLink } from "#src/components/Icons";
 import { WhenText } from "#src/components/WhenText";
