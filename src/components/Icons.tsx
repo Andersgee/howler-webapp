@@ -311,6 +311,33 @@ export function IconBell({ className, clickable, ...props }: IconClickableProps)
   );
 }
 
+export function IconBellWithNumber({ number, className, ...props }: { number: number } & IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn("hover:bg-secondary h-12 w-12 text-xs font-thin hover:rounded-full", className)}
+      {...props}
+    >
+      <path transform="translate(12,12)" d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+
+      {number > 0 && (
+        <g transform="translate(34,15)">
+          <circle cx="0" cy="0" r="10" stroke="none" fill="#ef4444" />
+          <text x="0" y="0" textAnchor="middle" dominantBaseline="central" stroke="#d4d4d4" fill="none">
+            {number > 9 ? 9 : number}
+          </text>
+        </g>
+      )}
+    </svg>
+  );
+}
+
 export function IconSettings({ className, clickable, ...props }: IconClickableProps) {
   return (
     <svg

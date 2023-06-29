@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
+import { useNotificationsContext } from "#src/context/NotificationsContext";
 import type { TokenUser } from "#src/utils/token/schema";
 import { SigninButtons } from "./buttons/SigninButtons";
 import { SignoutButton } from "./buttons/SignoutButton";
-import { IconBell, IconSettings } from "./Icons";
+import { IconBell, IconBellWithNumber, IconSettings } from "./Icons";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
 import { UserImage } from "./UserImage";
@@ -54,11 +55,18 @@ export function SigninButton() {
 }
 
 export function NotificationsButton() {
+  const { fcmToken, getFcmToken, messages } = useNotificationsContext();
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={(x) => setOpen(x)}>
-      <PopoverTrigger>
-        <IconBell clickable />
+      <PopoverTrigger
+        onClick={async () => {
+          if (!fcmToken) {
+            getFcmToken();
+          }
+        }}
+      >
+        <IconBellWithNumber number={3} />
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex items-center justify-between">
@@ -69,9 +77,9 @@ export function NotificationsButton() {
         </div>
         <Separator />
         <ul>
-          <li className="my-2">todo list of notifications here</li>
-          <li className="my-2">todo list of notifications here</li>
-          <li className="my-2">todo list of notifications here</li>
+          {messages.map((message) => (
+            <li key={message.messageId}>{message.notification?.title}</li>
+          ))}
         </ul>
       </PopoverContent>
     </Popover>
