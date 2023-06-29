@@ -8,7 +8,7 @@ import { useNotificationsContext } from "#src/context/NotificationsContext";
 import type { TokenUser } from "#src/utils/token/schema";
 import { SigninButtons } from "./buttons/SigninButtons";
 import { SignoutButton } from "./buttons/SignoutButton";
-import { IconBell, IconBellWithNumber, IconSettings } from "./Icons";
+import { IconArrowLink, IconBell, IconBellWithNumber, IconSettings } from "./Icons";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
 import { UserImage } from "./UserImage";
@@ -66,7 +66,7 @@ export function NotificationsButton() {
           }
         }}
       >
-        <IconBellWithNumber number={3} />
+        <IconBellWithNumber number={messages.length} />
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex items-center justify-between">
@@ -78,7 +78,19 @@ export function NotificationsButton() {
         <Separator />
         <ul>
           {messages.map((message) => (
-            <li key={message.messageId}>{message.notification?.title}</li>
+            <li key={message.messageId}>
+              <a className="hover:bg-secondary block border-b py-4 transition-colors" href={message.fcmOptions?.link}>
+                <div className="flex items-center justify-between px-4">
+                  <div>
+                    <h3 className="capitalize-first shrink truncate text-base font-normal">
+                      {message.notification?.title || "title"}
+                    </h3>
+                    <p>{message.notification?.body || "body"}</p>
+                  </div>
+                  <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
+                </div>
+              </a>
+            </li>
           ))}
         </ul>
       </PopoverContent>
