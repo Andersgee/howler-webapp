@@ -55,15 +55,6 @@ export function SigninButton() {
   );
 }
 
-const alalala = [
-  { title: 1, body: 2, linkUrl: 3, relativeLinkUrl: 4, fcmToken: 5 },
-  "howl by Anders Gustafsson",
-  "what: bek",
-  "https://howler.andyfx.net/event/Xm7gm",
-  "/event/Xm7gm",
-  "eS_9SxTvUmgjvY1lylSA9k:APA91bF9puiyEvTdWkHGtowgIKSyVFgCHf1gcpY66207zEbcrVK3JnX1EhZwH245bDqMIXsOuSbpp89SwwXrorwvBxAAhE194Ze2At9jaDZVBH7mh1JNoGwZBcQ2wI9EENWAdC8014_U",
-];
-
 export function NotificationsButton({ user }: { user: TokenUser }) {
   const { fcmToken, getFcmToken, messages } = useNotificationsContext();
   const notificationLatest10 = api.notification.latest10.useQuery({ userId: user.id });
