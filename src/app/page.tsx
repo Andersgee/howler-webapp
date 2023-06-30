@@ -24,9 +24,9 @@ export default async function Page() {
     <main className="">
       <div className="container">
         <CreateEventForm />
-        <div className="mt-8 flex justify-center">
+        <div className="mt-10 flex justify-center">
           <div>
-            <h2>Latest 10 created howls</h2>
+            <h2 className="text-center">Latest howls</h2>
             <ul className="max-w-md">
               {events.map((event) => (
                 <li key={event.id}>
@@ -37,14 +37,12 @@ export default async function Page() {
                   >
                     <div className="flex items-center justify-between px-4">
                       <div>
-                        <h3 className="capitalize-first shrink truncate text-base font-normal">
-                          {event.what || "anything"}
-                        </h3>
+                        <h3 className="capitalize-first shrink text-base font-normal">{event.what || "anything"}</h3>
                         <p>
                           <WhenText date={event.when} />
                         </p>
                       </div>
-                      <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
+                      <IconArrowLink className="shrink-0" />
                     </div>
                   </Link>
                 </li>
