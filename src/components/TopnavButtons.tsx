@@ -1,5 +1,6 @@
 "use client";
 
+import type { MessagePayload } from "firebase/messaging";
 import Link from "next/link";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
@@ -54,7 +55,7 @@ export function SigninButton() {
   );
 }
 
-export function NotificationsButton() {
+export function NotificationsButton({ initialMessages }: { initialMessages: MessagePayload[] }) {
   const { fcmToken, getFcmToken, messages } = useNotificationsContext();
   const [open, setOpen] = useState(false);
   return (

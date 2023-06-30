@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { IconHowler } from "#src/components/Icons";
-import { NotificationsButton, ProfileButton, SigninButton } from "#src/components/TopnavButtons";
+import { ProfileButton, SigninButton } from "#src/components/TopnavButtons";
 import { getUserFromCookie } from "#src/utils/token";
+import { Notifications } from "./Notifications";
 
 export async function Topnav() {
   const user = await getUserFromCookie();
@@ -13,7 +14,7 @@ export async function Topnav() {
         </Link>
         {user ? (
           <div className="flex">
-            <NotificationsButton />
+            <Notifications user={user} />
             <ProfileButton user={user} />
           </div>
         ) : (
