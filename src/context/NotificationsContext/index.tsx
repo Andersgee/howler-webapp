@@ -1,11 +1,11 @@
 "use client";
 
 import type { MessagePayload } from "firebase/messaging";
-import Link from "next/link";
+//import Link from "next/link";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { buttonVariants } from "#src/components/ui/Button";
-import { toast } from "#src/hooks/use-toast";
-import { cn } from "#src/utils/cn";
+//import { buttonVariants } from "#src/components/ui/Button";
+//import { toast } from "#src/hooks/use-toast";
+//import { cn } from "#src/utils/cn";
 import type { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
 import { setupMessaging } from "./util";
 
@@ -43,6 +43,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   const [messages, setMessages] = useState<MessagePayload[]>([]);
   const [fcmToken, setFcmToken] = useState<string | null>(null);
 
+  /*
   const onMessage = useCallback(
     ({
       title,
@@ -72,12 +73,14 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
     },
     []
   );
+  */
 
   useEffect(() => {
     setupMessaging()
       .then((fcm) => {
         fcmRef.current = fcm;
         fcmRef.current.onMessage((payload) => {
+          /*
           if (payload.notification?.title && payload.notification?.body && payload.fcmOptions?.link) {
             onMessage({
               title: payload.notification.title,
@@ -86,6 +89,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
               linkText: "Show me",
             });
           }
+          */
           setMessages((msgs) => [...msgs, payload]);
         });
         if (fcmRef.current.fcmToken) {
@@ -95,7 +99,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
       .catch((_error) => {
         //console.error(errorMessageFromUnkown(error));
       });
-  }, [onMessage]);
+  }, []);
 
   useEffect(() => {
     if (fcmToken) {
