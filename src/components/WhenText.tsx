@@ -9,14 +9,14 @@ type Props = {
 
 export function WhenText({ date }: Props) {
   const { datestr, isMounted } = useFormatDate(date);
-  return <span className={isMounted ? "visible" : "invisible"}>{datestr}</span>;
+  return <span>{datestr}</span>;
 }
 
 /**
  * avoids hydration mismatch of server/client rendered date string (by editing string on mount)
  */
 function useFormatDate(date: Date) {
-  const [value, setValue] = useState({ datestr: "---", isMounted: false });
+  const [value, setValue] = useState({ datestr: formatDate(date, false), isMounted: false });
   useEffect(() => {
     setValue({ datestr: formatDate(date), isMounted: true });
   }, [date]);

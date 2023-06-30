@@ -1,4 +1,5 @@
 import { addMinutes, format, formatDistance } from "date-fns";
+import { enUS } from "date-fns/locale";
 
 /**
  * `<input type="datetime-local">` wants a particular string format in local time such as
@@ -26,10 +27,15 @@ export function formatDateSimple(d: Date) {
   return format(d, "yyyy-MM-dd HH:mm");
 }
 
-export function formatDate(date: Date) {
-  return `${format(date, "yyyy-MM-dd HH:mm")} (${formatDistance(date, Date.now(), {
+export function formatDate(date: Date, defaultLocale = true) {
+  const datestr = format(date, "yyyy-MM-dd HH:mm", {
+    locale: defaultLocale ? undefined : enUS,
+  });
+  const distancestr = formatDistance(date, Date.now(), {
     addSuffix: true,
-  })})`;
+    locale: defaultLocale ? undefined : enUS,
+  });
+  return `${datestr} (${distancestr})`;
 }
 
 export function prettyDate(date: Date) {
