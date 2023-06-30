@@ -38,12 +38,21 @@ export function formatDate(date: Date, defaultLocale = true) {
   return `${datestr} (${distancestr})`;
 }
 
-export function prettyDate(date: Date) {
-  //"Saturday, June 17, 2023 at 20:55"
-  return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short", hour12: false }).format(date);
-
-  //undefined to use browsers default locale
-  //return new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "short", hour12: false }).format(Date.now());
+export function prettyDate(date: Date, defaultLocale = true) {
+  //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
+  if (defaultLocale) {
+    //undefined to use browsers default locale
+    return new Intl.DateTimeFormat(undefined, { dateStyle: "full", timeStyle: "short", hour12: false }).format(date);
+  } else {
+    //"Saturday, June 17, 2023 at 20:55"
+    return new Intl.DateTimeFormat("en-US", {
+      dateStyle: "full",
+      timeStyle: "short",
+      hour12: false,
+      timeZone: "UTC",
+      //timeZoneName: "short", //print timezone
+    }).format(date);
+  }
 
   //"Saturday, June 17, 2023 at 8:49 PM"
   //return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short" }).format(date);
