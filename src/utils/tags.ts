@@ -1,4 +1,6 @@
+import { parse } from "devalue";
 import { jsonObjectFrom } from "kysely/helpers/mysql";
+import type { NotificationData } from "#src/context/NotificationsContext/types";
 import { db } from "#src/db";
 import { idFromHashid } from "./hashid";
 
@@ -85,7 +87,7 @@ export async function getEventsLatest10() {
       ).as("creator"),
     ])
     .orderBy("id", "desc")
-    .offset(0)
+    //.offset(0)
     .limit(10)
     .get({
       cache: "force-cache",
@@ -122,3 +124,34 @@ export async function getUserInfoPublic({ userId }: { userId: number }) {
       },
     });
 }
+
+/*
+export function tagNotifications({ userId }: { userId: number }) {
+  return `notifications-${userId}`;
+}
+
+export type TgetNotificationsLatest10 = Awaited<ReturnType<typeof getNotificationsLatest10>>;
+export async function getNotificationsLatest10({ userId }: { userId: number }) {
+  const notifications = await db
+    .selectFrom("Notification")
+    .selectAll()
+    .where("userId", "=", userId)
+    .orderBy("id", "desc")
+    //.offset(0)
+    .limit(10)
+    .get({
+      cache: "force-cache",
+      next: {
+        tags: [tagNotifications({ userId })],
+      },
+    });
+
+  const parsedNotifications = notifications.map((notification) => ({
+    id: notification.id,
+    userId: notification.userId,
+    data: parse(notification.data) as NotificationData,
+  }));
+
+  return parsedNotifications;
+}
+*/

@@ -55,10 +55,11 @@ model User {
 }
 
 model Notification {
-    id             String @id //the "messageId" returned by firebase after handing it off
-    messagePayload String @db.VarChar(10000)
-    userId         Int
-    User           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id     Int    @id @default(autoincrement())
+    //messageId String @id //the "messageId" returned by firebase after handing it off
+    data   String @db.VarChar(10000)
+    userId Int
+    User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model FcmToken {

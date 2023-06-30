@@ -1,15 +1,15 @@
 "use client";
 
-import type { MessagePayload } from "firebase/messaging";
 import Link from "next/link";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
 import { useNotificationsContext } from "#src/context/NotificationsContext";
+import { api } from "#src/hooks/api";
 import type { TokenUser } from "#src/utils/token/schema";
 import { SigninButtons } from "./buttons/SigninButtons";
 import { SignoutButton } from "./buttons/SignoutButton";
-import { IconArrowLink, IconBell, IconBellWithNumber, IconSettings } from "./Icons";
+import { IconArrowLink, IconBellWithNumber, IconSettings } from "./Icons";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
 import { UserImage } from "./UserImage";
@@ -55,8 +55,18 @@ export function SigninButton() {
   );
 }
 
-export function NotificationsButton({ initialMessages }: { initialMessages: MessagePayload[] }) {
+const alalala = [
+  { title: 1, body: 2, linkUrl: 3, relativeLinkUrl: 4, fcmToken: 5 },
+  "howl by Anders Gustafsson",
+  "what: bek",
+  "https://howler.andyfx.net/event/Xm7gm",
+  "/event/Xm7gm",
+  "eS_9SxTvUmgjvY1lylSA9k:APA91bF9puiyEvTdWkHGtowgIKSyVFgCHf1gcpY66207zEbcrVK3JnX1EhZwH245bDqMIXsOuSbpp89SwwXrorwvBxAAhE194Ze2At9jaDZVBH7mh1JNoGwZBcQ2wI9EENWAdC8014_U",
+];
+
+export function NotificationsButton({ user }: { user: TokenUser }) {
   const { fcmToken, getFcmToken, messages } = useNotificationsContext();
+  const notificationLatest10 = api.notification.latest10.useQuery({ userId: user.id });
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={(x) => setOpen(x)}>
@@ -91,6 +101,27 @@ export function NotificationsButton({ initialMessages }: { initialMessages: Mess
                   <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                 </div>
               </a>
+            </li>
+          ))}
+
+          {notificationLatest10.data?.map((notification) => (
+            <li key={notification.id}>
+              {/*<pre>{JSON.stringify(notification, null, 2)}</pre>*/}
+
+              <Link
+                className="hover:bg-secondary block border-b py-4 transition-colors"
+                href={notification.data.relativeLinkUrl}
+              >
+                <div className="flex items-center justify-between px-4">
+                  <div>
+                    <h3 className="capitalize-first shrink truncate text-base font-normal">
+                      {notification.data.title}
+                    </h3>
+                    <p>{notification.data.body}</p>
+                  </div>
+                  <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
