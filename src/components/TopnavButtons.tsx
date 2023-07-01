@@ -12,7 +12,7 @@ import { SignoutButton } from "./buttons/SignoutButton";
 import { IconArrowLink, IconBellWithNumber, IconSettings } from "./Icons";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
-import { UserImage, UserImageClickable } from "./UserImage";
+import { UserImageClickable } from "./UserImage";
 
 export function ProfileButton({ user }: { user: TokenUser }) {
   const [open, setOpen] = useState(false);

@@ -9,7 +9,7 @@ export const notificationRouter = createTRPCRouter({
     const notifications = await db
       .selectFrom("Notification")
       .selectAll()
-      .where("userId", "=", input.userId)
+      .where("userId", "=", ctx.user.id)
       .orderBy("id", "desc")
       //.offset(0)
       .limit(10)
