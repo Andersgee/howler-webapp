@@ -10,7 +10,8 @@ type ImageProps = {
   className?: string;
 };
 
-const clickableStyles = "h-12 w-12 p-2 hover:bg-secondary";
+const oldClickableStyles = "h-12 w-12 p-2 hover:bg-secondary";
+const clickableStyles = "box-content h-8 w-8 p-2 hover:bg-secondary";
 
 export function UserImage({ src, alt, clickable, className }: ImageProps) {
   return (

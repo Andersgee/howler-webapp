@@ -39,7 +39,7 @@ export default async function Page({ params }: PageProps) {
           </div>
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-1">
-              <IconWhat />
+              <IconWhat className="" />
               <span className="w-16 pr-2">What?</span>
               <div className="flex items-center bg-white px-2 py-1 dark:bg-black">{event.what || "anything"}</div>
             </div>
@@ -48,7 +48,7 @@ export default async function Page({ params }: PageProps) {
               <span className="w-16 pr-2">Where?</span>
               <div className="bg-white px-2 py-1 dark:bg-black">{event.where || "anywhere"}</div>
             </div>
-            <div className="flex items-center gap-1 ">
+            <div className="flex items-center gap-1">
               <IconWho />
               <span className="w-16 pr-2">Who?</span>
               <div className="bg-white px-2 py-1 dark:bg-black">{event.who || "anyone"}</div>

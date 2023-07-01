@@ -4,9 +4,9 @@ import { cn } from "#src/utils/cn";
 type IconProps = ComponentProps<"svg">;
 type IconClickableProps = { clickable?: boolean } & IconProps;
 
-//size area should be atleast 48x48 if clickable
-//also padding an svg shrinks it so set size to 48 and shrink to the 24x24 they are designed for
-const clickableStyles = "w-12 h-12 p-3 rounded-full hover:bg-secondary";
+//size of clickable area should be atleast 48x48
+//const oldclickableStyles = "w-12 h-12 p-3 box-border rounded-full hover:bg-secondary";
+const clickableStyles = "w-6 h-6 p-3 box-content rounded-full  hover:bg-secondary";
 
 export function IconArrowDown({ className, ...props }: IconProps) {
   return (

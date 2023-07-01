@@ -104,6 +104,11 @@
   input::placeholder {
     @apply text-neutral-500 opacity-100;
   }
+
+  svg {
+    @apply shrink-0;
+    shape-rendering: geometricPrecision;
+  }
 }
 /*
 @layer base {
