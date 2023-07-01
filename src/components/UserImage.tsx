@@ -47,7 +47,7 @@ type LinkProps = {
 export function LinkUserImage({ userId, src, alt }: LinkProps) {
   return (
     <Link href={`/u/${hashidFromId(userId)}`}>
-      <UserImage src={src} alt={alt} />
+      <UserImage clickable src={src} alt={alt} />
     </Link>
   );
 }
