@@ -12,14 +12,14 @@ import { SignoutButton } from "./buttons/SignoutButton";
 import { IconArrowLink, IconBellWithNumber, IconSettings } from "./Icons";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
-import { UserImage } from "./UserImage";
+import { UserImage, UserImageClickable } from "./UserImage";
 
 export function ProfileButton({ user }: { user: TokenUser }) {
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={(x) => setOpen(x)}>
       <PopoverTrigger>
-        <UserImage src={user.image} alt={user.name} clickable />
+        <UserImageClickable src={user.image} alt={user.name} clickable />
       </PopoverTrigger>
       <PopoverContent className="">
         <div className="flex items-center justify-between">

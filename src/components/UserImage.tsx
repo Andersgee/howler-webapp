@@ -10,31 +10,36 @@ type ImageProps = {
   className?: string;
 };
 
-const oldClickableStyles = "h-12 w-12 p-2 hover:bg-secondary";
-const clickableStyles = "box-content h-8 w-8 p-2 hover:bg-secondary";
-
-export function UserImage({ src, alt, clickable, className }: ImageProps) {
+export function UserImage({ src, alt, className }: ImageProps) {
   return (
     <Image
       src={src}
       alt={alt}
-      width={32}
-      height={32}
-      sizes="32px"
-      className={cn("h-6 w-6 rounded-full", clickable ? clickableStyles : "shadow-imageborder", className)}
+      width={30}
+      height={30}
+      sizes="30px"
+      className={cn("shadow-imageborder h-8 w-8 rounded-full p-[1px]", className)}
     />
+  );
+}
+
+export function UserImageClickable({ src, alt, className }: ImageProps) {
+  return (
+    <div className="hover:bg-secondary flex h-12 w-12 items-center justify-center rounded-full">
+      <UserImage src={src} alt={alt} className={className} />
+    </div>
   );
 }
 
 export function UserImageLarge({ src, alt }: ImageProps) {
   return (
     <Image
-      className="shadow-imageborder h-12 w-12 rounded-full"
       src={src}
       alt={alt}
-      width={48}
-      height={48}
-      sizes="48px"
+      width={46}
+      height={46}
+      sizes="46px"
+      className="shadow-imageborder h-12 w-12 rounded-full p-[1px]"
     />
   );
 }
@@ -48,7 +53,7 @@ type LinkProps = {
 export function LinkUserImage({ userId, src, alt }: LinkProps) {
   return (
     <Link href={`/u/${hashidFromId(userId)}`}>
-      <UserImage clickable src={src} alt={alt} />
+      <UserImageClickable src={src} alt={alt} />
     </Link>
   );
 }

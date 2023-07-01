@@ -106,7 +106,7 @@
   }
 
   svg {
-    @apply shrink-0;
+    @apply shrink-0 box-content;
     shape-rendering: geometricPrecision;
   }
 }

@@ -13,7 +13,8 @@ export default {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       boxShadow: {
-        imageborder: "inset 0 2px 4px 0 hsla(0, 0%, 0%, .2)",
+        //imageborder: "inset 0 2px 4px 0 hsla(0, 0%, 0%, .2)",
+        imageborder: "inset 0 0 0 1px hsla(0, 0%, 0%, .1)",
       },
       colors: {
         sometest: "hsl(var(--sometest))",
