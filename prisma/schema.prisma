@@ -9,6 +9,7 @@ datasource db {
     url      = env("DATABASE_MYSQL_URL")
 }
 
+//
 //since im not actually using prisma client (only using schema to define tables) some stuff in schema.prisma may look okay but may not be
 // one example is uuid() and cuid(), the main thing Im unsure about right now is indexing, do I have to do @@index in some places or is @id enough?
 //before I know exactly what those cases are... best to examine schema of tables manually every now and then:
@@ -20,20 +21,29 @@ datasource db {
 //> use db;
 //> DESCRIBE User;
 //> SHOW INDEXES FROM User;
-
+//
 // also while there, can inspect performance of queries with EXPLAIN ANALYZE
 //> EXPLAIN ANALYZE SELECT * FROM User WHERE googleUserSub = '117740985776559123826';
 //
 // that gives:
 // "EXPLAIN": Index lookup on User using User_googleUserSub_idx (googleUserSub='117740985776559123826')
 // "ANALYZE": (cost=0.35 rows=1) (actual time=0.055..0.058 rows=1 loops=1)
-
+//
 //for analyze the numbers means:
 // Actual time to get first row (in milliseconds)
 // Actual time to get all rows (in milliseconds) 
 // Actual number of rows read <- THIS IS THE IMPORTANT ONE TO SEE IF INDEXING IS USED CORRECT
 // Actual number of loops
 //more explanation here: https://dev.mysql.com/blog-archive/mysql-explain-analyze/
+//
+// Also:
+// prisma has some default mappings for String etc for different databases
+// for example, with mysql, the type "String" maps to VARCHAR(191)
+// see the other mappings here: https://www.prisma.io/docs/concepts/database-connectors/mysql#native-type-mapping-from-prisma-to-mysql
+//
+//
+// EDIT: made a script to introspect/print tables and indexing, also 
+// can explain analyze any queries on server by toggling environment variable
 
 model User {
     id            Int     @id @default(autoincrement())
@@ -51,7 +61,8 @@ model User {
     sentFollows     UserUserPivot[] @relation("sentFollows")
     recievedFollows UserUserPivot[] @relation("recievedFollows")
 
-    notifications Notification[]
+    notifications     Notification[]
+    eventChatMessages EventChatMessage[]
 }
 
 model Notification {
@@ -100,7 +111,17 @@ model Event {
     place   Place? @relation(fields: [placeId], references: [id])
     placeId Int?
 
-    joinedUsers UserEventPivot[]
+    joinedUsers  UserEventPivot[]
+    chatMessages EventChatMessage[]
+}
+
+model EventChatMessage {
+    id        Int    @id @default(autoincrement())
+    creator   User   @relation(fields: [creatorId], references: [id])
+    creatorId Int
+    text      String @db.VarChar(280) //not sure how big chat messages to allow... twitter has max 280 so lets just go with that
+    Event     Event  @relation(fields: [eventId], references: [id])
+    eventId   Int
 }
 
 model Place {

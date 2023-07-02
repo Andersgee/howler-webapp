@@ -1,16 +1,20 @@
 import { notFound } from "next/navigation";
 import { JoinEventButton } from "#src/components/buttons/JoinEventButton";
 import { ShareButton } from "#src/components/buttons/ShareButton";
+import { EventChat } from "#src/components/EventChat";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "#src/components/Icons";
 import { LinkUserImage } from "#src/components/UserImage";
 import { WhenText } from "#src/components/WhenText";
+import { idFromHashid } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
 import { getEventInfo, getHasJoinedEvent } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
 
 export async function generateMetadata({ params }: PageProps) {
-  const event = await getEventInfo(params.hashid);
+  const eventId = idFromHashid(params.hashid);
+  if (!eventId) notFound();
+  const event = await getEventInfo({ eventId });
   if (!event) notFound();
 
   return seo({
@@ -24,7 +28,9 @@ export async function generateMetadata({ params }: PageProps) {
 //export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: PageProps) {
-  const event = await getEventInfo(params.hashid);
+  const eventId = idFromHashid(params.hashid);
+  if (!eventId) notFound();
+  const event = await getEventInfo({ eventId });
   if (!event) notFound();
   const user = await getUserFromCookie();
   const hasJoinedEvent = user ? await getHasJoinedEvent({ eventHashid: params.hashid, userId: user.id }) : false;
@@ -73,6 +79,8 @@ export default async function Page({ params }: PageProps) {
               <ShareButton title={event.what} />
             </div>
           </div>
+
+          {user && <EventChat eventId={eventId} userId={user.id} />}
         </div>
       </div>
     </>

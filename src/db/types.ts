@@ -15,6 +15,12 @@ export type Event = {
   info: string;
   placeId: number | null;
 };
+export type EventChatMessage = {
+  id: Generated<number>;
+  creatorId: number;
+  text: string;
+  eventId: number;
+};
 export type Example = {
   id: Generated<number>;
   createdAt: Generated<Timestamp>;
@@ -56,6 +62,7 @@ export type UserUserPivot = {
 };
 export type DB = {
   Event: Event;
+  EventChatMessage: EventChatMessage;
   Example: Example;
   FcmToken: FcmToken;
   Notification: Notification;

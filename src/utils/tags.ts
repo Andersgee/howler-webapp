@@ -53,10 +53,7 @@ export async function getHasJoinedEvent({ eventHashid, userId }: { eventHashid: 
 export function tagEventInfo({ eventId }: { eventId: number }) {
   return `event-${eventId}`;
 }
-export async function getEventInfo(eventHashid: string) {
-  const eventId = idFromHashid(eventHashid);
-  if (!eventId) return undefined;
-
+export async function getEventInfo({ eventId }: { eventId: number }) {
   return await db
     .selectFrom("Event")
     .selectAll("Event")
