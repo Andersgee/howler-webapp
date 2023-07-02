@@ -108,12 +108,12 @@ model UserEventchatPivot {
 
 model Eventchat {
     //id Int @id @default(autoincrement())
-    id Int @id //same as event
+    id    Int   @id //same as event
+    event Event @relation(fields: [id], references: [id], onDelete: Cascade)
 
     eventchatmessages  Eventchatmessage[]
     userEventchatPivot UserEventchatPivot[]
 
-    event Event @relation(fields: [id], references: [id], onDelete: Cascade)
     //eventId Int   @unique
 }
 
