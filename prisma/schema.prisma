@@ -113,7 +113,7 @@ model Eventchat {
     eventchatmessages  Eventchatmessage[]
     userEventchatPivot UserEventchatPivot[]
 
-    event Event @relation(fields: [id], references: [id])
+    event Event @relation(fields: [id], references: [id], onDelete: Cascade)
     //eventId Int   @unique
 }
 
@@ -122,7 +122,7 @@ model Eventchatmessage {
     createdAt DateTime @default(now())
     text      String   @db.VarChar(280)
 
-    eventchat   Eventchat @relation(fields: [eventchatId], references: [id])
+    eventchat   Eventchat @relation(fields: [eventchatId], references: [id], onDelete: Cascade)
     eventchatId Int
     user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId      Int
