@@ -42,6 +42,7 @@ export function CreateEventForm() {
             className="block"
             value={what}
             onChange={(e) => setWhat(e.target.value)}
+            aria-label="what"
           />
         </div>
         {/* Where */}
@@ -57,6 +58,7 @@ export function CreateEventForm() {
             className="block"
             value={where}
             onChange={(e) => setWhere(e.target.value)}
+            aria-label="where"
           />
         </div>
         {/* Who */}
@@ -72,6 +74,7 @@ export function CreateEventForm() {
             className="block"
             value={who}
             onChange={(e) => setWho(e.target.value)}
+            aria-label="who"
           />
         </div>
         {/* When */}
@@ -94,6 +97,7 @@ export function CreateEventForm() {
                   setWhenEnd(addHours(newWhen, 1));
                 }
               }}
+              aria-label="when start"
             />
             <IconArrowDown height={18} width={18} className="mx-auto my-1" />
             <Input
@@ -109,6 +113,7 @@ export function CreateEventForm() {
                   setWhen(subHours(newWhenend, 1));
                 }
               }}
+              aria-label="when end"
             />
           </div>
         </div>
