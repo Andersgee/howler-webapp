@@ -6,23 +6,21 @@ import { useIntersectionObserver } from "#src/hooks/useIntersectionObserver";
 import { cn } from "#src/utils/cn";
 import { Button } from "./ui/Button";
 
-function useEventchatInfiniteMessages<T extends Element = HTMLDivElement>(eventId: number) {
+function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(eventId: number) {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = api.eventchat.infiniteMessages.useInfiniteQuery(
     { eventId },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialCursor: undefined,
     }
   );
 
   const ref = useIntersectionObserver<T>(([entry]) => {
-    const isVisible = !!entry?.isIntersecting;
-    if (isVisible && hasNextPage !== false) {
-      fetchNextPage();
-    }
+    if (hasNextPage && !!entry?.isIntersecting) fetchNextPage();
   });
 
   const messages = useMemo(() => data?.pages.flatMap((page) => page.messages) || [], [data]);
-  return { messages, ref, isFetchingNextPage, hasNextPage };
+  return { ref, messages, isFetchingNextPage, hasNextPage };
 }
 
 type Props = {
@@ -31,8 +29,6 @@ type Props = {
 };
 
 export function EventChat({ eventId, userId }: Props) {
-  //const eventchatLatest10 = api.eventchat.latest10.useQuery({ eventId });
-
   const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId);
 
   const apiContext = api.useContext();
@@ -41,7 +37,7 @@ export function EventChat({ eventId, userId }: Props) {
   const eventchatSend = api.eventchat.send.useMutation({
     onSettled: () => setText(""),
     onSuccess: () => {
-      apiContext.eventchat.latest10.invalidate();
+      //apiContext.eventchat.infiniteMessages. latest10.invalidate();
     },
   });
 

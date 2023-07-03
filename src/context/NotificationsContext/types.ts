@@ -1,8 +1,12 @@
-export type NotificationData = {
-  fcmToken: string;
-  title: string;
-  body: string;
-  //imageUrl?: string;
-  linkUrl: string;
-  relativeLinkUrl: string;
-};
+import { z } from "zod";
+
+const notificationDataSchema = z.object({
+  fcmToken: z.string(),
+  title: z.string(),
+  body: z.string(),
+  //imageUrl: z.string().optional(),
+  linkUrl: z.string(),
+  relativeLinkUrl: z.string(),
+});
+
+export type NotificationData = z.infer<typeof notificationDataSchema>;

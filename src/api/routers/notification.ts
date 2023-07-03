@@ -1,6 +1,6 @@
 import { parse } from "devalue";
 import { z } from "zod";
-import type { NotificationData } from "#src/context/NotificationsContext/types";
+import { notificationDataSchema } from "#src/context/NotificationsContext/types";
 import { db } from "#src/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -18,7 +18,7 @@ export const notificationRouter = createTRPCRouter({
     const parsedNotifications = notifications.map((notification) => ({
       id: notification.id,
       userId: notification.userId,
-      data: parse(notification.data) as NotificationData,
+      data: notificationDataSchema.parse(parse(notification.data)),
     }));
 
     return parsedNotifications;

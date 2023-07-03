@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 /**
  * Wrapper for `new IntersectionObserver(callback, options)`
@@ -21,11 +21,18 @@ export function useIntersectionObserver<T extends Element>(
   callback: IntersectionObserverCallback,
   options?: IntersectionObserverInit
 ) {
+  const observer = useRef<IntersectionObserver | null>(null);
+
   //see https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
-  return useCallback((node: T) => {
-    if (node !== null) {
-      const observer = new IntersectionObserver(callback, options);
-      observer.observe(node);
+  return useCallback((element: T) => {
+    if (observer.current) {
+      observer.current.disconnect();
+      observer.current = null;
+    }
+
+    if (element !== null) {
+      observer.current = new IntersectionObserver(callback, options);
+      observer.current.observe(element);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

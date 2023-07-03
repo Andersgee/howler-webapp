@@ -1,6 +1,7 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
+import { db } from "#src/db";
 import { hashidFromId, idFromHashidOrThrow } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
 import { getHasJoinedEvent, tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
@@ -53,7 +54,7 @@ export const eventRouter = createTRPCRouter({
       // simulate a slow db call
       //await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const insertresult = await ctx.db
+      const insertresult = await db
         .insertInto("Event")
         .values({
           creatorId: ctx.user.id,
@@ -68,6 +69,9 @@ export const eventRouter = createTRPCRouter({
 
       const insertId = Number(insertresult.insertId);
       const hashid = hashidFromId(insertId);
+
+      //kick of a chat aswell, might make sense to have a user "start a conversation" separately
+      const _insertresult2 = await db.insertInto("Eventchat").ignore().values({ id: insertId }).execute();
 
       await notifyEventCreated({ eventId: insertId });
       revalidateTag(tagEvents());
