@@ -13,8 +13,14 @@ export function TrpcProvider({ children }: { children: React.ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            refetchOnWindowFocus: false,
             staleTime: Infinity,
+            refetchOnWindowFocus: false,
+            refetchInterval: false,
+            refetchOnReconnect: false,
+            refetchOnMount: false,
+            refetchIntervalInBackground: false,
+            retry: false,
+            cacheTime: 1000 * 60 * 60, //(default is 5 min) would refetch any query "not on screen" for 5 min, increase this..
           },
         },
       })

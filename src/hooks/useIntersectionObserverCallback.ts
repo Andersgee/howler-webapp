@@ -9,7 +9,8 @@ import { useCallback, useRef } from "react";
  *
  * ```ts
  * const ref = useIntersectionObserver<HTMLDivElement>(([entry]) => {
- *   if (!!entry?.isIntersecting && someDependency === "hello") {
+ *   const isIntersecting = !!entry?.isIntersecting;
+ *   if (isIntersecting && someDependency === "hello") {
  *     //do something
  *   }
  * }, [someDependency]);
