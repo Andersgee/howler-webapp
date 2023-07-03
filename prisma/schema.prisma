@@ -126,6 +126,8 @@ model Eventchatmessage {
     eventchatId Int
     user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId      Int
+
+    @@index([eventchatId])
 }
 
 model Event {

@@ -39,12 +39,24 @@ export const eventchatRouter = createTRPCRouter({
   infiniteMessages: protectedProcedure
     .input(z.object({ cursor: z.number().optional(), eventId: z.number() }))
     .query(async ({ input, ctx }) => {
-      // simulate a slow db call
-      console.log("input.cursor:", input.cursor);
-      console.log("debug wait 2 seconds...");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      //await new Promise((resolve) => setTimeout(resolve, 2000));
 
       const LIMIT = 2;
+
+      /*
+      let hmm = db.selectFrom("Eventchat").select("Eventchat.id").where("Eventchat.id", "=", input.eventId)
+      .select((eb) => [
+        jsonArrayFrom(
+          eb
+            .selectFrom("Eventchatmessage")
+            .selectAll("Eventchatmessage")
+            .whereRef("Eventchatmessage.eventchatId", "=", "Eventchat.id")
+            .orderBy("id", "desc")
+          .limit(LIMIT + 1)
+        ).as("eventchatmessages"),
+      ])
+      .executeTakeFirst();
+      */
 
       let query = db
         .selectFrom("Eventchatmessage")
@@ -57,27 +69,13 @@ export const eventchatRouter = createTRPCRouter({
         query = query.where("id", "<=", input.cursor);
       }
       const messages = await query.execute();
-      console.log("messages:", messages);
-
-      /*
-      const messages = await db
-        .selectFrom("Eventchatmessage")
-        .selectAll("Eventchatmessage")
-        .where("Eventchatmessage.eventchatId", "=", input.eventId)
-        .$if(input.cursor !== undefined, (qb) => qb.where("id", "<", input.cursor!))
-        .orderBy("id", "desc")
-        .limit(LIMIT)
-        .execute();
-      */
 
       if (messages.length > LIMIT) {
         //const nextItem = messages.pop();
         const nextItem = messages.pop();
         const nextCursor = nextItem?.id;
-        console.log("returning nextCursor: ", nextCursor);
         return { messages, nextCursor };
       } else {
-        console.log("returning nextCursor: undefined");
         return { messages, nextCursor: undefined };
       }
     }),
