@@ -20,7 +20,8 @@ export function TrpcProvider({ children }: { children: React.ReactNode }) {
             refetchOnMount: false,
             refetchIntervalInBackground: false,
             retry: false,
-            cacheTime: 1000 * 60 * 60, //(default is 5 min) would refetch any query "not on screen" for 5 min, increase this..
+            //(default cacheTime is 5 min, meaning would refetch any "not on screen" (aka inactive) queries if looking at some other page for 5 min
+            cacheTime: 1000 * 60 * 60,
           },
         },
       })
