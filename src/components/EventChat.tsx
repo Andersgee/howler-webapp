@@ -17,10 +17,9 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
   const ref = useIntersectionObserverCallback<T>(
     ([entry]) => {
       const isIntersecting = !!entry?.isIntersecting;
-      console.log({ isIntersecting, hasNextPage });
-      if (hasNextPage && isIntersecting) fetchNextPage();
+      if (isIntersecting && hasNextPage && !isFetchingNextPage) fetchNextPage();
     },
-    [hasNextPage]
+    [hasNextPage, isFetchingNextPage]
   );
 
   const messages = useMemo(() => data?.pages.flatMap((page) => page.messages) || [], [data]);
@@ -47,16 +46,14 @@ export function EventChat({ eventId, userId }: Props) {
 
   return (
     <div>
-      <div ref={ref}>auto load more when this div is visible</div>
-      <div>isFetchingNextPage: {JSON.stringify(isFetchingNextPage)}</div>
-      <div>hasNextPage: {JSON.stringify(hasNextPage)}</div>
-      <ul>
+      <div ref={ref}>{isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of chat"}</div>
+      <div className="flex flex-col-reverse">
         {messages.map((message) => (
-          <li key={message.id} className={cn("text-sm", message.userId === userId ? "bg-accent" : "bg-secondary")}>
+          <div key={message.id} className={cn("text-sm", message.userId === userId ? "bg-accent" : "bg-secondary")}>
             {`id: ${message.id}, text: ${message.text}`}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
       <div>
         <input
           type="text"

@@ -1,25 +1,23 @@
 import { useCallback, useRef } from "react";
 
 /**
- * Wrapper for `new IntersectionObserver(callback, options)`
+ * hook for `new IntersectionObserver(callback, options)`
  *
- * [MDN Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
- *
- * note: this is the simplest I could make it. options are static (not part of dependency array of callback)
+ * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver)
  *
  * ### Example
  *
  * ```ts
  * const ref = useIntersectionObserver<HTMLDivElement>(([entry]) => {
- *   if (!!entry?.isIntersecting) {
+ *   if (!!entry?.isIntersecting && someDependency === "hello") {
  *     //do something
  *   }
- * });
+ * }, [someDependency]);
  * ```
  */
 export function useIntersectionObserverCallback<T extends Element>(
   callback: IntersectionObserverCallback,
-  deps: Array<string | number | boolean | undefined>,
+  deps: Array<string | number | boolean | undefined | null>,
   options?: IntersectionObserverInit
 ) {
   const observer = useRef<IntersectionObserver | null>(null);
