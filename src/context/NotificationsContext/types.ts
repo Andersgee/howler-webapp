@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const notificationDataSchema = z.object({
+export const notificationDataSchema = z.object({
   fcmToken: z.string(),
   title: z.string(),
   body: z.string(),
