@@ -7,20 +7,22 @@ import { cn } from "#src/utils/cn";
 import { Button } from "./ui/Button";
 
 function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(eventId: number) {
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = api.eventchat.infiniteMessages.useInfiniteQuery(
-    { eventId },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      initialCursor: undefined,
-    }
-  );
+  const { data, hasNextPage, hasPreviousPage, fetchNextPage, isFetchingNextPage } =
+    api.eventchat.infiniteMessages.useInfiniteQuery(
+      { eventId },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      }
+    );
 
   const ref = useIntersectionObserver<T>(([entry]) => {
-    if (hasNextPage && !!entry?.isIntersecting) fetchNextPage();
+    const isIntersecting = !!entry?.isIntersecting;
+    console.log({ isIntersecting, hasNextPage, hasPreviousPage });
+    if (hasNextPage !== false && isIntersecting) fetchNextPage();
   });
 
   const messages = useMemo(() => data?.pages.flatMap((page) => page.messages) || [], [data]);
-  return { ref, messages, isFetchingNextPage, hasNextPage };
+  return { ref, messages, isFetchingNextPage, hasNextPage, hasPreviousPage };
 }
 
 type Props = {
@@ -29,7 +31,7 @@ type Props = {
 };
 
 export function EventChat({ eventId, userId }: Props) {
-  const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId);
+  const { messages, hasNextPage, hasPreviousPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId);
 
   const apiContext = api.useContext();
 
@@ -46,10 +48,11 @@ export function EventChat({ eventId, userId }: Props) {
       <div ref={ref}>auto load more when this div is visible</div>
       <div>isFetchingNextPage: {JSON.stringify(isFetchingNextPage)}</div>
       <div>hasNextPage: {JSON.stringify(hasNextPage)}</div>
+      <div>hasPreviousPage: {JSON.stringify(hasPreviousPage)}</div>
       <ul>
         {messages.map((message) => (
           <li key={message.id} className={cn("text-sm", message.userId === userId ? "bg-accent" : "bg-secondary")}>
-            {message.text}
+            {`id: ${message.id}, text: ${message.text}`}
           </li>
         ))}
       </ul>
