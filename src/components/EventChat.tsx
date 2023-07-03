@@ -1,9 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { api } from "#src/hooks/api";
+import { useIntersectionObserver } from "#src/hooks/useIntersectionObserver";
 import { cn } from "#src/utils/cn";
 import { Button } from "./ui/Button";
+
+function useEventchatInfiniteMessages<T extends Element = HTMLDivElement>(eventId: number) {
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = api.eventchat.infiniteMessages.useInfiniteQuery(
+    { eventId },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
+  const ref = useIntersectionObserver<T>(([entry]) => {
+    const isVisible = !!entry?.isIntersecting;
+    if (isVisible && hasNextPage !== false) {
+      fetchNextPage();
+    }
+  });
+
+  const messages = useMemo(() => data?.pages.flatMap((page) => page.messages) || [], [data]);
+  return { messages, ref, isFetchingNextPage, hasNextPage };
+}
 
 type Props = {
   eventId: number;
@@ -11,7 +31,10 @@ type Props = {
 };
 
 export function EventChat({ eventId, userId }: Props) {
-  const eventchatLatest10 = api.eventchat.latest10.useQuery({ eventId });
+  //const eventchatLatest10 = api.eventchat.latest10.useQuery({ eventId });
+
+  const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId);
+
   const apiContext = api.useContext();
 
   const [text, setText] = useState("");
@@ -24,9 +47,12 @@ export function EventChat({ eventId, userId }: Props) {
 
   return (
     <div>
+      <div ref={ref}>auto load more when this div is visible</div>
+      <div>isFetchingNextPage: {JSON.stringify(isFetchingNextPage)}</div>
+      <div>hasNextPage: {JSON.stringify(hasNextPage)}</div>
       <ul>
-        {eventchatLatest10.data?.map((message) => (
-          <li key={message.id} className={cn("text-sm", message.creatorId === userId ? "bg-accent" : "bg-secondary")}>
+        {messages.map((message) => (
+          <li key={message.id} className={cn("text-sm", message.userId === userId ? "bg-accent" : "bg-secondary")}>
             {message.text}
           </li>
         ))}
