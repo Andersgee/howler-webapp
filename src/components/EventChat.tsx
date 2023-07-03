@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { api } from "#src/hooks/api";
-import { useIntersectionObserver } from "#src/hooks/useIntersectionObserver";
+import { useIntersectionObserverCallback } from "#src/hooks/useIntersectionObserverCallback";
 import { cn } from "#src/utils/cn";
 import { Button } from "./ui/Button";
 
@@ -15,11 +15,14 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
       }
     );
 
-  const ref = useIntersectionObserver<T>(([entry]) => {
-    const isIntersecting = !!entry?.isIntersecting;
-    console.log({ isIntersecting, hasNextPage, hasPreviousPage });
-    if (hasNextPage !== false && isIntersecting) fetchNextPage();
-  });
+  const ref = useIntersectionObserverCallback<T>(
+    ([entry]) => {
+      const isIntersecting = !!entry?.isIntersecting;
+      console.log({ isIntersecting, hasNextPage, hasPreviousPage });
+      if (hasNextPage !== false && isIntersecting) fetchNextPage();
+    },
+    [hasNextPage, hasPreviousPage]
+  );
 
   const messages = useMemo(() => data?.pages.flatMap((page) => page.messages) || [], [data]);
   return { ref, messages, isFetchingNextPage, hasNextPage, hasPreviousPage };

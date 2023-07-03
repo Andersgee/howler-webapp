@@ -17,8 +17,9 @@ import { useCallback, useRef } from "react";
  * });
  * ```
  */
-export function useIntersectionObserver<T extends Element>(
+export function useIntersectionObserverCallback<T extends Element>(
   callback: IntersectionObserverCallback,
+  deps: Array<string | number | boolean | undefined>,
   options?: IntersectionObserverInit
 ) {
   const observer = useRef<IntersectionObserver | null>(null);
@@ -35,5 +36,5 @@ export function useIntersectionObserver<T extends Element>(
       observer.current.observe(element);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, deps);
 }
