@@ -83,6 +83,10 @@ export default {
         ".text-tweet": {
           "@apply whitespace-pre-wrap break-words": {},
         },
+        ".text-paragraph": {
+          "@apply max-w-[55ch] font-sans text-base font-normal leading-[1.55] tracking-[0.15px] text-neutral-600 [word-spacing:0.5px] dark:text-neutral-300":
+            {},
+        },
       });
     }),
   ],
