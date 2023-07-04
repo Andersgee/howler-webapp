@@ -41,7 +41,7 @@ export const eventchatRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const LIMIT = 10;
+      const LIMIT = 30;
 
       /*
       //is it faster to do it via Eventchat which already has relation to only relevant messages?
