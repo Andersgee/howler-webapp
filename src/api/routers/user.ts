@@ -9,7 +9,13 @@ export const userRouter = createTRPCRouter({
   isFollowing: protectedProcedure.input(z.object({ userHashId: z.string().min(1) })).query(async ({ input, ctx }) => {
     return getIsFollowingUser({ myUserId: ctx.user.id, otherUserHashId: input.userHashId });
   }),
-
+  image: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
+    return db
+      .selectFrom("User")
+      .select(["User.id", "User.image", "User.name"])
+      .where("User.id", "=", input.userId)
+      .executeTakeFirst();
+  }),
   follow: protectedProcedure.input(z.object({ userHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
     const otherUserId = idFromHashid(input.userHashId);
     if (!otherUserId) return false;

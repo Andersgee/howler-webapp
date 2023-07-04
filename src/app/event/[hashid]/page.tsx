@@ -79,10 +79,9 @@ export default async function Page({ params }: PageProps) {
               <ShareButton title={event.what} />
             </div>
           </div>
-
-          {user && <EventChat eventId={eventId} userId={user.id} />}
         </div>
       </div>
+      {user && <EventChat eventId={eventId} userId={user.id} />}
     </>
   );
 }

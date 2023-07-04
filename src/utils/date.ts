@@ -58,6 +58,24 @@ export function prettyDate(date: Date, defaultLocale = true) {
   //return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short" }).format(date);
 }
 
+export function prettyDateShort(date: Date, defaultLocale = true) {
+  if (defaultLocale) {
+    //undefined to use browsers default locale
+    return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short", hour12: false }).format(date);
+  } else {
+    return new Intl.DateTimeFormat("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+      hour12: false,
+      timeZone: "UTC",
+      //timeZoneName: "short", //print timezone
+    }).format(date);
+  }
+
+  //"Saturday, June 17, 2023 at 8:49 PM"
+  //return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short" }).format(date);
+}
+
 /**
  * use on server side to parse the <input type"datetime-local"> value sent from form
  *
