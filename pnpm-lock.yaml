@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@ianvs/prettier-plugin-sort-imports': ^4.0.2
   '@radix-ui/react-popover': ^1.0.6
+  '@radix-ui/react-scroll-area': ^1.0.4
   '@radix-ui/react-select': ^1.2.2
   '@radix-ui/react-separator': ^1.0.3
   '@radix-ui/react-slot': ^1.0.2
@@ -50,6 +51,7 @@ specifiers:
 
 dependencies:
   '@radix-ui/react-popover': 1.0.6_2ejdisobb7q4dn5gvncpcai4wu
+  '@radix-ui/react-scroll-area': 1.0.4_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-select': 1.2.2_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-separator': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-slot': 1.0.2_xomkljxbsahfbuzbqqeyw47ndm
@@ -1593,6 +1595,35 @@ packages:
     dependencies:
       '@babel/runtime': 7.21.5
       '@radix-ui/react-slot': 1.0.2_xomkljxbsahfbuzbqqeyw47ndm
+      '@types/react': 18.2.9
+      '@types/react-dom': 18.2.4
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@radix-ui/react-scroll-area/1.0.4_2ejdisobb7q4dn5gvncpcai4wu:
+    resolution: {integrity: sha512-OIClwBkwPG+FKvC4OMTRaa/3cfD069nkKFFL/TQzRzaO42Ce5ivKU9VMKgT7UU6UIkjcQqKBrDOIzWtPGw6e6w==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.21.5
+      '@radix-ui/number': 1.0.1
+      '@radix-ui/primitive': 1.0.1
+      '@radix-ui/react-compose-refs': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-context': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-direction': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-presence': 1.0.1_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-primitive': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-use-callback-ref': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-use-layout-effect': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
       '@types/react': 18.2.9
       '@types/react-dom': 18.2.4
       react: 18.2.0

@@ -5,6 +5,7 @@ import { api } from "#src/hooks/api";
 import { useIntersectionObserverCallback } from "#src/hooks/useIntersectionObserverCallback";
 import { cn } from "#src/utils/cn";
 import { Button } from "./ui/Button";
+import { ScrollArea } from "./ui/ScrollArea";
 
 function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(eventId: number) {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = api.eventchat.infiniteMessages.useInfiniteQuery(
@@ -46,14 +47,16 @@ export function EventChat({ eventId, userId }: Props) {
 
   return (
     <div>
-      <div ref={ref}>{isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of chat"}</div>
-      <div className="flex flex-col-reverse">
-        {messages.map((message) => (
-          <div key={message.id} className={cn("text-sm", message.userId === userId ? "bg-accent" : "bg-secondary")}>
-            {`id: ${message.id}, text: ${message.text}`}
-          </div>
-        ))}
-      </div>
+      <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+        <div ref={ref}>{isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of chat"}</div>
+        <div className="flex flex-col-reverse">
+          {messages.map((message) => (
+            <div key={message.id} className={cn("text-sm", message.userId === userId ? "bg-accent" : "bg-secondary")}>
+              {`id: ${message.id}, text: ${message.text}`}
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
       <div>
         <input
           type="text"
