@@ -5,7 +5,7 @@ import { api } from "#src/hooks/api";
 import { useIntersectionObserverCallback } from "#src/hooks/useIntersectionObserverCallback";
 import { cn } from "#src/utils/cn";
 import { prettyDate, prettyDateShort } from "#src/utils/date";
-import { IconArrowRight } from "./Icons";
+import { IconSend } from "./Icons";
 import { Button } from "./ui/Button";
 import { ScrollArea } from "./ui/ScrollArea";
 import { LinkUserImageFromId } from "./UserImageQuery";
@@ -51,7 +51,7 @@ export function EventChat({ eventId, userId }: Props) {
   return (
     <div className="container mt-4 flex justify-center">
       <div className="max-w-md grow">
-        <ScrollArea className="h-[50vh] w-full grow rounded-md border-t p-2">
+        <ScrollArea className="h-[50vh] min-h-[384px] w-full grow rounded-md border-t p-2">
           <div className="text-paragraph text-center" ref={ref}>
             {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
           </div>
@@ -99,7 +99,7 @@ export function EventChat({ eventId, userId }: Props) {
               eventchatSend.mutate({ eventId, text });
             }}
           >
-            <IconArrowRight className="" />
+            <IconSend className="" />
           </Button>
         </div>
       </div>

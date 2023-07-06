@@ -356,7 +356,7 @@ export function IconSettings({ className, clickable, ...props }: IconClickablePr
   );
 }
 
-export function IconArrowRight({ className, clickable, ...props }: IconClickableProps) {
+export function IconSend({ className, clickable, ...props }: IconClickableProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

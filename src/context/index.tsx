@@ -1,18 +1,18 @@
 "use client";
 
 import { DialogProvider } from "./DialogContext";
-import { NotificationsProvider } from "./NotificationsContext";
+import { FcmProvider } from "./Fcm";
 import { TrpcProvider } from "./Trpc";
 import { UserProvider } from "./UserContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <UserProvider>
-      <NotificationsProvider>
+      <FcmProvider>
         <DialogProvider>
           <TrpcProvider>{children}</TrpcProvider>
         </DialogProvider>
-      </NotificationsProvider>
+      </FcmProvider>
     </UserProvider>
   );
 }

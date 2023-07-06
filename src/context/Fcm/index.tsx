@@ -9,7 +9,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import type { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
 import { setupMessaging } from "./util";
 
-export function useNotificationsContext() {
+export function useFcmContext() {
   const ctx = useContext(Context);
   if (ctx === undefined) throw new Error("context does not have provider");
   return ctx;
@@ -38,7 +38,7 @@ async function postFcmToken(fcmToken: string) {
 }
 
 /** setup service worker and firebase cloud messaging */
-export function NotificationsProvider({ children }: { children: React.ReactNode }) {
+export function FcmProvider({ children }: { children: React.ReactNode }) {
   const fcmRef = useRef<FirebaseCloudMessaging | null>(null);
   const [messages, setMessages] = useState<MessagePayload[]>([]);
   const [fcmToken, setFcmToken] = useState<string | null>(null);

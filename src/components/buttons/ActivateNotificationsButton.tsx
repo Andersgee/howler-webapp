@@ -1,6 +1,6 @@
 "use client";
 
-import { useNotificationsContext } from "#src/context/NotificationsContext";
+import { useNotificationsContext } from "#src/context/FcmContext";
 import { useUserContext } from "#src/context/UserContext";
 import { IconBell } from "../Icons";
 import { Button } from "../ui/Button";

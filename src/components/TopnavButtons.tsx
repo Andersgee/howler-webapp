@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
-import { useNotificationsContext } from "#src/context/NotificationsContext";
+import { useFcmContext } from "#src/context/Fcm";
 import { api } from "#src/hooks/api";
 import type { TokenUser } from "#src/utils/token/schema";
 import { SigninButtons } from "./buttons/SigninButtons";
@@ -56,7 +56,7 @@ export function SigninButton() {
 }
 
 export function NotificationsButton({ user }: { user: TokenUser }) {
-  const { fcmToken, getFcmToken, messages } = useNotificationsContext();
+  const { fcmToken, getFcmToken, messages } = useFcmContext();
   const notificationLatest10 = api.notification.latest10.useQuery({ userId: user.id });
   const [open, setOpen] = useState(false);
   return (

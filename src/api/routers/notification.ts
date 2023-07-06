@@ -1,6 +1,6 @@
 import { parse } from "devalue";
 import { z } from "zod";
-import { notificationDataSchema } from "#src/context/NotificationsContext/types";
+import { notificationDataSchema } from "#src/context/Fcm/message-schema";
 import { db } from "#src/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
