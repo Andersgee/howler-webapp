@@ -61,17 +61,32 @@ model User {
     sentFollows     UserUserPivot[] @relation("sentFollows")
     recievedFollows UserUserPivot[] @relation("recievedFollows")
 
-    notifications     Notification[]
+    notifications     UserNotificationPivot[]
     eventchats        UserEventchatPivot[]
     eventchatmessages Eventchatmessage[]
 }
 
+model UserNotificationPivot {
+    user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId         Int
+    notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+    notificationId Int
+
+    @@id([userId, notificationId])
+}
+
 model Notification {
-    id     Int    @id @default(autoincrement())
+    id                    Int                     @id @default(autoincrement())
+    userNotificationPivot UserNotificationPivot[]
+
+    title           String
+    body            String
+    imageUrl        String?
+    linkUrl         String
+    relativeLinkUrl String
+
     //messageId String @id //the "messageId" returned by firebase after handing it off
-    data   String @db.VarChar(10000)
-    userId Int
-    User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    //data   String @db.VarChar(10000)
 }
 
 model FcmToken {

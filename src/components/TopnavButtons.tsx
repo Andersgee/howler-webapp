@@ -56,7 +56,7 @@ export function SigninButton() {
 }
 
 export function NotificationsButton({ user }: { user: TokenUser }) {
-  const { fcmToken, getFcmToken, messages } = useFcmContext();
+  const { fcmToken, getFcmToken, notificationMessages } = useFcmContext();
   const notificationLatest10 = api.notification.latest10.useQuery({ userId: user.id });
   const [open, setOpen] = useState(false);
   return (
@@ -68,7 +68,7 @@ export function NotificationsButton({ user }: { user: TokenUser }) {
           }
         }}
       >
-        <IconBellWithNumber number={messages.length} />
+        <IconBellWithNumber number={notificationMessages.length} />
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex items-center justify-between">
@@ -79,15 +79,13 @@ export function NotificationsButton({ user }: { user: TokenUser }) {
         </div>
         <Separator />
         <ul>
-          {messages.map((message) => (
-            <li key={message.messageId}>
-              <a className="hover:bg-secondary block border-b py-4 transition-colors" href={message.fcmOptions?.link}>
+          {notificationMessages.map((message) => (
+            <li key={message.title}>
+              <a className="hover:bg-secondary block border-b py-4 transition-colors" href={message.linkUrl}>
                 <div className="flex items-center justify-between px-4">
                   <div>
-                    <h3 className="capitalize-first shrink truncate text-base font-normal">
-                      {message.notification?.title || "title"}
-                    </h3>
-                    <p>{message.notification?.body || "body"}</p>
+                    <h3 className="capitalize-first shrink truncate text-base font-normal">{message.title}</h3>
+                    <p>{message.body}</p>
                   </div>
                   <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                 </div>
@@ -101,15 +99,13 @@ export function NotificationsButton({ user }: { user: TokenUser }) {
 
               <Link
                 className="hover:bg-secondary block border-b py-4 transition-colors"
-                href={notification.data.relativeLinkUrl}
+                href={notification.relativeLinkUrl}
                 onClick={() => setOpen(false)}
               >
                 <div className="flex items-center justify-between px-4">
                   <div>
-                    <h3 className="capitalize-first shrink truncate text-base font-normal">
-                      {notification.data.title}
-                    </h3>
-                    <p>{notification.data.body}</p>
+                    <h3 className="capitalize-first shrink truncate text-base font-normal">{notification.title}</h3>
+                    <p>{notification.body}</p>
                   </div>
                   <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                 </div>

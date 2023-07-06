@@ -1,5 +1,6 @@
 "use client";
 
+import { parse } from "devalue";
 import type { MessagePayload } from "firebase/messaging";
 //import Link from "next/link";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
@@ -7,6 +8,13 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 //import { toast } from "#src/hooks/use-toast";
 //import { cn } from "#src/utils/cn";
 import type { FirebaseCloudMessaging } from "./firebas-cloud-messaging";
+import {
+  chatDataSchema,
+  notificationDataSchema,
+  type ChatMessageData,
+  type FcmMessageData,
+  type NotificationMessageData,
+} from "./message-schema";
 import { setupMessaging } from "./util";
 
 export function useFcmContext() {
@@ -20,7 +28,8 @@ export function useFcmContext() {
 type Value = {
   fcmToken: string | null;
   getFcmToken: () => Promise<string | null>;
-  messages: MessagePayload[];
+  notificationMessages: NotificationMessageData[];
+  chatMessages: ChatMessageData[];
 };
 
 const Context = createContext<undefined | Value>(undefined);
@@ -40,57 +49,33 @@ async function postFcmToken(fcmToken: string) {
 /** setup service worker and firebase cloud messaging */
 export function FcmProvider({ children }: { children: React.ReactNode }) {
   const fcmRef = useRef<FirebaseCloudMessaging | null>(null);
-  const [messages, setMessages] = useState<MessagePayload[]>([]);
   const [fcmToken, setFcmToken] = useState<string | null>(null);
-
-  /*
-  const onMessage = useCallback(
-    ({
-      title,
-      description,
-      link,
-      linkText,
-    }: {
-      title: string;
-      description: string;
-      link: string;
-      linkText: string;
-    }) => {
-      const { dismiss } = toast({
-        title: title,
-        description: description,
-        variant: "default",
-        action: (
-          <Link
-            onClick={() => dismiss()}
-            href={link}
-            className={cn(buttonVariants({ variant: "outline" }), "whitespace-nowrap")}
-          >
-            {linkText}
-          </Link>
-        ),
-      });
-    },
-    []
-  );
-  */
+  const [notificationMessages, setNotificationMessages] = useState<NotificationMessageData[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessageData[]>([]);
 
   useEffect(() => {
     setupMessaging()
       .then((fcm) => {
         fcmRef.current = fcm;
         fcmRef.current.onMessage((payload) => {
-          /*
-          if (payload.notification?.title && payload.notification?.body && payload.fcmOptions?.link) {
-            onMessage({
-              title: payload.notification.title,
-              description: payload.notification.body,
-              link: payload.fcmOptions.link,
-              linkText: "Show me",
-            });
+          const dataStr = payload.data?.str;
+          if (!dataStr) return;
+
+          const messageData = parse(dataStr) as FcmMessageData;
+
+          if (messageData.type === "notification") {
+            const parsed = notificationDataSchema.safeParse(messageData);
+            if (parsed.success) {
+              setNotificationMessages((v) => [...v, parsed.data]);
+            }
+          } else if (messageData.type === "chat") {
+            const parsed = chatDataSchema.safeParse(messageData);
+            if (parsed.success) {
+              setChatMessages((v) => [...v, parsed.data]);
+            }
+          } else {
+            console.log("ignoring payload.data: ", payload.data);
           }
-          */
-          setMessages((msgs) => [...msgs, payload]);
         });
         if (fcmRef.current.fcmToken) {
           setFcmToken(fcmRef.current.fcmToken);
@@ -123,5 +108,9 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
     return token;
   }, []);
 
-  return <Context.Provider value={{ fcmToken, getFcmToken, messages }}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={{ fcmToken, getFcmToken, notificationMessages, chatMessages }}>
+      {children}
+    </Context.Provider>
+  );
 }

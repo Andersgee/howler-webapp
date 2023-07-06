@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const notificationDataSchema = z.object({
   type: z.literal("notification"),
-  fcmToken: z.string(),
+  //fcmToken: z.string(),
   title: z.string(),
   body: z.string(),
   //imageUrl: z.string().optional(),
