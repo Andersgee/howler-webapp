@@ -43,28 +43,6 @@ export const eventchatRouter = createTRPCRouter({
 
       const LIMIT = 30;
 
-      /*
-      //is it faster to do it via Eventchat which already has relation to only relevant messages?
-      //but relation is just a schema relation guarantee, it has nothing to to with actual lookup speed?
-      //although the lookup will be faster if only selecting specific ids (which are indexed) instead of scanning for a condition
-      //anyway, need more messages in db to properly EXPLAIN ANALYZE the of query since db driver might
-      //decide its faster to do full table scan or smth if there are only 20 messages in db
-      //maybe put and index on Eventchatmessage.eventchatId, yeah lets do that for now, increase speed at cost of db size.. this index will prob get huge...
-      //TODO: get gud at sql...
-      const eventchatWithMessages = db.selectFrom("Eventchat").select("Eventchat.id").where("Eventchat.id", "=", input.eventId)
-      .select((eb) => [
-        jsonArrayFrom(
-          eb
-            .selectFrom("Eventchatmessage")
-            .selectAll("Eventchatmessage")
-            .whereRef("Eventchatmessage.eventchatId", "=", "Eventchat.id")
-            .orderBy("id", "desc")
-          .limit(LIMIT + 1)
-        ).as("eventchatmessages"),
-      ])
-      .executeTakeFirst();
-      */
-
       let query = db
         .selectFrom("Eventchatmessage")
         .selectAll("Eventchatmessage")

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useFcmContext } from "#src/context/Fcm";
 import { api } from "#src/hooks/api";
 import { useIntersectionObserverCallback } from "#src/hooks/useIntersectionObserverCallback";
 import { cn } from "#src/utils/cn";
@@ -30,6 +31,12 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
   return { ref, messages, isFetchingNextPage, hasNextPage };
 }
 
+function useChatMessages(eventId: number) {
+  const { chatMessages } = useFcmContext();
+
+  return chatMessages.filter((m) => m.eventchatId === eventId);
+}
+
 type Props = {
   eventId: number;
   userId: number;
@@ -37,6 +44,7 @@ type Props = {
 
 export function EventChat({ eventId, userId }: Props) {
   const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId);
+  const pushedMessages = useChatMessages(eventId);
 
   const apiContext = api.useContext();
 
@@ -56,8 +64,34 @@ export function EventChat({ eventId, userId }: Props) {
             {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
           </div>
           <div className="mx-2 flex grow flex-col-reverse">
-            {messages.map((message, ind) => {
-              if (message.userId !== userId || ind === 2 || ind === 5) {
+            {pushedMessages.map((message) => {
+              if (message.userId !== userId) {
+                return (
+                  <div key={message.id} className="my-2 flex w-4/5">
+                    <LinkUserImageFromId userId={message.userId} />
+                    <div className="flex flex-col items-start">
+                      <p className="text-tweet bg-secondary mt-1.5 rounded-lg p-2 font-medium">{message.text}</p>
+                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <div key={message.id}>
+                  <div className="my-2 flex justify-end gap-2">
+                    <div className="flex w-4/5 flex-col items-end">
+                      <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
+                        {message.text}
+                      </p>
+                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {messages.map((message, i) => {
+              if (message.userId !== userId || i === 2 || i === 5) {
                 return (
                   <div key={message.id} className="my-2 flex w-4/5">
                     <LinkUserImageFromId userId={message.userId} />
