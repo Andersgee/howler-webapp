@@ -1,6 +1,7 @@
 import { jsonArrayFrom, jsonObjectFrom } from "kysely/helpers/mysql";
 import { z } from "zod";
 import { db } from "#src/db";
+import { postChatMessage } from "#src/utils/notify";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const eventchatRouter = createTRPCRouter({
@@ -10,29 +11,8 @@ export const eventchatRouter = createTRPCRouter({
   send: protectedProcedure
     .input(z.object({ eventId: z.number(), text: z.string().max(280) }))
     .mutation(async ({ input, ctx }) => {
-      //need to create a Eventchat before inserting into Eventchatmessage
-      //for now just do it on every send() but should do it on initial create event.
-      const _insertresult = await db.insertInto("Eventchat").ignore().values({ id: input.eventId }).execute();
-
-      const insertResult = await db
-        .insertInto("Eventchatmessage")
-        .values({
-          eventchatId: input.eventId,
-          userId: ctx.user.id,
-          text: input.text,
-        })
-        .executeTakeFirst();
-
-      const numInsertedRows = Number(insertResult.numInsertedOrUpdatedRows);
-      if (!numInsertedRows) return false;
-
-      //actually, send data to api instead,
-      //save it to db there and hand off to fcm so that it can push to relevant fcmTokens aka users
-      //look at Eventchat.userEventchatPivot.userId to know who to send to
-      //or maybe just grab userId directly from UserEventchatPivot where eventchatId
-
-      //const numInsertedRows = Number(insertResult.numInsertedOrUpdatedRows);
-      //if (!numInsertedRows) return false;
+      const res = await postChatMessage({ eventId: input.eventId, userId: ctx.user.id, text: input.text });
+      if (!res.ok) return false;
 
       return true;
     }),

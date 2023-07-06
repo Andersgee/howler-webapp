@@ -46,14 +46,9 @@ export function EventChat({ eventId, userId }: Props) {
   const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId);
   const pushedMessages = useChatMessages(eventId);
 
-  const apiContext = api.useContext();
-
   const [text, setText] = useState("");
   const eventchatSend = api.eventchat.send.useMutation({
     onSettled: () => setText(""),
-    onSuccess: () => {
-      //apiContext.eventchat.infiniteMessages. latest10.invalidate();
-    },
   });
 
   return (
