@@ -71,7 +71,7 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
           } else if (messageData.type === "chat") {
             const parsed = chatDataSchema.safeParse(messageData);
             if (parsed.success) {
-              setChatMessages((v) => [...v, parsed.data]);
+              setChatMessages((v) => [parsed.data, ...v]);
             }
           } else {
             console.log("ignoring payload.data: ", payload.data);

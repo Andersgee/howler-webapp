@@ -86,7 +86,7 @@ export function EventChat({ eventId, userId }: Props) {
             })}
 
             {messages.map((message, i) => {
-              if (message.userId !== userId || i === 2 || i === 5) {
+              if (message.userId !== userId) {
                 return (
                   <div key={message.id} className="my-2 flex w-4/5">
                     <LinkUserImageFromId userId={message.userId} />
