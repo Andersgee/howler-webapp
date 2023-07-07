@@ -42,12 +42,8 @@ export default async function Page({ params }: PageProps) {
           <div className="my-2 flex justify-center">
             <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
           </div>
-          {event.creatorId === user?.id && (
-            <div>
-              <EditEventButton eventId={eventId} />
-            </div>
-          )}
-          <div>
+          <div className="flex gap-2">
+            {event.creatorId === user?.id && <EditEventButton eventId={eventId} initialEventInfo={event} />}
             <ShareButton title={event.what} />
           </div>
         </div>

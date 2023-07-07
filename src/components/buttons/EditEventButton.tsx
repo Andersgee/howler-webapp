@@ -12,20 +12,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "#src/components/ui/Dialog";
-import { api } from "#src/hooks/api";
+import { api, type RouterOutputs } from "#src/hooks/api";
 import { datetimelocalString } from "#src/utils/date";
-import { IconArrowDown, IconEdit, IconHowler, IconWhat, IconWhen, IconWhere, IconWho } from "../Icons";
+import { IconArrowDown, IconEdit, IconWhat, IconWhen, IconWhere, IconWho } from "../Icons";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 
 type Props = {
   eventId: number;
+  initialEventInfo: NonNullable<RouterOutputs["event"]["info"]>;
 };
 
-export function EditEventButton({ eventId }: Props) {
+export function EditEventButton({ eventId, initialEventInfo }: Props) {
   const [open, setOpen] = useState(false);
 
-  const { data: event } = api.event.info.useQuery({ eventId });
+  const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
+  //const { data: event } = api.event.info.useQuery({ eventId });
 
   const utils = api.useContext();
   const eventUpdate = api.event.update.useMutation({
@@ -146,35 +148,20 @@ export function EditEventButton({ eventId }: Props) {
                   />
                 </div>
               </div>
-              <div className="my-4 flex">
-                <div className="w-24"></div>
-                <div className="flex justify-center">
-                  <Button
-                    variant="default"
-                    disabled={eventUpdate.isLoading}
-                    className="h-16 rounded-full px-6"
-                    onClick={() => {
-                      eventUpdate.mutate({
-                        eventId: eventId,
-                        what: what,
-                        where: where,
-                        who: who,
-                        when: when,
-                        whenEnd: whenEnd,
-                      });
-                    }}
-                  >
-                    <span className="mr-2 text-2xl">Howl</span> <IconHowler className="h-12 w-12" />
-                  </Button>
-                </div>
-              </div>
             </div>
           </div>
-
           <DialogFooter>
             <Button
+              disabled={eventUpdate.isLoading}
               onClick={() => {
-                setOpen(false);
+                eventUpdate.mutate({
+                  eventId: eventId,
+                  what: what,
+                  where: where,
+                  who: who,
+                  when: when,
+                  whenEnd: whenEnd,
+                });
               }}
             >
               Save

@@ -77,7 +77,7 @@ export const eventRouter = createTRPCRouter({
       const hashid = hashidFromId(insertId);
 
       await notifyEventCreated({ eventId: insertId });
-      revalidateTag(tagEvents());
+      //revalidateTag(tagEvents());
 
       return { eventId: insertId, eventHashId: hashid };
     }),
@@ -95,7 +95,7 @@ export const eventRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      //await new Promise((resolve) => setTimeout(resolve, 2000));
 
       const _updateResult = await db
         .updateTable("Event")
@@ -109,10 +109,12 @@ export const eventRouter = createTRPCRouter({
         })
         .executeTakeFirstOrThrow();
 
-      const eventInfo = getEventInfo({ eventId: input.eventId, cached: false });
+      const eventInfo = await getEventInfo({ eventId: input.eventId, cached: false });
 
+      //cant revalidateTag multiple times.. only the last call does stuff:
+      //https://github.com/vercel/next.js/issues/52020
+      //revalidateTag(tagEvents());
       revalidateTag(tagEventInfo({ eventId: input.eventId }));
-      revalidateTag(tagEvents());
 
       return eventInfo;
     }),

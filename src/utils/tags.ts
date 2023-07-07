@@ -63,7 +63,10 @@ export async function getEventInfo({ eventId, cached = true }: { eventId: number
             },
           }
         : {
-            cache: "no-store",
+            cache: "no-cache",
+            next: {
+              tags: [tagEventInfo({ eventId })],
+            },
           }
     );
 }
@@ -84,9 +87,10 @@ export async function getEventsLatest10() {
     //.offset(0)
     .limit(10)
     .get({
-      cache: "force-cache",
+      //cache: "force-cache",
       next: {
-        tags: [tagEvents()],
+        //tags: [tagEvents()],
+        revalidate: 10,
       },
     });
 }

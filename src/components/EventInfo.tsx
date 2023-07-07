@@ -1,7 +1,5 @@
 "use client";
 
-import { useDialogDispatch } from "#src/context/DialogContext";
-import { useUserContext } from "#src/context/UserContext";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
 import { LinkUserImage } from "./UserImage";
