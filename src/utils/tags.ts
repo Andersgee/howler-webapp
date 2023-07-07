@@ -54,21 +54,12 @@ export async function getEventInfo({ eventId, cached = true }: { eventId: number
         eb.selectFrom("User").select(["User.id", "User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
       ).as("creator"),
     ])
-    .getFirst(
-      cached
-        ? {
-            cache: "force-cache",
-            next: {
-              tags: [tagEventInfo({ eventId })],
-            },
-          }
-        : {
-            cache: "no-cache",
-            next: {
-              tags: [tagEventInfo({ eventId })],
-            },
-          }
-    );
+    .getFirst({
+      cache: cached ? "force-cache" : "no-cache",
+      next: {
+        tags: [tagEventInfo({ eventId })],
+      },
+    });
 }
 
 export function tagEvents() {

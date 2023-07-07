@@ -1,4 +1,3 @@
-import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { db } from "#src/db";
