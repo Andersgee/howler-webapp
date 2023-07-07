@@ -33,7 +33,7 @@ export default async function Page({ params }: PageProps) {
   const event = await getEventInfo({ eventId });
   if (!event) notFound();
   const user = await getUserFromCookie();
-  const hasJoinedEvent = user ? await getHasJoinedEvent({ eventHashid: params.hashid, userId: user.id }) : false;
+  const hasJoinedEvent = user ? await getHasJoinedEvent({ eventId, userId: user.id }) : false;
 
   return (
     <>
@@ -73,7 +73,7 @@ export default async function Page({ params }: PageProps) {
               </div>
             </div>
             <div className="my-2 flex justify-center">
-              <JoinEventButton eventHashId={params.hashid} initialIsJoined={hasJoinedEvent} />
+              <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
             </div>
             <div>
               <ShareButton title={event.what} />

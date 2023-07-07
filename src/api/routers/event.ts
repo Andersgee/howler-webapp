@@ -2,43 +2,39 @@ import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { db } from "#src/db";
-import { hashidFromId, idFromHashidOrThrow } from "#src/utils/hashid";
+import { hashidFromId } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
 import { getHasJoinedEvent, tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
-  isJoined: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).query(async ({ input, ctx }) => {
-    const hasJoined = await getHasJoinedEvent({ eventHashid: input.eventHashId, userId: ctx.user.id });
+  isJoined: protectedProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
+    const hasJoined = await getHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id });
 
     return hasJoined;
   }),
-  join: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
-    const eventId = idFromHashidOrThrow(input.eventHashId);
-
+  join: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
     const _insertResult = await ctx.db
       .insertInto("UserEventPivot")
       .values({
-        eventId: eventId,
+        eventId: input.eventId,
         userId: ctx.user.id,
       })
       .executeTakeFirstOrThrow();
 
-    revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
+    revalidateTag(tagHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id }));
 
-    return { eventId, userId: ctx.user.id };
+    return { eventId: input.eventId, userId: ctx.user.id };
   }),
-  leave: protectedProcedure.input(z.object({ eventHashId: z.string().min(1) })).mutation(async ({ input, ctx }) => {
-    const eventId = idFromHashidOrThrow(input.eventHashId);
-
+  leave: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
     const _deleteResult = await ctx.db
       .deleteFrom("UserEventPivot")
       .where("userId", "=", ctx.user.id)
-      .where("eventId", "=", eventId)
+      .where("eventId", "=", input.eventId)
       .executeTakeFirstOrThrow();
 
-    revalidateTag(tagHasJoinedEvent({ eventId, userId: ctx.user.id }));
-    return { eventId, userId: ctx.user.id };
+    revalidateTag(tagHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id }));
+    return { eventId: input.eventId, userId: ctx.user.id };
   }),
   create: protectedProcedure
     .input(
@@ -66,12 +62,18 @@ export const eventRouter = createTRPCRouter({
           info: "no info",
         })
         .executeTakeFirstOrThrow();
-
       const insertId = Number(insertresult.insertId);
-      const hashid = hashidFromId(insertId);
 
-      //kick of a chat aswell, might make sense to have a user "start a conversation" separately
-      const _insertresult2 = await db.insertInto("Eventchat").ignore().values({ id: insertId }).execute();
+      //auto join creator to event
+      await db
+        .insertInto("UserEventPivot")
+        .values({
+          eventId: insertId,
+          userId: ctx.user.id,
+        })
+        .execute();
+
+      const hashid = hashidFromId(insertId);
 
       await notifyEventCreated({ eventId: insertId });
       revalidateTag(tagEvents());
@@ -79,13 +81,11 @@ export const eventRouter = createTRPCRouter({
       return { eventId: insertId, eventHashId: hashid };
     }),
 
-  info: publicProcedure.input(z.object({ eventHashId: z.string().min(1) })).query(async ({ input, ctx }) => {
-    const eventId = idFromHashidOrThrow(input.eventHashId);
-
+  info: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
     const event = await ctx.db
       .selectFrom("Event")
       .selectAll("Event")
-      .where("Event.id", "=", eventId)
+      .where("Event.id", "=", input.eventId)
       .select((eb) => [
         jsonObjectFrom(
           eb

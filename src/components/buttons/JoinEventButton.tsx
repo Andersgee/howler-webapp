@@ -7,21 +7,21 @@ import { Button } from "../ui/Button";
 
 type Props = {
   initialIsJoined: boolean;
-  eventHashId: string;
+  eventId: number;
 };
 
-export function JoinEventButton({ initialIsJoined, eventHashId }: Props) {
+export function JoinEventButton({ initialIsJoined, eventId }: Props) {
   const user = useUserContext();
   const utils = api.useContext();
   const dialogDispatch = useDialogDispatch();
 
-  const { data: isJoined } = api.event.isJoined.useQuery({ eventHashId }, { initialData: initialIsJoined });
+  const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
 
   const eventJoin = api.event.join.useMutation({
-    onMutate: () => utils.event.isJoined.setData({ eventHashId }, () => true),
+    onMutate: () => utils.event.isJoined.setData({ eventId }, () => true),
   });
   const eventLeave = api.event.leave.useMutation({
-    onMutate: () => utils.event.isJoined.setData({ eventHashId }, () => false),
+    onMutate: () => utils.event.isJoined.setData({ eventId }, () => false),
   });
 
   return (
@@ -33,9 +33,9 @@ export function JoinEventButton({ initialIsJoined, eventHashId }: Props) {
         if (!user) {
           dialogDispatch({ type: "show", name: "signin" });
         } else if (isJoined) {
-          eventLeave.mutate({ eventHashId });
+          eventLeave.mutate({ eventId });
         } else {
-          eventJoin.mutate({ eventHashId });
+          eventJoin.mutate({ eventId });
         }
       }}
     >

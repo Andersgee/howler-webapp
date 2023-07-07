@@ -57,7 +57,7 @@ export function SigninButton() {
 
 export function NotificationsButton({ user }: { user: TokenUser }) {
   const { fcmToken, getFcmToken, notificationMessages } = useFcmContext();
-  const notificationLatest10 = api.notification.latest10.useQuery({ userId: user.id });
+  const notificationLatest10 = api.notification.latest10.useQuery();
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={(x) => setOpen(x)}>

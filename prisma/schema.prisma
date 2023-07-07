@@ -62,8 +62,16 @@ model User {
     recievedFollows UserUserPivot[] @relation("recievedFollows")
 
     notifications     UserNotificationPivot[]
-    eventchats        UserEventchatPivot[]
     eventchatmessages Eventchatmessage[]
+}
+
+model UserUserPivot {
+    user       User @relation("recievedFollows", fields: [userId], references: [id], onDelete: Cascade)
+    userId     Int
+    follower   User @relation("sentFollows", fields: [followerId], references: [id], onDelete: Cascade)
+    followerId Int
+
+    @@id([userId, followerId])
 }
 
 model UserNotificationPivot {
@@ -84,9 +92,6 @@ model Notification {
     imageUrl        String?
     linkUrl         String
     relativeLinkUrl String
-
-    //messageId String @id //the "messageId" returned by firebase after handing it off
-    //data   String @db.VarChar(10000)
 }
 
 model FcmToken {
@@ -112,37 +117,17 @@ model UserEventPivot {
     @@id([userId, eventId])
 }
 
-model UserEventchatPivot {
-    user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId      Int
-    eventchat   Eventchat @relation(fields: [eventchatId], references: [id], onDelete: Cascade)
-    eventchatId Int
-
-    @@id([userId, eventchatId])
-}
-
-model Eventchat {
-    //id Int @id @default(autoincrement())
-    id    Int   @id //same as event
-    event Event @relation(fields: [id], references: [id], onDelete: Cascade)
-
-    eventchatmessages  Eventchatmessage[]
-    userEventchatPivot UserEventchatPivot[]
-
-    //eventId Int   @unique
-}
-
 model Eventchatmessage {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     text      String   @db.VarChar(280)
 
-    eventchat   Eventchat @relation(fields: [eventchatId], references: [id], onDelete: Cascade)
-    eventchatId Int
-    user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId      Int
+    event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    eventId Int
+    user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId  Int
 
-    @@index([eventchatId])
+    @@index([eventId])
 }
 
 model Event {
@@ -157,36 +142,6 @@ model Event {
     who     String
     info    String
 
-    place   Place? @relation(fields: [placeId], references: [id])
-    placeId Int?
-
-    joinedUsers UserEventPivot[]
-
-    eventchat Eventchat?
-}
-
-//model EventChatMessage {
-//    id        Int    @id @default(autoincrement())
-//    creator   User   @relation(fields: [creatorId], references: [id])
-//    creatorId Int
-//    text      String @db.VarChar(280) //not sure how big chat messages to allow... twitter has max 280 so lets just go with that
-//    Event     Event  @relation(fields: [eventId], references: [id])
-//    eventId   Int
-//}
-
-model Place {
-    id     Int     @id @default(autoincrement())
-    label  String
-    lng    Float
-    lat    Float
-    events Event[]
-}
-
-model UserUserPivot {
-    user       User @relation("recievedFollows", fields: [userId], references: [id], onDelete: Cascade)
-    userId     Int
-    follower   User @relation("sentFollows", fields: [followerId], references: [id], onDelete: Cascade)
-    followerId Int
-
-    @@id([userId, followerId])
+    joinedUsers      UserEventPivot[]
+    eventchatmessage Eventchatmessage[]
 }

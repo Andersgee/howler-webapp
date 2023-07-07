@@ -7,21 +7,21 @@ import { Button } from "../ui/Button";
 
 type Props = {
   initialIsFollowing: boolean;
-  userHashId: string;
+  userId: number;
 };
 
-export function FollowUserButton({ initialIsFollowing, userHashId }: Props) {
+export function FollowUserButton({ initialIsFollowing, userId }: Props) {
   const user = useUserContext();
   const utils = api.useContext();
   const dialogDispatch = useDialogDispatch();
 
-  const { data: isFollowing } = api.user.isFollowing.useQuery({ userHashId }, { initialData: initialIsFollowing });
+  const { data: isFollowing } = api.user.isFollowing.useQuery({ userId }, { initialData: initialIsFollowing });
 
   const userFollow = api.user.follow.useMutation({
-    onMutate: () => utils.user.isFollowing.setData({ userHashId }, () => true),
+    onMutate: () => utils.user.isFollowing.setData({ userId }, () => true),
   });
   const userUnFollow = api.user.unFollow.useMutation({
-    onMutate: () => utils.user.isFollowing.setData({ userHashId }, () => false),
+    onMutate: () => utils.user.isFollowing.setData({ userId }, () => false),
   });
 
   return (
@@ -33,9 +33,9 @@ export function FollowUserButton({ initialIsFollowing, userHashId }: Props) {
         if (!user) {
           dialogDispatch({ type: "show", name: "signin" });
         } else if (isFollowing) {
-          userUnFollow.mutate({ userHashId });
+          userUnFollow.mutate({ userId });
         } else {
-          userFollow.mutate({ userHashId });
+          userFollow.mutate({ userId });
         }
       }}
     >

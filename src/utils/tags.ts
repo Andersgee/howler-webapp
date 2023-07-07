@@ -1,15 +1,11 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { db } from "#src/db";
-import { idFromHashid } from "./hashid";
 
 /** userId follows otherUserId */
 export function tagIsFollowingUser({ myUserId, otherUserId }: { myUserId: number; otherUserId: number }) {
   return `isfollowing-${myUserId}-${otherUserId}`;
 }
-export async function getIsFollowingUser({ myUserId, otherUserHashId }: { myUserId: number; otherUserHashId: string }) {
-  const otherUserId = idFromHashid(otherUserHashId);
-  if (!otherUserId) return false;
-
+export async function getIsFollowingUser({ myUserId, otherUserId }: { myUserId: number; otherUserId: number }) {
   const userUserPivot = await db
     .selectFrom("UserUserPivot")
     .select(["userId", "followerId"])
@@ -29,9 +25,7 @@ export async function getIsFollowingUser({ myUserId, otherUserHashId }: { myUser
 export function tagHasJoinedEvent({ eventId, userId }: { eventId: number; userId: number }) {
   return `hasjoinedevent-${eventId}-${userId}`;
 }
-export async function getHasJoinedEvent({ eventHashid, userId }: { eventHashid: string; userId: number }) {
-  const eventId = idFromHashid(eventHashid);
-  if (!eventId) return false;
+export async function getHasJoinedEvent({ eventId, userId }: { eventId: number; userId: number }) {
   const userEventPivot = await db
     .selectFrom("UserEventPivot")
     .select("userId")

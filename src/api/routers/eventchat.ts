@@ -26,7 +26,7 @@ export const eventchatRouter = createTRPCRouter({
       let query = db
         .selectFrom("Eventchatmessage")
         .selectAll("Eventchatmessage")
-        .where("Eventchatmessage.eventchatId", "=", input.eventId)
+        .where("Eventchatmessage.eventId", "=", input.eventId)
         .orderBy("id", "desc")
         .limit(LIMIT + 1);
 

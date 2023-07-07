@@ -34,7 +34,7 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
 function useChatMessages(eventId: number) {
   const { chatMessages } = useFcmContext();
 
-  return chatMessages.filter((m) => m.eventchatId === eventId);
+  return chatMessages.filter((m) => m.eventId === eventId);
 }
 
 type Props = {
@@ -46,6 +46,7 @@ export function EventChat({ eventId, userId }: Props) {
   const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId);
   const pushedMessages = useChatMessages(eventId);
 
+  //const { data: isJoined } = api.event.isJoined.useQuery({ eventHashId }, { initialData: initialIsJoined });
   const [text, setText] = useState("");
   const eventchatSend = api.eventchat.send.useMutation({
     onSettled: () => setText(""),

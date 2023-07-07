@@ -2,10 +2,10 @@ import { z } from "zod";
 
 export const notificationDataSchema = z.object({
   type: z.literal("notification"),
-  //fcmToken: z.string(),
+  id: z.number(),
   title: z.string(),
   body: z.string(),
-  //imageUrl: z.string().optional(),
+  imageUrl: z.string().nullable(),
   linkUrl: z.string(),
   relativeLinkUrl: z.string(),
 });
@@ -17,7 +17,7 @@ export const chatDataSchema = z.object({
   id: z.number(),
   createdAt: z.date(),
   text: z.string(),
-  eventchatId: z.number(),
+  eventId: z.number(),
   userId: z.number(),
 });
 
