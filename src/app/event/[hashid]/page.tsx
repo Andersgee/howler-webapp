@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { EditEventButton } from "#src/components/buttons/EditEventButton";
 import { JoinEventButton } from "#src/components/buttons/JoinEventButton";
 import { ShareButton } from "#src/components/buttons/ShareButton";
 import { EventChat } from "#src/components/EventChat";
@@ -76,6 +77,7 @@ export default async function Page({ params }: PageProps) {
               <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
             </div>
             <div>
+              {event.creatorId === user?.id && <EditEventButton />}
               <ShareButton title={event.what} />
             </div>
           </div>

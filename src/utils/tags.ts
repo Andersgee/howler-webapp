@@ -1,7 +1,6 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { db } from "#src/db";
 
-/** userId follows otherUserId */
 export function tagIsFollowingUser({ myUserId, otherUserId }: { myUserId: number; otherUserId: number }) {
   return `isfollowing-${myUserId}-${otherUserId}`;
 }
