@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@ianvs/prettier-plugin-sort-imports': ^4.0.2
+  '@radix-ui/react-dialog': ^1.0.4
   '@radix-ui/react-popover': ^1.0.6
   '@radix-ui/react-scroll-area': ^1.0.4
   '@radix-ui/react-select': ^1.2.2
@@ -50,6 +51,7 @@ specifiers:
   zod: ^3.21.4
 
 dependencies:
+  '@radix-ui/react-dialog': 1.0.4_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-popover': 1.0.6_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-scroll-area': 1.0.4_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-select': 1.2.2_2ejdisobb7q4dn5gvncpcai4wu
@@ -1379,6 +1381,40 @@ packages:
       '@babel/runtime': 7.21.5
       '@types/react': 18.2.9
       react: 18.2.0
+    dev: false
+
+  /@radix-ui/react-dialog/1.0.4_2ejdisobb7q4dn5gvncpcai4wu:
+    resolution: {integrity: sha512-hJtRy/jPULGQZceSAP2Re6/4NpKo8im6V8P2hUqZsdFiSL8l35kYsw3qbRI6Ay5mQd2+wlLqje770eq+RJ3yZg==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.21.5
+      '@radix-ui/primitive': 1.0.1
+      '@radix-ui/react-compose-refs': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-context': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-dismissable-layer': 1.0.4_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-focus-guards': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-focus-scope': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-id': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-portal': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-presence': 1.0.1_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-primitive': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-slot': 1.0.2_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-use-controllable-state': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@types/react': 18.2.9
+      '@types/react-dom': 18.2.4
+      aria-hidden: 1.2.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-remove-scroll: 2.5.5_xomkljxbsahfbuzbqqeyw47ndm
     dev: false
 
   /@radix-ui/react-direction/1.0.1_xomkljxbsahfbuzbqqeyw47ndm:

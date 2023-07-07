@@ -76,8 +76,13 @@ export default async function Page({ params }: PageProps) {
             <div className="my-2 flex justify-center">
               <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
             </div>
+
+            {event.creatorId === user?.id && (
+              <div>
+                <EditEventButton />
+              </div>
+            )}
             <div>
-              {event.creatorId === user?.id && <EditEventButton />}
               <ShareButton title={event.what} />
             </div>
           </div>
