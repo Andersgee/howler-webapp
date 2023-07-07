@@ -59,7 +59,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         <ScrollArea className="h-[50vh] min-h-[384px] w-full grow rounded-md border-t p-2">
           <div className="text-paragraph text-center" ref={ref}>
             {!isJoined
-              ? "join to see chat"
+              ? "need to join to be able see chat"
               : isFetchingNextPage
               ? "loading..."
               : hasNextPage
