@@ -47,8 +47,7 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      // simulate a slow db call
-      //await new Promise((resolve) => setTimeout(resolve, 2000));
+      //await artificialDelay()
 
       const insertresult = await db
         .insertInto("Event")
@@ -93,8 +92,7 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      // simulate a slow db call
-      //await new Promise((resolve) => setTimeout(resolve, 2000));
+      //await artificialDelay()
 
       const _updateResult = await db
         .updateTable("Event")
