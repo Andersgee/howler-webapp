@@ -81,7 +81,7 @@ export default async function Page({ params }: PageProps) {
           </div>
         </div>
       </div>
-      {user && <EventChat eventId={eventId} userId={user.id} />}
+      {user && <EventChat eventId={eventId} userId={user.id} initialIsJoined={hasJoinedEvent} />}
     </>
   );
 }

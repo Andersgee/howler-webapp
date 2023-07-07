@@ -4,17 +4,17 @@ import { useMemo, useState } from "react";
 import { useFcmContext } from "#src/context/Fcm";
 import { api } from "#src/hooks/api";
 import { useIntersectionObserverCallback } from "#src/hooks/useIntersectionObserverCallback";
-import { cn } from "#src/utils/cn";
-import { prettyDate, prettyDateShort } from "#src/utils/date";
+import { prettyDateShort } from "#src/utils/date";
 import { IconSend } from "./Icons";
 import { Button } from "./ui/Button";
 import { ScrollArea } from "./ui/ScrollArea";
 import { LinkUserImageFromId } from "./UserImageQuery";
 
-function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(eventId: number) {
+function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(eventId: number, enabled: boolean) {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = api.eventchat.infiniteMessages.useInfiniteQuery(
     { eventId },
     {
+      enabled: enabled,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
@@ -22,9 +22,9 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
   const ref = useIntersectionObserverCallback<T>(
     ([entry]) => {
       const isIntersecting = !!entry?.isIntersecting;
-      if (isIntersecting && hasNextPage && !isFetchingNextPage) fetchNextPage();
+      if (enabled && isIntersecting && hasNextPage && !isFetchingNextPage) fetchNextPage();
     },
-    [hasNextPage, isFetchingNextPage]
+    [hasNextPage, isFetchingNextPage, enabled]
   );
 
   const messages = useMemo(() => data?.pages.flatMap((page) => page.messages) || [], [data]);
@@ -40,13 +40,14 @@ function useChatMessages(eventId: number) {
 type Props = {
   eventId: number;
   userId: number;
+  initialIsJoined: boolean;
 };
 
-export function EventChat({ eventId, userId }: Props) {
-  const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId);
+export function EventChat({ eventId, userId, initialIsJoined }: Props) {
+  const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
+  const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId, isJoined);
   const pushedMessages = useChatMessages(eventId);
 
-  //const { data: isJoined } = api.event.isJoined.useQuery({ eventHashId }, { initialData: initialIsJoined });
   const [text, setText] = useState("");
   const eventchatSend = api.eventchat.send.useMutation({
     onSettled: () => setText(""),
@@ -57,7 +58,13 @@ export function EventChat({ eventId, userId }: Props) {
       <div className="max-w-md grow">
         <ScrollArea className="h-[50vh] min-h-[384px] w-full grow rounded-md border-t p-2">
           <div className="text-paragraph text-center" ref={ref}>
-            {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
+            {!isJoined
+              ? "join first to chat"
+              : isFetchingNextPage
+              ? "loading..."
+              : hasNextPage
+              ? "-"
+              : "this is the beginning of conversation"}
           </div>
           <div className="mx-2 flex grow flex-col-reverse">
             {pushedMessages.map((message) => {
@@ -124,7 +131,7 @@ export function EventChat({ eventId, userId }: Props) {
 
           <Button
             className="ml-1"
-            disabled={!text || eventchatSend.isLoading}
+            disabled={!text || eventchatSend.isLoading || !isJoined}
             onClick={() => {
               eventchatSend.mutate({ eventId, text });
             }}

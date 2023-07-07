@@ -1,4 +1,4 @@
-import { jsonArrayFrom, jsonObjectFrom } from "kysely/helpers/mysql";
+import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { z } from "zod";
 import { db } from "#src/db";
 import { postChatMessage } from "#src/utils/notify";
