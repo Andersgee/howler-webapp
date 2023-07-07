@@ -66,59 +66,61 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
               ? "-"
               : "this is the beginning of conversation"}
           </div>
-          <div className="mx-2 flex grow flex-col-reverse">
-            {pushedMessages.map((message) => {
-              if (message.userId !== userId) {
+          {isJoined && (
+            <div className="mx-2 flex grow flex-col-reverse">
+              {pushedMessages.map((message) => {
+                if (message.userId !== userId) {
+                  return (
+                    <div key={message.id} className="my-2 flex w-4/5">
+                      <LinkUserImageFromId userId={message.userId} />
+                      <div className="flex flex-col items-start">
+                        <p className="text-tweet bg-secondary mt-1.5 rounded-lg p-2 font-medium">{message.text}</p>
+                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                      </div>
+                    </div>
+                  );
+                }
                 return (
-                  <div key={message.id} className="my-2 flex w-4/5">
-                    <LinkUserImageFromId userId={message.userId} />
-                    <div className="flex flex-col items-start">
-                      <p className="text-tweet bg-secondary mt-1.5 rounded-lg p-2 font-medium">{message.text}</p>
-                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                  <div key={message.id}>
+                    <div className="my-2 flex justify-end gap-2">
+                      <div className="flex w-4/5 flex-col items-end">
+                        <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
+                          {message.text}
+                        </p>
+                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                      </div>
                     </div>
                   </div>
                 );
-              }
-              return (
-                <div key={message.id}>
-                  <div className="my-2 flex justify-end gap-2">
-                    <div className="flex w-4/5 flex-col items-end">
-                      <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
-                        {message.text}
-                      </p>
-                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+              })}
 
-            {messages.map((message, i) => {
-              if (message.userId !== userId) {
+              {messages.map((message, i) => {
+                if (message.userId !== userId) {
+                  return (
+                    <div key={message.id} className="my-2 flex w-4/5">
+                      <LinkUserImageFromId userId={message.userId} />
+                      <div className="flex flex-col items-start">
+                        <p className="text-tweet bg-secondary mt-1.5 rounded-lg p-2 font-medium">{message.text}</p>
+                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                      </div>
+                    </div>
+                  );
+                }
                 return (
-                  <div key={message.id} className="my-2 flex w-4/5">
-                    <LinkUserImageFromId userId={message.userId} />
-                    <div className="flex flex-col items-start">
-                      <p className="text-tweet bg-secondary mt-1.5 rounded-lg p-2 font-medium">{message.text}</p>
-                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                  <div key={message.id}>
+                    <div className="my-2 flex justify-end gap-2">
+                      <div className="flex w-4/5 flex-col items-end">
+                        <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
+                          {message.text}
+                        </p>
+                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                      </div>
                     </div>
                   </div>
                 );
-              }
-              return (
-                <div key={message.id}>
-                  <div className="my-2 flex justify-end gap-2">
-                    <div className="flex w-4/5 flex-col items-end">
-                      <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
-                        {message.text}
-                      </p>
-                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+              })}
+            </div>
+          )}
         </ScrollArea>
         <div className="m-1 flex items-center">
           <input
