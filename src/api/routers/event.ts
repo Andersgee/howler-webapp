@@ -4,14 +4,15 @@ import { z } from "zod";
 import { db } from "#src/db";
 import { hashidFromId } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
-import { getHasJoinedEvent, tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
+import { getEventInfo, getHasJoinedEvent, tagEventInfo, tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
   isJoined: protectedProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
-    const hasJoined = await getHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id });
-
-    return hasJoined;
+    return getHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id });
+  }),
+  info: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
+    return getEventInfo({ eventId: input.eventId });
   }),
   join: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
     const _insertResult = await ctx.db
@@ -81,21 +82,38 @@ export const eventRouter = createTRPCRouter({
       return { eventId: insertId, eventHashId: hashid };
     }),
 
-  info: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
-    const event = await ctx.db
-      .selectFrom("Event")
-      .selectAll("Event")
-      .where("Event.id", "=", input.eventId)
-      .select((eb) => [
-        jsonObjectFrom(
-          eb
-            .selectFrom("User")
-            .select(["User.id", "User.name", "User.image"])
-            .whereRef("User.id", "=", "Event.creatorId")
-        ).as("creator"),
-      ])
-      .executeTakeFirstOrThrow();
+  update: protectedProcedure
+    .input(
+      z.object({
+        eventId: z.number(),
+        what: z.string(),
+        where: z.string(),
+        when: z.date(),
+        whenEnd: z.date(),
+        who: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      // simulate a slow db call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    return event;
-  }),
+      const _updateResult = await db
+        .updateTable("Event")
+        .where("id", "=", input.eventId)
+        .set({
+          what: input.what,
+          where: input.where,
+          when: input.when,
+          whenEnd: input.whenEnd,
+          who: input.who,
+        })
+        .executeTakeFirstOrThrow();
+
+      const eventInfo = getEventInfo({ eventId: input.eventId, cached: false });
+
+      revalidateTag(tagEventInfo({ eventId: input.eventId }));
+      revalidateTag(tagEvents());
+
+      return eventInfo;
+    }),
 });

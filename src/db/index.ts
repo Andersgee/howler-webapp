@@ -35,8 +35,17 @@ declare module "kysely" {
      * ```
      */
     get(init?: RequestInit): Promise<Simplify<O>[]>;
-    /** same as get() but return first element */
+    /**
+     * same as get() but return first element
+     *
+     * keep in mind that GET request has `{cache: "force-cache"}` by default in nextjs
+     * */
     getFirst(init?: RequestInit): Promise<Simplify<O> | undefined>;
+    /**
+     * same as get() but return first element or throw if no element
+     *
+     * keep in mind that GET request has `{cache: "force-cache"}` by default in nextjs
+     * */
     getFirstOrThrow(init?: RequestInit): Promise<Simplify<O>>;
   }
 }

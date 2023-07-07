@@ -44,7 +44,7 @@ export async function getHasJoinedEvent({ eventId, userId }: { eventId: number; 
 export function tagEventInfo({ eventId }: { eventId: number }) {
   return `event-${eventId}`;
 }
-export async function getEventInfo({ eventId }: { eventId: number }) {
+export async function getEventInfo({ eventId, cached = true }: { eventId: number; cached?: boolean }) {
   return await db
     .selectFrom("Event")
     .selectAll("Event")
@@ -54,12 +54,18 @@ export async function getEventInfo({ eventId }: { eventId: number }) {
         eb.selectFrom("User").select(["User.id", "User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
       ).as("creator"),
     ])
-    .getFirst({
-      cache: "force-cache",
-      next: {
-        tags: [tagEventInfo({ eventId })],
-      },
-    });
+    .getFirst(
+      cached
+        ? {
+            cache: "force-cache",
+            next: {
+              tags: [tagEventInfo({ eventId })],
+            },
+          }
+        : {
+            cache: "no-store",
+          }
+    );
 }
 
 export function tagEvents() {
