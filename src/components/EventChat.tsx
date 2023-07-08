@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useFcmContext } from "#src/context/Fcm";
 import { api } from "#src/hooks/api";
 import { useIntersectionObserverCallback } from "#src/hooks/useIntersectionObserverCallback";
+import { cn } from "#src/utils/cn";
 import { prettyDateShort } from "#src/utils/date";
 import { IconSend } from "./Icons";
 import { Button } from "./ui/Button";
@@ -48,15 +49,56 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
   const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId, isJoined);
   const pushedMessages = useChatMessages(eventId);
 
-  const [text, setText] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  //const [text, setText] = useState("");
+
   const eventchatSend = api.eventchat.send.useMutation({
-    onSettled: () => setText(""),
+    onSettled: () => {
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+      //setText(""),
+    },
   });
+
+  const endOfChatRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (endOfChatRef.current) {
+      if (pushedMessages.length > 0) {
+        endOfChatRef.current.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [pushedMessages]);
+
+  useEffect(() => {
+    if (endOfChatRef.current && isFirstRender.current && messages.length > 0) {
+      isFirstRender.current = false;
+      endOfChatRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [messages]);
 
   return (
     <div className="container mt-4 flex justify-center">
       <div className="max-w-md grow">
-        <ScrollArea className="h-[50vh] min-h-[384px] w-full grow rounded-md border-t p-2">
+        <button
+          className="block"
+          onClick={() => {
+            if (endOfChatRef.current) {
+              endOfChatRef.current.scrollIntoView({
+                behavior: "smooth",
+              });
+            }
+          }}
+        >
+          scroll to last message
+        </button>
+        <ScrollArea className="scroller h-[50vh] min-h-[384px] w-full grow rounded-md border-t p-2">
           <div className="text-paragraph text-center" ref={ref}>
             {!isJoined
               ? "need to join to be able see chat"
@@ -68,6 +110,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
           </div>
           {isJoined && (
             <div className="mx-2 flex grow flex-col-reverse">
+              {/*
               {pushedMessages.map((message) => {
                 if (message.userId !== userId) {
                   return (
@@ -81,14 +124,33 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
                   );
                 }
                 return (
-                  <div key={message.id}>
-                    <div className="my-2 flex justify-end gap-2">
-                      <div className="flex w-4/5 flex-col items-end">
-                        <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
-                          {message.text}
-                        </p>
-                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                      </div>
+                  <div key={message.id} className="my-2 flex justify-end gap-2">
+                    <div className="flex w-4/5 flex-col items-end">
+                      <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
+                        {message.text}
+                      </p>
+                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            */}
+
+              {pushedMessages.map((message) => {
+                const isNotMe = message.userId !== userId;
+                return (
+                  <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+                    {isNotMe && <LinkUserImageFromId userId={message.userId} />}
+                    <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
+                      <p
+                        className={cn(
+                          "text-tweet rounded-lg p-2 font-medium",
+                          isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
+                        )}
+                      >
+                        {message.text}
+                      </p>
+                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
                     </div>
                   </div>
                 );
@@ -121,21 +183,26 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
               })}
             </div>
           )}
+          <div ref={endOfChatRef} className="h-[1px]"></div>
         </ScrollArea>
         <div className="m-1 flex items-center">
           <input
+            name="chatmessage"
+            ref={inputRef}
             type="text"
             placeholder="Your message"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            //value={text}
+            //onChange={(e) => setText(e.target.value)}
             className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 grow rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           />
 
           <Button
             className="ml-1"
-            disabled={!text || eventchatSend.isLoading || !isJoined}
+            disabled={eventchatSend.isLoading || !isJoined}
             onClick={() => {
-              eventchatSend.mutate({ eventId, text });
+              if (inputRef.current?.value) {
+                eventchatSend.mutate({ eventId, text: inputRef.current.value });
+              }
             }}
           >
             <IconSend className="" />

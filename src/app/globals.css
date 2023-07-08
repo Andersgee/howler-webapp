@@ -111,6 +111,21 @@
     text-rendering: geometricPrecision;
   }
 }
+
+/*
+pin scroll to bottom: https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
+put this on chat
+*/
+.scroller * {
+  overflow-anchor: none;
+}
+
+/* put this at bottom of chat*/
+.scroller-anchor {
+  overflow-anchor: auto;
+  /*height: 1px;*/
+}
+
 /*
 @layer base {
   body {
