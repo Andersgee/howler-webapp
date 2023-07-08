@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFcmContext } from "#src/context/Fcm";
 import { api } from "#src/hooks/api";
 import { useIntersectionObserverCallback } from "#src/hooks/useIntersectionObserverCallback";
@@ -34,8 +34,9 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
 
 function useChatMessages(eventId: number) {
   const { chatMessages } = useFcmContext();
+  const eventChatMessages = useMemo(() => chatMessages.filter((m) => m.eventId === eventId), [eventId, chatMessages]);
 
-  return chatMessages.filter((m) => m.eventId === eventId);
+  return eventChatMessages;
 }
 
 type Props = {
@@ -78,7 +79,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
     if (endOfChatRef.current && isFirstRender.current && messages.length > 0) {
       isFirstRender.current = false;
       endOfChatRef.current.scrollIntoView({
-        behavior: "smooth",
+        behavior: "instant",
       });
     }
   }, [messages]);
@@ -86,19 +87,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
   return (
     <div className="container mt-4 flex justify-center">
       <div className="max-w-md grow">
-        <button
-          className="block"
-          onClick={() => {
-            if (endOfChatRef.current) {
-              endOfChatRef.current.scrollIntoView({
-                behavior: "smooth",
-              });
-            }
-          }}
-        >
-          scroll to last message
-        </button>
-        <ScrollArea className="scroller h-[50vh] min-h-[384px] w-full grow rounded-md border-t p-2">
+        <div className="">
           <div className="text-paragraph text-center" ref={ref}>
             {!isJoined
               ? "need to join to be able see chat"
@@ -110,32 +99,6 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
           </div>
           {isJoined && (
             <div className="mx-2 flex grow flex-col-reverse">
-              {/*
-              {pushedMessages.map((message) => {
-                if (message.userId !== userId) {
-                  return (
-                    <div key={message.id} className="my-2 flex w-4/5">
-                      <LinkUserImageFromId userId={message.userId} />
-                      <div className="flex flex-col items-start">
-                        <p className="text-tweet bg-secondary mt-1.5 rounded-lg p-2 font-medium">{message.text}</p>
-                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                      </div>
-                    </div>
-                  );
-                }
-                return (
-                  <div key={message.id} className="my-2 flex justify-end gap-2">
-                    <div className="flex w-4/5 flex-col items-end">
-                      <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
-                        {message.text}
-                      </p>
-                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            */}
-
               {pushedMessages.map((message) => {
                 const isNotMe = message.userId !== userId;
                 return (
@@ -156,27 +119,21 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
                 );
               })}
 
-              {messages.map((message, i) => {
-                if (message.userId !== userId) {
-                  return (
-                    <div key={message.id} className="my-2 flex w-4/5">
-                      <LinkUserImageFromId userId={message.userId} />
-                      <div className="flex flex-col items-start">
-                        <p className="text-tweet bg-secondary mt-1.5 rounded-lg p-2 font-medium">{message.text}</p>
-                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                      </div>
-                    </div>
-                  );
-                }
+              {messages.map((message) => {
+                const isNotMe = message.userId !== userId;
                 return (
-                  <div key={message.id}>
-                    <div className="my-2 flex justify-end gap-2">
-                      <div className="flex w-4/5 flex-col items-end">
-                        <p className="text-tweet mt-2 rounded-lg bg-blue-600 p-2 font-medium text-white">
-                          {message.text}
-                        </p>
-                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                      </div>
+                  <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+                    {isNotMe && <LinkUserImageFromId userId={message.userId} />}
+                    <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
+                      <p
+                        className={cn(
+                          "text-tweet rounded-lg p-2 font-medium",
+                          isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
+                        )}
+                      >
+                        {message.text}
+                      </p>
+                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
                     </div>
                   </div>
                 );
@@ -184,7 +141,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
             </div>
           )}
           <div ref={endOfChatRef} className="h-[1px]"></div>
-        </ScrollArea>
+        </div>
         <div className="m-1 flex items-center">
           <input
             name="chatmessage"

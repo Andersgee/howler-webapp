@@ -1,12 +1,9 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EditEventButton } from "#src/components/buttons/EditEventButton";
 import { JoinEventButton } from "#src/components/buttons/JoinEventButton";
 import { ShareButton } from "#src/components/buttons/ShareButton";
 import { EventChat } from "#src/components/EventChat";
 import { EventInfo } from "#src/components/EventInfo";
-import { IconChat } from "#src/components/Icons";
-import { Button } from "#src/components/ui/Button";
 import { idFromHashid } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
 import { getEventInfo, getHasJoinedEvent } from "#src/utils/tags";
@@ -20,9 +17,9 @@ export async function generateMetadata({ params }: PageProps) {
   if (!event) notFound();
 
   return seo({
-    title: `${event.what} | Howler`,
+    title: `${event.what} | chat | Howler`,
     description: `where: ${event.where} who: ${event.who} info: ${event.info}`,
-    url: `/event/${params.hashid}`,
+    url: `/event/${params.hashid}/chat`,
     image: "/icons/favicon-512x512.png",
   });
 }
@@ -37,27 +34,9 @@ export default async function Page({ params }: PageProps) {
   const user = await getUserFromCookie();
   const hasJoinedEvent = user ? await getHasJoinedEvent({ eventId, userId: user.id }) : false;
 
-  return (
-    <>
-      <div className="container flex justify-center">
-        <div className="">
-          <EventInfo eventId={eventId} initialEventInfo={event} />
-          <div className="my-2 flex justify-center">
-            <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
-          </div>
-          <div className="flex gap-2">
-            {event.creatorId === user?.id && <EditEventButton eventId={eventId} initialEventInfo={event} />}
-            <ShareButton title={event.what} />
-            {user && (
-              <Button variant="outline" asChild>
-                <Link href={`/event/${params.hashid}/chat`}>
-                  <IconChat /> <span className="ml-2">Chat</span>
-                </Link>
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
-    </>
+  return user ? (
+    <EventChat eventId={eventId} userId={user.id} initialIsJoined={hasJoinedEvent} />
+  ) : (
+    <div>sign in and join this event to chat</div>
   );
 }
