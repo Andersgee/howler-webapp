@@ -66,7 +66,7 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
           if (messageData.type === "notification") {
             const parsed = notificationDataSchema.safeParse(messageData);
             if (parsed.success) {
-              setNotificationMessages((v) => [...v, parsed.data]);
+              setNotificationMessages((v) => [parsed.data, ...v]);
             }
           } else if (messageData.type === "chat") {
             const parsed = chatDataSchema.safeParse(messageData);

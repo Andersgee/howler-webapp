@@ -93,25 +93,28 @@ export function NotificationsButton({ user }: { user: TokenUser }) {
             </li>
           ))}
 
-          {notificationLatest10.data?.map((notification) => (
-            <li key={notification.id}>
-              {/*<pre>{JSON.stringify(notification, null, 2)}</pre>*/}
+          {notificationLatest10.data
+            ?.slice()
+            .reverse()
+            .map((notification) => (
+              <li key={notification.id}>
+                {/*<pre>{JSON.stringify(notification, null, 2)}</pre>*/}
 
-              <Link
-                className="hover:bg-secondary block border-b py-4 transition-colors"
-                href={notification.relativeLinkUrl}
-                onClick={() => setOpen(false)}
-              >
-                <div className="flex items-center justify-between px-4">
-                  <div>
-                    <h3 className="capitalize-first shrink truncate text-base font-normal">{notification.title}</h3>
-                    <p>{notification.body}</p>
+                <Link
+                  className="hover:bg-secondary block border-b py-4 transition-colors"
+                  href={notification.relativeLinkUrl}
+                  onClick={() => setOpen(false)}
+                >
+                  <div className="flex items-center justify-between px-4">
+                    <div>
+                      <h3 className="capitalize-first shrink truncate text-base font-normal">{notification.title}</h3>
+                      <p>{notification.body}</p>
+                    </div>
+                    <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                   </div>
-                  <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
-                </div>
-              </Link>
-            </li>
-          ))}
+                </Link>
+              </li>
+            ))}
         </ul>
       </PopoverContent>
     </Popover>
