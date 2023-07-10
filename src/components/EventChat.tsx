@@ -154,6 +154,8 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         <div className="container max-w-lg">
           <div className="flex items-center">
             <input
+              autoComplete="off"
+              //autoFocus
               name="chatmessage"
               ref={inputRef}
               type="text"
@@ -164,11 +166,18 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
             <Button
               className="ml-1"
               disabled={eventchatSend.isLoading}
-              onClick={() => {
+              onPointerDown={(e) => {
+                e.preventDefault();
                 if (inputRef.current?.value) {
                   eventchatSend.mutate({ eventId, text: inputRef.current.value });
                 }
               }}
+              //onClick={() => {
+              //  if (inputRef.current?.value) {
+              //
+              //    eventchatSend.mutate({ eventId, text: inputRef.current.value });
+              //  }
+              //}}
             >
               <IconSend className="" />
             </Button>
