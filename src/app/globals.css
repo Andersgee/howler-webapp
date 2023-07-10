@@ -126,6 +126,10 @@ put this on chat
   /*height: 1px;*/
 }
 
+.chatheight {
+  height: calc(100% - 88px);
+}
+
 /*
 @layer base {
   body {

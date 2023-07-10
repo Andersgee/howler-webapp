@@ -49,7 +49,7 @@ export default async function Page({ params }: PageProps) {
             {event.creatorId === user?.id && <EditEventButton eventId={eventId} initialEventInfo={event} />}
             <ShareButton title={event.what} />
             {user && (
-              <Button variant="outline" asChild>
+              <Button variant="secondary" asChild>
                 <Link href={`/event/${params.hashid}/chat`}>
                   <IconChat /> <span className="ml-2">Chat</span>
                 </Link>
