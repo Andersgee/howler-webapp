@@ -127,7 +127,7 @@ put this on chat
 }
 
 .chatheight {
-  height: calc(100% - 96px);
+  height: calc(100% - 100px);
 }
 
 /*
