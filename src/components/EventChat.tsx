@@ -150,7 +150,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
           <div ref={endOfChatRef} className="h-[1px]"></div>
         </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0">
+      <div className="absolute inset-x-0 bottom-1">
         <div className="container max-w-lg">
           <div className="flex items-center">
             <input
