@@ -106,7 +106,7 @@ export const eventRouter = createTRPCRouter({
         })
         .executeTakeFirstOrThrow();
 
-      const eventInfo = await getEventInfo({ eventId: input.eventId, cached: false });
+      const eventInfo = await getEventInfo({ eventId: input.eventId }, false);
 
       //cant revalidateTag multiple times.. only the last call does stuff:
       //https://github.com/vercel/next.js/issues/52020

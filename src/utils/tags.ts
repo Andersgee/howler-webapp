@@ -1,19 +1,21 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { db } from "#src/db";
 
-export function tagIsFollowingUser({ myUserId, otherUserId }: { myUserId: number; otherUserId: number }) {
-  return `isfollowing-${myUserId}-${otherUserId}`;
+type IsFollowingUserParams = { myUserId: number; otherUserId: number };
+
+export function tagIsFollowingUser(p: IsFollowingUserParams) {
+  return `isfollowing-${p.myUserId}-${p.otherUserId}`;
 }
-export async function getIsFollowingUser({ myUserId, otherUserId }: { myUserId: number; otherUserId: number }) {
+export async function getIsFollowingUser(p: IsFollowingUserParams, cached = true) {
   const userUserPivot = await db
     .selectFrom("UserUserPivot")
     .select(["userId", "followerId"])
-    .where("followerId", "=", myUserId)
-    .where("userId", "=", otherUserId)
+    .where("followerId", "=", p.myUserId)
+    .where("userId", "=", p.otherUserId)
     .getFirst({
-      cache: "force-cache",
+      cache: cached ? "force-cache" : "no-cache",
       next: {
-        tags: [tagIsFollowingUser({ myUserId, otherUserId })],
+        tags: [tagIsFollowingUser(p)],
       },
     });
 
@@ -21,19 +23,21 @@ export async function getIsFollowingUser({ myUserId, otherUserId }: { myUserId: 
   return false;
 }
 
-export function tagHasJoinedEvent({ eventId, userId }: { eventId: number; userId: number }) {
-  return `hasjoinedevent-${eventId}-${userId}`;
+type HasJoinedEventParams = { eventId: number; userId: number };
+
+export function tagHasJoinedEvent(p: HasJoinedEventParams) {
+  return `hasjoinedevent-${p.eventId}-${p.userId}`;
 }
-export async function getHasJoinedEvent({ eventId, userId }: { eventId: number; userId: number }) {
+export async function getHasJoinedEvent(p: HasJoinedEventParams, cached = true) {
   const userEventPivot = await db
     .selectFrom("UserEventPivot")
     .select("userId")
-    .where("userId", "=", userId)
-    .where("eventId", "=", eventId)
+    .where("userId", "=", p.userId)
+    .where("eventId", "=", p.eventId)
     .getFirst({
-      cache: "force-cache",
+      cache: cached ? "force-cache" : "no-cache",
       next: {
-        tags: [tagHasJoinedEvent({ eventId, userId })],
+        tags: [tagHasJoinedEvent(p)],
       },
     });
 
@@ -41,14 +45,16 @@ export async function getHasJoinedEvent({ eventId, userId }: { eventId: number; 
   return false;
 }
 
-export function tagEventInfo({ eventId }: { eventId: number }) {
-  return `event-${eventId}`;
+type EventInfoParams = { eventId: number };
+
+export function tagEventInfo(p: EventInfoParams) {
+  return `eventinfo-${p.eventId}`;
 }
-export async function getEventInfo({ eventId, cached = true }: { eventId: number; cached?: boolean }) {
+export async function getEventInfo(p: EventInfoParams, cached = true) {
   return await db
     .selectFrom("Event")
     .selectAll("Event")
-    .where("Event.id", "=", eventId)
+    .where("Event.id", "=", p.eventId)
     .select((eb) => [
       jsonObjectFrom(
         eb.selectFrom("User").select(["User.id", "User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
@@ -56,9 +62,7 @@ export async function getEventInfo({ eventId, cached = true }: { eventId: number
     ])
     .getFirst({
       cache: cached ? "force-cache" : "no-cache",
-      next: {
-        tags: [tagEventInfo({ eventId })],
-      },
+      next: { tags: [tagEventInfo(p)] },
     });
 }
 
@@ -75,41 +79,34 @@ export async function getEventsLatest10() {
       ).as("creator"),
     ])
     .orderBy("id", "desc")
-    //.offset(0)
     .limit(10)
     .get({
-      //cache: "force-cache",
-      next: {
-        //tags: [tagEvents()],
-        revalidate: 10,
-      },
+      next: { revalidate: 10 },
     });
 }
 
-export function tagUserInfo({ userId }: { userId: number }) {
-  return `userinfo-${userId}`;
+type UserInfoParams = { userId: number };
+
+export function tagUserInfo(p: UserInfoParams) {
+  return `userinfo-${p.userId}`;
 }
-export async function getUserInfo({ userId }: { userId: number }) {
+export async function getUserInfo(p: UserInfoParams, cached = true) {
   return await db
     .selectFrom("User")
     .selectAll()
-    .where("User.id", "=", userId)
+    .where("User.id", "=", p.userId)
     .getFirst({
-      cache: "force-cache",
-      next: {
-        tags: [tagUserInfo({ userId })],
-      },
+      cache: cached ? "force-cache" : "no-cache",
+      next: { tags: [tagUserInfo(p)] },
     });
 }
-export async function getUserInfoPublic({ userId }: { userId: number }) {
+export async function getUserInfoPublic(p: UserInfoParams, cached = true) {
   return await db
     .selectFrom("User")
     .select(["id", "name", "image"])
-    .where("User.id", "=", userId)
+    .where("User.id", "=", p.userId)
     .getFirst({
-      cache: "force-cache",
-      next: {
-        tags: [tagUserInfo({ userId })],
-      },
+      cache: cached ? "force-cache" : "no-cache",
+      next: { tags: [tagUserInfo(p)] },
     });
 }
