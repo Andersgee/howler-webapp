@@ -2,7 +2,6 @@ import { Providers } from "#src/context";
 import { seo } from "#src/utils/seo";
 import { Topnav } from "./Topnav";
 import "./globals.css";
-import Script from "next/script";
 import { ScreenSizeIndicator } from "#src/components/ScreenSizeIndicator";
 import { Toaster } from "#src/context/Toaster";
 import { fontSans } from "#src/utils/font";
@@ -26,7 +25,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScreenSizeIndicator />
         <Toaster />
       </body>
-      <Script src="https://howler.andyfx.net/google-maps.js" strategy="lazyOnload" />
     </html>
   );
 }

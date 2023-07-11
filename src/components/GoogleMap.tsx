@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useMapContext } from "#src/context/Map";
 
 const MAP_ID = "google-maps-div";
 
 export function GoogleMap() {
+  const { isLoaded } = useMapContext();
   const mapRef = useRef<google.maps.Map>();
+
   useEffect(() => {
-    if (mapRef.current) return;
+    if (!isLoaded || mapRef.current) return;
 
     async function initMap(): Promise<void> {
       const { Map } = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
@@ -18,7 +21,7 @@ export function GoogleMap() {
     }
 
     initMap();
-  }, []);
+  }, [isLoaded]);
   return (
     <>
       <style jsx global>{`
