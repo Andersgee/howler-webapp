@@ -58,7 +58,9 @@ export function GoogleMap() {
           height: 100%;
         }
       `}</style>
-      <LocateButton onLocated={(pos) => setUserPos(pos)} />
+      <div className="absolute inset-x-0 bottom-4 z-50 mx-auto">
+        <LocateButton onLocated={(pos) => setUserPos(pos)} />
+      </div>
       <div id={MAP_ID} className="h-full-minus-nav w-full" />
     </>
   );

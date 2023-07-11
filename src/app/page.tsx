@@ -49,6 +49,9 @@ export default async function Page() {
               ))}
             </ul>
             <ActivateNotificationsButton />
+            <Link href="/map" className="block" prefetch={false}>
+              google maps testing over here
+            </Link>
           </div>
         </div>
       </div>
