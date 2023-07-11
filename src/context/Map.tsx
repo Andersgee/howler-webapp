@@ -3,8 +3,8 @@
 import Script from "next/script";
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Hmm = { isLoaded: boolean };
-const Context = createContext<Hmm | undefined>(undefined);
+type Value = { isLoaded: boolean };
+const Context = createContext<Value | undefined>(undefined);
 
 export function useMapContext() {
   const ctx = useContext(Context);
