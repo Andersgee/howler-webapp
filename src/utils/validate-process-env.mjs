@@ -22,6 +22,7 @@ export const envSchema = z.object({
   DATABASE_HTTP_AUTH_HEADER: z.string(),
   NEXT_PUBLIC_HASHIDS_SALT: z.string(),
   NEXT_PUBLIC_FCM_VAPID_KEY: z.string(),
+  //NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string(),
 });
 
 function formatErrors(errors) {
