@@ -9,20 +9,21 @@ const MAP_ID = "google-maps-div";
 export function GoogleMap() {
   const { isLoaded } = useMapContext();
   const mapRef = useRef<google.maps.Map>();
-  const markerRef = useRef<typeof google.maps.marker.AdvancedMarkerElement>();
+  //const markerRef = useRef<typeof google.maps.marker.AdvancedMarkerElement>();
 
   const [userPos, setUserPos] = useState<Pos | undefined>();
 
   useEffect(() => {
-    if (!mapRef.current || !userPos || !markerRef.current) return;
+    if (!mapRef.current || !userPos) return;
 
     mapRef.current.setCenter(userPos);
+    mapRef.current.setZoom(10);
 
-    const marker = new markerRef.current({
-      map: mapRef.current,
-      position: userPos,
-      title: "You",
-    });
+    //const marker = new markerRef.current({
+    //  map: mapRef.current,
+    //  position: userPos,
+    //  title: "You",
+    //});
   }, [userPos]);
 
   useEffect(() => {
@@ -35,8 +36,8 @@ export function GoogleMap() {
         zoom: 8,
       });
 
-      const { AdvancedMarkerElement } = (await google.maps.importLibrary("marker")) as google.maps.MarkerLibrary;
-      markerRef.current = AdvancedMarkerElement;
+      //const { AdvancedMarkerElement } = (await google.maps.importLibrary("marker")) as google.maps.MarkerLibrary;
+      //markerRef.current = AdvancedMarkerElement;
 
       //const position = { lat: -25.344, lng: 131.031 };
 
@@ -59,7 +60,7 @@ export function GoogleMap() {
         }
       `}</style>
       <div className="absolute inset-x-0 bottom-4 z-50 mx-auto">
-        <LocateButton onLocated={(pos) => setUserPos(pos)} />
+        <LocateButton onLocated={(pos) => setUserPos(pos)} label="Go to your position" />
       </div>
       <div id={MAP_ID} className="h-full-minus-nav w-full" />
     </>

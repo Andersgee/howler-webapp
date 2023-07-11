@@ -6,10 +6,11 @@ export type Pos = { lng: number; lat: number };
 
 type Props = {
   className?: string;
+  label: string;
   onLocated: (pos: Pos) => void;
 };
 
-export function LocateButton({ className, onLocated }: Props) {
+export function LocateButton({ className, onLocated, label }: Props) {
   return (
     <Button
       variant="secondary"
@@ -40,7 +41,7 @@ export function LocateButton({ className, onLocated }: Props) {
         }
       }}
     >
-      <IconLocate /> <span className="ml-2">Locate</span>
+      <IconLocate /> <span className="ml-2">{label}</span>
     </Button>
   );
 }
