@@ -130,6 +130,10 @@ put this on chat
   height: calc(100% - 100px);
 }
 
+.h-full-minus-nav {
+  height: calc(100% - 48px);
+}
+
 /*
 @layer base {
   body {

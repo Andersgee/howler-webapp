@@ -30,7 +30,7 @@ export function GoogleMap() {
           height: 100%;
         }
       `}</style>
-      <div id={MAP_ID} className="h-full w-full" />
+      <div id={MAP_ID} className="h-full-minus-nav w-full" />
     </>
   );
 }
