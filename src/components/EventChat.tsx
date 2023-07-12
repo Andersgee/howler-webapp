@@ -88,6 +88,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         //keep _view_ at same place rather than keeeping _scroll_ at at same place (scroll is at top)
         secondPageRef.current.scrollIntoView({
           behavior: "instant",
+          block: "start",
         });
       }
     }
@@ -127,8 +128,8 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
           height: 100%;
         }
       `}</style>
-      <div className="chatheight container max-w-lg overflow-y-scroll shadow-sm">
-        <div className="text-paragraph text-center" ref={ref}>
+      <div className="chatheight container relative max-w-lg overflow-y-scroll shadow-sm">
+        <div className="text-paragraph bg-card/50 absolute inset-x-0 m-auto text-center" ref={ref}>
           {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
         </div>
         {infiniteMessages?.pages.map((page, i) => {
