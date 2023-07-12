@@ -17,6 +17,10 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
     {
       enabled: enabled,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
+      select: (data) => ({
+        pages: [...data.pages].reverse(),
+        pageParams: [...data.pageParams].reverse(),
+      }),
     }
   );
 
@@ -28,8 +32,8 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
     [hasNextPage, isFetchingNextPage, enabled]
   );
 
-  const messages = useMemo(() => data?.pages.flatMap((page) => page.messages) || [], [data]);
-  return { ref, messages, isFetchingNextPage, hasNextPage };
+  //const messages = useMemo(() => data?.pages.flatMap((page) => page.messages) || [], [data]);
+  return { ref, data, isFetchingNextPage, hasNextPage };
 }
 
 function usePushedChatMessages(eventId: number) {
@@ -47,7 +51,12 @@ type Props = {
 
 export function EventChat({ eventId, userId, initialIsJoined }: Props) {
   const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
-  const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId, isJoined);
+  const {
+    data: infiniteMessages,
+    hasNextPage,
+    isFetchingNextPage,
+    ref,
+  } = useEventchatInfiniteMessages(eventId, isJoined);
   const pushedMessages = usePushedChatMessages(eventId);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +76,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
 
   useEffect(() => {
     //when messages change
-    if (endOfChatRef.current && messages.length > 0) {
+    if (endOfChatRef.current && infiniteMessages && infiniteMessages.pages.length > 0) {
       if (isFirstRender.current) {
         //fist time, scroll to bottom
         isFirstRender.current = false;
@@ -77,12 +86,12 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
       } else if (oldestMessageRef.current) {
         //otherwise person scrolled up to fetch earlier messages..
         //keep _view_ at same place rather than keeeping _scroll_ at at same place (scroll is at top)
-        oldestMessageRef.current.scrollIntoView({
-          behavior: "instant",
-        });
+        //oldestMessageRef.current.scrollIntoView({
+        //  behavior: "instant",
+        //});
       }
     }
-  }, [messages]);
+  }, [infiniteMessages]);
 
   useEffect(() => {
     if (endOfChatRef.current && isAtEndOfChatRef.current) {
@@ -122,33 +131,31 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         <div className="text-paragraph text-center" ref={ref}>
           {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
         </div>
-        {messages
-          .slice()
-          .reverse()
-          .map((message, i) => {
-            const isOldestMessage = i === 0;
-            const isNotMe = message.userId !== userId;
-            return (
-              <div
-                key={message.id}
-                ref={isOldestMessage ? oldestMessageRef : undefined}
-                className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}
-              >
-                {isNotMe && <LinkUserImageFromId userId={message.userId} />}
-                <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
-                  <p
-                    className={cn(
-                      "text-tweet rounded-lg p-2 font-medium",
-                      isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
-                    )}
-                  >
-                    {message.text}
-                  </p>
-                  <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                </div>
-              </div>
-            );
-          })}
+        {infiniteMessages?.pages.map((page) => {
+          return (
+            <div key={page.nextCursor}>
+              {page.messages.map((message) => {
+                const isNotMe = message.userId !== userId;
+                return (
+                  <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+                    {isNotMe && <LinkUserImageFromId userId={message.userId} />}
+                    <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
+                      <p
+                        className={cn(
+                          "text-tweet rounded-lg p-2 font-medium",
+                          isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
+                        )}
+                      >
+                        {message.text}
+                      </p>
+                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
 
         {pushedMessages.map((message) => {
           const isNotMe = message.userId !== userId;
@@ -210,6 +217,33 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
     </>
   );
 }
+
+/*
+        {infiniteMessages?.pages.map(page=>page.messages)  ((message, i) => {
+            const isOldestMessage = i === 0;
+            const isNotMe = message.userId !== userId;
+            return (
+              <div
+                key={message.id}
+                ref={isOldestMessage ? oldestMessageRef : undefined}
+                className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}
+              >
+                {isNotMe && <LinkUserImageFromId userId={message.userId} />}
+                <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
+                  <p
+                    className={cn(
+                      "text-tweet rounded-lg p-2 font-medium",
+                      isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
+                    )}
+                  >
+                    {message.text}
+                  </p>
+                  <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                </div>
+              </div>
+            );
+          })}
+          */
 
 /*
 
