@@ -134,25 +134,28 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         {infiniteMessages?.pages.map((page) => {
           return (
             <div key={page.nextCursor}>
-              {page.messages.map((message) => {
-                const isNotMe = message.userId !== userId;
-                return (
-                  <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
-                    {isNotMe && <LinkUserImageFromId userId={message.userId} />}
-                    <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
-                      <p
-                        className={cn(
-                          "text-tweet rounded-lg p-2 font-medium",
-                          isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
-                        )}
-                      >
-                        {message.text}
-                      </p>
-                      <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+              {page.messages
+                .slice()
+                .reverse()
+                .map((message) => {
+                  const isNotMe = message.userId !== userId;
+                  return (
+                    <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+                      {isNotMe && <LinkUserImageFromId userId={message.userId} />}
+                      <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
+                        <p
+                          className={cn(
+                            "text-tweet rounded-lg p-2 font-medium",
+                            isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
+                          )}
+                        >
+                          {message.text}
+                        </p>
+                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           );
         })}
