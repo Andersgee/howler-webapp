@@ -64,7 +64,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
   const isFirstRender = useRef(true);
   const isAtEndOfChatRef = useRef(false);
 
-  const oldestMessageRef = useRef<HTMLDivElement>(null);
+  const secondPageRef = useRef<HTMLDivElement>(null);
 
   const eventchatSend = api.eventchat.send.useMutation({
     onSettled: () => {
@@ -83,12 +83,12 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         endOfChatRef.current.scrollIntoView({
           behavior: "instant",
         });
-      } else if (oldestMessageRef.current) {
+      } else if (secondPageRef.current) {
         //otherwise person scrolled up to fetch earlier messages..
         //keep _view_ at same place rather than keeeping _scroll_ at at same place (scroll is at top)
-        //oldestMessageRef.current.scrollIntoView({
-        //  behavior: "instant",
-        //});
+        secondPageRef.current.scrollIntoView({
+          behavior: "instant",
+        });
       }
     }
   }, [infiniteMessages]);
@@ -131,9 +131,10 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         <div className="text-paragraph text-center" ref={ref}>
           {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
         </div>
-        {infiniteMessages?.pages.map((page) => {
+        {infiniteMessages?.pages.map((page, i) => {
+          const isSecondPage = i === 1;
           return (
-            <div key={page.nextCursor}>
+            <div key={page.nextCursor} ref={isSecondPage ? secondPageRef : undefined}>
               {page.messages
                 .slice()
                 .reverse()
