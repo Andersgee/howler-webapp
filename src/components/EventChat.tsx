@@ -51,6 +51,11 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
   const pushedMessages = usePushedChatMessages(eventId);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const endOfChatRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+  const isAtEndOfChatRef = useRef(false);
+
+  const oldestMessageRef = useRef<HTMLDivElement>(null);
 
   const eventchatSend = api.eventchat.send.useMutation({
     onSettled: () => {
@@ -60,18 +65,24 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
     },
   });
 
-  const endOfChatRef = useRef<HTMLDivElement>(null);
-  const isFirstRender = useRef(true);
-
   useEffect(() => {
-    if (endOfChatRef.current && isFirstRender.current && messages.length > 0) {
-      isFirstRender.current = false;
-      endOfChatRef.current.scrollIntoView({
-        behavior: "instant",
-      });
+    //when messages change
+    if (endOfChatRef.current && messages.length > 0) {
+      if (isFirstRender.current) {
+        //fist time, scroll to bottom
+        isFirstRender.current = false;
+        endOfChatRef.current.scrollIntoView({
+          behavior: "instant",
+        });
+      } else if (oldestMessageRef.current) {
+        //otherwise person scrolled up to fetch earlier messages..
+        //keep _view_ at same place rather than keeeping _scroll_ at at same place (scroll is at top)
+        oldestMessageRef.current.scrollIntoView({
+          behavior: "instant",
+        });
+      }
     }
   }, [messages]);
-  const isAtEndOfChatRef = useRef(false);
 
   useEffect(() => {
     if (endOfChatRef.current && isAtEndOfChatRef.current) {
@@ -114,10 +125,15 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         {messages
           .slice()
           .reverse()
-          .map((message) => {
+          .map((message, i) => {
+            const isOldestMessage = i === 0;
             const isNotMe = message.userId !== userId;
             return (
-              <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+              <div
+                key={message.id}
+                ref={isOldestMessage ? oldestMessageRef : undefined}
+                className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}
+              >
                 {isNotMe && <LinkUserImageFromId userId={message.userId} />}
                 <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
                   <p
