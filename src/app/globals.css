@@ -123,7 +123,8 @@ put this on chat
 /* put this at bottom of chat*/
 .scroller-anchor {
   overflow-anchor: auto;
-  /*height: 1px;*/
+  height: 1px;
+  /*scroll-behavior: smooth;*/
 }
 
 .chatheight {

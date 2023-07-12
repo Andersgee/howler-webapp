@@ -1,6 +1,7 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { z } from "zod";
 import { db } from "#src/db";
+import { artificialDelay } from "#src/utils/debug";
 import { postChatMessage } from "#src/utils/notify";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -19,9 +20,9 @@ export const eventchatRouter = createTRPCRouter({
   infiniteMessages: protectedProcedure
     .input(z.object({ cursor: z.number().optional(), eventId: z.number() }))
     .query(async ({ input, ctx }) => {
-      //await artificialDelay()
+      await artificialDelay();
 
-      const LIMIT = 30;
+      const LIMIT = 10;
 
       let query = db
         .selectFrom("Eventchatmessage")

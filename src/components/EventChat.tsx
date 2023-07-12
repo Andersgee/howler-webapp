@@ -32,7 +32,7 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
   return { ref, messages, isFetchingNextPage, hasNextPage };
 }
 
-function useChatMessages(eventId: number) {
+function usePushedChatMessages(eventId: number) {
   const { chatMessages } = useFcmContext();
   const eventChatMessages = useMemo(() => chatMessages.filter((m) => m.eventId === eventId), [eventId, chatMessages]);
 
@@ -48,7 +48,7 @@ type Props = {
 export function EventChat({ eventId, userId, initialIsJoined }: Props) {
   const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
   const { messages, hasNextPage, isFetchingNextPage, ref } = useEventchatInfiniteMessages(eventId, isJoined);
-  const pushedMessages = useChatMessages(eventId);
+  const pushedMessages = usePushedChatMessages(eventId);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -64,6 +64,16 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
   const isFirstRender = useRef(true);
 
   useEffect(() => {
+    if (endOfChatRef.current && isFirstRender.current && messages.length > 0) {
+      isFirstRender.current = false;
+      endOfChatRef.current.scrollIntoView({
+        behavior: "instant",
+      });
+    }
+  }, [messages]);
+
+  /*
+  useEffect(() => {
     if (endOfChatRef.current) {
       if (pushedMessages.length > 0) {
         endOfChatRef.current.scrollIntoView({
@@ -72,15 +82,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
       }
     }
   }, [pushedMessages]);
-
-  useEffect(() => {
-    if (endOfChatRef.current && isFirstRender.current && messages.length > 0) {
-      isFirstRender.current = false;
-      endOfChatRef.current.scrollIntoView({
-        behavior: "instant",
-      });
-    }
-  }, [messages]);
+  */
 
   if (!isJoined) {
     return (
@@ -101,55 +103,56 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
           height: 100%;
         }
       `}</style>
-      <div className="chatheight container max-w-lg overflow-scroll shadow-sm">
-        <div className="flex h-full flex-col px-3">
-          <div className="text-paragraph text-center" ref={ref}>
-            {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
-          </div>
-          <div className="flex flex-col-reverse">
-            {pushedMessages.map((message) => {
-              const isNotMe = message.userId !== userId;
-              return (
-                <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
-                  {isNotMe && <LinkUserImageFromId userId={message.userId} />}
-                  <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
-                    <p
-                      className={cn(
-                        "text-tweet rounded-lg p-2 font-medium",
-                        isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
-                      )}
-                    >
-                      {message.text}
-                    </p>
-                    <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                  </div>
-                </div>
-              );
-            })}
-
-            {messages.map((message) => {
-              const isNotMe = message.userId !== userId;
-              return (
-                <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
-                  {isNotMe && <LinkUserImageFromId userId={message.userId} />}
-                  <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
-                    <p
-                      className={cn(
-                        "text-tweet rounded-lg p-2 font-medium",
-                        isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
-                      )}
-                    >
-                      {message.text}
-                    </p>
-                    <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div ref={endOfChatRef} className="h-[1px]"></div>
+      <div className="chatheight scroller container max-w-lg overflow-scroll shadow-sm">
+        <div className="text-paragraph text-center" ref={ref}>
+          {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
         </div>
+        {messages
+          .slice()
+          .reverse()
+          .map((message) => {
+            const isNotMe = message.userId !== userId;
+            return (
+              <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+                {isNotMe && <LinkUserImageFromId userId={message.userId} />}
+                <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
+                  <p
+                    className={cn(
+                      "text-tweet rounded-lg p-2 font-medium",
+                      isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
+                    )}
+                  >
+                    {message.text}
+                  </p>
+                  <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                </div>
+              </div>
+            );
+          })}
+
+        {pushedMessages.map((message) => {
+          const isNotMe = message.userId !== userId;
+          return (
+            <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+              {isNotMe && <LinkUserImageFromId userId={message.userId} />}
+              <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
+                <p
+                  className={cn(
+                    "text-tweet rounded-lg p-2 font-medium",
+                    isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
+                  )}
+                >
+                  {message.text}
+                </p>
+                <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+              </div>
+            </div>
+          );
+        })}
+        {/*<div  className="h-[1px]"></div>*/}
+        <div ref={endOfChatRef} className="scroller-anchor" />
       </div>
+
       <div className="absolute inset-x-0 bottom-3">
         <div className="container max-w-lg">
           <div className="flex items-center">
