@@ -18,7 +18,7 @@ import { useCallback, useRef } from "react";
  */
 export function useIntersectionObserverCallback<T extends Element>(
   callback: IntersectionObserverCallback,
-  deps: Array<string | number | boolean | undefined | null>,
+  deps: Array<string | number | boolean | undefined | null | Array<any>>,
   options?: IntersectionObserverInit
 ) {
   const observer = useRef<IntersectionObserver | null>(null);

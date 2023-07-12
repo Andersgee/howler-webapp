@@ -71,10 +71,10 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
       });
     }
   }, [messages]);
+  const isAtEndOfChatRef = useRef(false);
 
-  /*
   useEffect(() => {
-    if (endOfChatRef.current) {
+    if (endOfChatRef.current && isAtEndOfChatRef.current) {
       if (pushedMessages.length > 0) {
         endOfChatRef.current.scrollIntoView({
           behavior: "smooth",
@@ -82,7 +82,11 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
       }
     }
   }, [pushedMessages]);
-  */
+
+  const endOfChatRef2 = useIntersectionObserverCallback<HTMLDivElement>(([entry]) => {
+    const isIntersecting = !!entry?.isIntersecting;
+    isAtEndOfChatRef.current = isIntersecting;
+  }, []);
 
   if (!isJoined) {
     return (
@@ -103,7 +107,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
           height: 100%;
         }
       `}</style>
-      <div className="chatheight scroller container max-w-lg overflow-y-scroll shadow-sm">
+      <div className="chatheight container max-w-lg overflow-y-scroll shadow-sm">
         <div className="text-paragraph text-center" ref={ref}>
           {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
         </div>
@@ -149,8 +153,8 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
             </div>
           );
         })}
-        {/*<div  className="h-[1px]"></div>*/}
-        <div ref={endOfChatRef} className="scroller-anchor" />
+        <div ref={endOfChatRef2} className="h-[1px]" />
+        <div ref={endOfChatRef} className="h-[1px]" />
       </div>
 
       <div className="absolute inset-x-0 bottom-3">

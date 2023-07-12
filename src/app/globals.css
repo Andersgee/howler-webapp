@@ -112,24 +112,6 @@
   }
 }
 
-/*
-pin scroll to bottom: https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
-put this on chat
-*/
-.scroller {
-  scroll-behavior: smooth;
-}
-.scroller * {
-  overflow-anchor: none;
-}
-
-/* put this at bottom of chat*/
-.scroller-anchor {
-  overflow-anchor: auto;
-  scroll-behavior: smooth;
-  height: 1px;
-}
-
 .chatheight {
   height: calc(100% - 100px);
 }
