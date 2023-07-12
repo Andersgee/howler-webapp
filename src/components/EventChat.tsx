@@ -103,7 +103,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
           height: 100%;
         }
       `}</style>
-      <div className="chatheight scroller container max-w-lg overflow-scroll shadow-sm">
+      <div className="chatheight scroller container max-w-lg overflow-y-scroll shadow-sm">
         <div className="text-paragraph text-center" ref={ref}>
           {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
         </div>
