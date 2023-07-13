@@ -97,7 +97,6 @@ export function seo({
     applicationName: "Howler",
     referrer: "origin-when-cross-origin",
     viewport: "width=device-width, initial-scale=1",
-    themeColor: "#fafafa",
     manifest: absUrl("/manifest.webmanifest"),
     icons: [
       { rel: "icon", type: "image/svg+xml", url: absUrl("/icons/favicon.svg") },

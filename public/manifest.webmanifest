@@ -2,8 +2,6 @@
   "name": "Howler",
   "short_name": "Howler",
   "description": "Find something to do or make something happen.",
-  "theme_color": "#fafafa",
-  "background_color": "#fafafa",
   "display": "standalone",
   "orientation": "any",
   "scope": "/",
@@ -21,9 +19,5 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ],
-  "splash_pages": null,
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  }
+  ]
 }
