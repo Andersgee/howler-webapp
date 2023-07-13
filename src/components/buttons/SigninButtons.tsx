@@ -2,10 +2,37 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { IconDiscord, IconGithub, IconGoogle } from "../Icons";
 
 export function SigninButtons() {
   const pathname = usePathname();
+
+  const [browserInfo, setBrowserInfo] = useState({ userAgent: "unkown", isConsideredSafeForOauth: true });
+
+  useEffect(() => {
+    if ("userAgent" in navigator) {
+      const ua = navigator.userAgent;
+      //setBrowserInfo({ userAgent: ua, isConsideredSafeForOauth: false });
+
+      if (ua.match(/FBAN|FBAV/i)) {
+        // Facebook in-app browser detected
+        setBrowserInfo({ userAgent: ua, isConsideredSafeForOauth: false });
+      } /*else {
+        // Not using the Facebook in-app browser
+        setBrowserInfo({ userAgent: ua, isConsideredSafeForOauth: true });
+      }*/
+    }
+  }, []);
+
+  if (!browserInfo.isConsideredSafeForOauth) {
+    return (
+      <div>
+        <p className="mb-2 text-sm font-semibold">Cant sign in with Facebook in-app browser</p>
+        <p className="text-sm">Please use a normal browser like Chrome, Safari, Firefox etc.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white">
