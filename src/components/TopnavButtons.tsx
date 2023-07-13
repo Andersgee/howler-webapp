@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
 import { useFcmContext } from "#src/context/Fcm";
@@ -41,15 +41,37 @@ export function ProfileButton({ user }: { user: TokenUser }) {
 export function SigninButton() {
   const dialog = useDialogContext();
   const dialogDispatch = useDialogDispatch();
+  const [browserInfo, setBrowserInfo] = useState({ userAgent: "unkown", isConsideredSafeForOauth: true });
 
-  //controlled popover, to trigger this from other places
+  useEffect(() => {
+    if ("userAgent" in navigator) {
+      const ua = navigator.userAgent;
+      //setBrowserInfo({ userAgent: ua, isConsideredSafeForOauth: false });
+
+      if (ua.match(/FBAN|FBAV/i)) {
+        // Facebook in-app browser detected
+        setBrowserInfo({ userAgent: ua, isConsideredSafeForOauth: false });
+      } /*else {
+        // Not using the Facebook in-app browser
+        setBrowserInfo({ userAgent: ua, isConsideredSafeForOauth: true });
+      }*/
+    }
+  }, []);
+
   return (
     <Popover open={dialog === "signin"} onOpenChange={() => dialogDispatch({ type: "toggle", name: "signin" })}>
       <PopoverTrigger asChild>
         <Button className="my-1">sign in</Button>
       </PopoverTrigger>
       <PopoverContent className="bg-white">
-        <SigninButtons />
+        {browserInfo.isConsideredSafeForOauth ? (
+          <SigninButtons />
+        ) : (
+          <div>
+            <p className="mb-2 text-sm font-semibold">Cant sign in with Facebook in-app browser</p>
+            <p className="text-sm">Please use a normal browser like Chrome, Safari, Firefox etc.</p>
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );
