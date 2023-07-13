@@ -142,7 +142,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
                 .map((message) => {
                   const isNotMe = message.userId !== userId;
                   return (
-                    <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+                    <div key={message.id} className={cn("flex p-2", isNotMe ? " w-4/5" : "justify-end gap-2")}>
                       {isNotMe && <LinkUserImageFromId userId={message.userId} />}
                       <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
                         <p
@@ -165,7 +165,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         {pushedMessages.map((message) => {
           const isNotMe = message.userId !== userId;
           return (
-            <div key={message.id} className={cn("my-2 flex", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+            <div key={message.id} className={cn("flex p-2", isNotMe ? " w-4/5" : "justify-end gap-2")}>
               {isNotMe && <LinkUserImageFromId userId={message.userId} />}
               <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
                 <p

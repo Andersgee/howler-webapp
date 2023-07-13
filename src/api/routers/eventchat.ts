@@ -20,7 +20,7 @@ export const eventchatRouter = createTRPCRouter({
   infiniteMessages: protectedProcedure
     .input(z.object({ cursor: z.number().optional(), eventId: z.number() }))
     .query(async ({ input, ctx }) => {
-      await artificialDelay();
+      //await artificialDelay();
 
       const LIMIT = 10;
 
