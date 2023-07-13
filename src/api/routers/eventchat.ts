@@ -22,7 +22,7 @@ export const eventchatRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       //await artificialDelay();
 
-      const LIMIT = 10;
+      const LIMIT = 30;
 
       let query = db
         .selectFrom("Eventchatmessage")
