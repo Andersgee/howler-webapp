@@ -1,15 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
 import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
 import { useFcmContext } from "#src/context/Fcm";
+import { type ChatMessageData } from "#src/context/Fcm/message-schema";
 import { api } from "#src/hooks/api";
+import { hashidFromId } from "#src/utils/hashid";
 import type { TokenUser } from "#src/utils/token/schema";
 import { SigninButtons } from "./buttons/SigninButtons";
 import { SignoutButton } from "./buttons/SignoutButton";
-import { IconArrowLink, IconBellWithNumber, IconSettings } from "./Icons";
+import { EventWhatFromId } from "./EventWhatQuery";
+import { IconArrowLink, IconBellWithNumber, IconChatWithNumber, IconSettings } from "./Icons";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
 import { UserImageClickable } from "./UserImage";
@@ -79,7 +82,7 @@ export function NotificationsButton({ user }: { user: TokenUser }) {
         <Separator />
         <ul>
           {notificationMessages.map((message) => (
-            <li key={message.title}>
+            <li key={message.id}>
               <a className="hover:bg-secondary block border-b py-4 transition-colors" href={message.linkUrl}>
                 <div className="flex items-center justify-between px-4">
                   <div>
@@ -114,6 +117,75 @@ export function NotificationsButton({ user }: { user: TokenUser }) {
                 </Link>
               </li>
             ))}
+        </ul>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+/** returns a list of [eventId,messages] */
+function groupChatMessagesByEventId(messages: ChatMessageData[]) {
+  const groupedMessages: Map<number, ChatMessageData[]> = new Map();
+  for (const message of messages) {
+    //const a = groupedMessages[message.eventId]
+    const eventMessages = groupedMessages.get(message.eventId);
+    if (eventMessages) {
+      eventMessages.push(message);
+    } else {
+      groupedMessages.set(message.eventId, [message]);
+    }
+  }
+
+  return Array.from(groupedMessages);
+}
+
+export function ChatNotificationsButton({ user }: { user: TokenUser }) {
+  const { fcmToken, getFcmToken, chatMessages } = useFcmContext();
+  //const [unseenNumber, setUnseenNumber] = useState(0);
+
+  const groupedChatMessages = useMemo(() => groupChatMessagesByEventId(chatMessages), [chatMessages]);
+
+  const [open, setOpen] = useState(false);
+  return (
+    <Popover open={open} onOpenChange={(x) => setOpen(x)}>
+      <PopoverTrigger
+        onClick={async () => {
+          //setUnseenNumber(0);
+          if (!fcmToken) {
+            getFcmToken();
+          }
+        }}
+      >
+        <IconChatWithNumber number={groupedChatMessages.length} />
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="flex items-center justify-between">
+          <h2>Messages</h2>
+          <Link href="/account/notifications" onClick={() => setOpen(false)}>
+            <IconSettings clickable />
+          </Link>
+        </div>
+        <Separator />
+        <ul>
+          {groupedChatMessages.map(([eventId, messages]) => (
+            <li key={eventId}>
+              <Link
+                className="hover:bg-secondary block border-b py-4 transition-colors"
+                href={`/event/${hashidFromId(eventId)}/chat`}
+              >
+                <div className="flex items-center justify-between px-4">
+                  <div>
+                    <h3 className="capitalize-first shrink truncate text-base font-normal">
+                      <EventWhatFromId eventId={eventId} />
+                    </h3>
+                    <p>{messages[0].text}</p>
+                    {messages.length > 1 && <p>{`...and ${messages.length - 1} more`}</p>}
+                  </div>
+                  <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
+                </div>
+              </Link>
+            </li>
+          ))}
         </ul>
       </PopoverContent>
     </Popover>

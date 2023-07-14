@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { IconHowler } from "#src/components/Icons";
-import { NotificationsButton, ProfileButton, SigninButton } from "#src/components/TopnavButtons";
+import {
+  ChatNotificationsButton,
+  NotificationsButton,
+  ProfileButton,
+  SigninButton,
+} from "#src/components/TopnavButtons";
 import { getUserFromCookie } from "#src/utils/token";
 
 export async function Topnav() {
@@ -13,6 +18,7 @@ export async function Topnav() {
         </Link>
         {user ? (
           <div className="flex">
+            <ChatNotificationsButton user={user} />
             <NotificationsButton user={user} />
             <ProfileButton user={user} />
           </div>

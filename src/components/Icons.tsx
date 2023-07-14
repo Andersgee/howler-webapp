@@ -423,6 +423,36 @@ export function IconChat({ className, clickable, ...props }: IconClickableProps)
   );
 }
 
+export function IconChatWithNumber({ number, className, ...props }: { number: number } & IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn("hover:bg-secondary h-12 w-12 text-xs font-thin hover:rounded-full", className)}
+      {...props}
+    >
+      <g transform="translate(12,12)">
+        <path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z" />
+        <path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1" />
+      </g>
+
+      {number > 0 && (
+        <g transform="translate(34,15)">
+          <circle cx="0" cy="0" r="10" stroke="none" fill="#ef4444" />
+          <text x="0" y="0" textAnchor="middle" dominantBaseline="central" stroke="#d4d4d4" fill="none">
+            {number > 9 ? 9 : number}
+          </text>
+        </g>
+      )}
+    </svg>
+  );
+}
+
 export function IconLocate({ className, clickable, ...props }: IconClickableProps) {
   return (
     <svg
