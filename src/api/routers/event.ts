@@ -14,7 +14,7 @@ export const eventRouter = createTRPCRouter({
     return getEventInfo({ eventId: input.eventId });
   }),
   join: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
-    const _insertResult = await ctx.db
+    const _insertResult = await db
       .insertInto("UserEventPivot")
       .values({
         eventId: input.eventId,
@@ -27,7 +27,7 @@ export const eventRouter = createTRPCRouter({
     return { eventId: input.eventId, userId: ctx.user.id };
   }),
   leave: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
-    const _deleteResult = await ctx.db
+    const _deleteResult = await db
       .deleteFrom("UserEventPivot")
       .where("userId", "=", ctx.user.id)
       .where("eventId", "=", input.eventId)
@@ -35,6 +35,20 @@ export const eventRouter = createTRPCRouter({
 
     revalidateTag(tagHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id }));
     return { eventId: input.eventId, userId: ctx.user.id };
+  }),
+  delete: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
+    const deleteResult = await db
+      .deleteFrom("Event")
+      .where("id", "=", input.eventId)
+      .where("creatorId", "=", ctx.user.id)
+      .executeTakeFirstOrThrow();
+
+    const numDeletedRows = Number(deleteResult.numDeletedRows);
+    if (!numDeletedRows) return false;
+
+    revalidateTag(tagEventInfo({ eventId: input.eventId }));
+
+    return true;
   }),
   create: protectedProcedure
     .input(

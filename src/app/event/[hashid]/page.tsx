@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DeleteEventButton } from "#src/components/buttons/DeleteEventButton";
 import { EditEventButton } from "#src/components/buttons/EditEventButton";
 import { JoinEventButton } from "#src/components/buttons/JoinEventButton";
 import { ShareButton } from "#src/components/buttons/ShareButton";
-import { EventChat } from "#src/components/EventChat";
 import { EventInfo } from "#src/components/EventInfo";
 import { IconChat } from "#src/components/Icons";
 import { Button } from "#src/components/ui/Button";
@@ -42,7 +42,7 @@ export default async function Page({ params }: PageProps) {
       <div className="container flex justify-center">
         <div className="">
           <EventInfo eventId={eventId} initialEventInfo={event} />
-          <div className="my-2 flex justify-center">
+          <div className="my-4 flex justify-center">
             <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
           </div>
           <div className="flex gap-2">
@@ -56,6 +56,11 @@ export default async function Page({ params }: PageProps) {
               </Button>
             )}
           </div>
+          {user?.id === event.creatorId && (
+            <div className="my-8">
+              <DeleteEventButton eventId={event.id} />
+            </div>
+          )}
         </div>
       </div>
     </>
