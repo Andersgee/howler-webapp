@@ -135,7 +135,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         {infiniteMessages?.pages.map((page, i) => {
           const isSecondPage = i === 1;
           return (
-            <div key={page.nextCursor} ref={isSecondPage ? secondPageRef : undefined}>
+            <div key={page.nextCursor || 0} ref={isSecondPage ? secondPageRef : undefined}>
               {page.messages
                 .slice()
                 .reverse()

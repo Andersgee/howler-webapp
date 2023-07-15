@@ -4,6 +4,8 @@ import { parse } from "devalue";
 //import type { MessagePayload } from "firebase/messaging";
 //import Link from "next/link";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { api } from "#src/hooks/api";
+import type { Optional } from "#src/utils/typescript";
 //import { buttonVariants } from "#src/components/ui/Button";
 //import { toast } from "#src/hooks/use-toast";
 //import { cn } from "#src/utils/cn";
@@ -52,6 +54,7 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
   const [fcmToken, setFcmToken] = useState<string | null>(null);
   const [notificationMessages, setNotificationMessages] = useState<NotificationMessageData[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageData[]>([]);
+  const apiContext = api.useContext();
 
   useEffect(() => {
     setupMessaging()
@@ -71,7 +74,19 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
           } else if (messageData.type === "chat") {
             const parsed = chatDataSchema.safeParse(messageData);
             if (parsed.success) {
-              setChatMessages((v) => [...v, parsed.data]);
+              const newChatMessage = parsed.data as Optional<ChatMessageData, "type">;
+              delete newChatMessage.type;
+
+              //const prevData = apiContext.eventchat.infiniteMessages.getInfiniteData();
+
+              apiContext.eventchat.infiniteMessages.setInfiniteData({ eventId: newChatMessage.eventId }, (oldData) => {
+                oldData?.pages.at(-1)?.messages.unshift(newChatMessage);
+                console.log("oldData after update:", oldData);
+                const newData = Object.assign({}, oldData); //new reference for state
+                return newData;
+              });
+
+              //setChatMessages((v) => [...v, parsed.data]);
             }
           } else {
             console.log("ignoring payload.data: ", payload.data);
