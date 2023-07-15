@@ -12,16 +12,16 @@ type Props = {
 
 export function JoinEventButton({ initialIsJoined, eventId }: Props) {
   const user = useUserContext();
-  const utils = api.useContext();
+  const apiContext = api.useContext();
   const dialogDispatch = useDialogDispatch();
 
   const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
 
   const eventJoin = api.event.join.useMutation({
-    onMutate: () => utils.event.isJoined.setData({ eventId }, () => true),
+    onMutate: () => apiContext.event.isJoined.setData({ eventId }, () => true),
   });
   const eventLeave = api.event.leave.useMutation({
-    onMutate: () => utils.event.isJoined.setData({ eventId }, () => false),
+    onMutate: () => apiContext.event.isJoined.setData({ eventId }, () => false),
   });
 
   return (

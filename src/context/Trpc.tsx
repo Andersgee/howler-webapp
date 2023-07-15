@@ -7,6 +7,8 @@ import { transformer } from "#src/api/transformer";
 import { api } from "#src/hooks/api";
 import { baseUrl } from "#src/utils/url";
 
+//https://tanstack.com/query/v4/docs/react/guides/important-defaults
+
 export function TrpcProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
@@ -21,7 +23,8 @@ export function TrpcProvider({ children }: { children: React.ReactNode }) {
             refetchIntervalInBackground: false,
             retry: false,
             //(default cacheTime is 5 min, meaning would refetch any "not on screen" (aka inactive) queries if looking at some other page for 5 min
-            cacheTime: 1000 * 60 * 60,
+            //cacheTime: 1000 * 60 * 60,
+            cacheTime: Infinity,
           },
         },
       })

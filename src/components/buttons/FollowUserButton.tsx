@@ -12,16 +12,16 @@ type Props = {
 
 export function FollowUserButton({ initialIsFollowing, userId }: Props) {
   const user = useUserContext();
-  const utils = api.useContext();
+  const apiContext = api.useContext();
   const dialogDispatch = useDialogDispatch();
 
   const { data: isFollowing } = api.user.isFollowing.useQuery({ userId }, { initialData: initialIsFollowing });
 
   const userFollow = api.user.follow.useMutation({
-    onMutate: () => utils.user.isFollowing.setData({ userId }, () => true),
+    onMutate: () => apiContext.user.isFollowing.setData({ userId }, () => true),
   });
   const userUnFollow = api.user.unFollow.useMutation({
-    onMutate: () => utils.user.isFollowing.setData({ userId }, () => false),
+    onMutate: () => apiContext.user.isFollowing.setData({ userId }, () => false),
   });
 
   return (

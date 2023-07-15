@@ -29,11 +29,11 @@ export function EditEventButton({ eventId, initialEventInfo }: Props) {
   const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
   //const { data: event } = api.event.info.useQuery({ eventId });
 
-  const utils = api.useContext();
+  const apiContext = api.useContext();
   const eventUpdate = api.event.update.useMutation({
     onSuccess: (updatedEvent) => {
       if (updatedEvent) {
-        utils.event.info.setData({ eventId }, () => updatedEvent);
+        apiContext.event.info.setData({ eventId }, () => updatedEvent);
       }
     },
     onSettled: () => setOpen(false),
