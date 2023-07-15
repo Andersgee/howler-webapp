@@ -9,13 +9,13 @@ import { UserProvider } from "./UserContext";
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <UserProvider>
-      <FcmProvider>
-        <DialogProvider>
-          <TrpcProvider>
+      <TrpcProvider>
+        <FcmProvider>
+          <DialogProvider>
             <MapProvider>{children}</MapProvider>
-          </TrpcProvider>
-        </DialogProvider>
-      </FcmProvider>
+          </DialogProvider>
+        </FcmProvider>
+      </TrpcProvider>
     </UserProvider>
   );
 }
