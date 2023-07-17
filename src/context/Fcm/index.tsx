@@ -74,8 +74,9 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
           } else if (messageData.type === "chat") {
             const parsed = chatDataSchema.safeParse(messageData);
             if (parsed.success) {
-              const newChatMessage = parsed.data as Optional<ChatMessageData, "type">;
+              const newChatMessage = parsed.data as Optional<ChatMessageData, "type" | "title">;
               delete newChatMessage.type;
+              delete newChatMessage.title;
 
               //const prevData = apiContext.eventchat.infiniteMessages.getInfiniteData();
 

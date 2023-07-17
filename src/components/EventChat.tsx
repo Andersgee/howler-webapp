@@ -36,13 +36,6 @@ function useEventchatInfiniteMessages<T extends HTMLElement = HTMLDivElement>(ev
   return { ref, data, isFetchingNextPage, hasNextPage };
 }
 
-function usePushedChatMessages(eventId: number) {
-  const { chatMessages } = useFcmContext();
-  const eventChatMessages = useMemo(() => chatMessages.filter((m) => m.eventId === eventId), [eventId, chatMessages]);
-
-  return eventChatMessages;
-}
-
 type Props = {
   eventId: number;
   userId: number;
@@ -57,7 +50,6 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
     isFetchingNextPage,
     ref,
   } = useEventchatInfiniteMessages(eventId, isJoined);
-  const pushedMessages = usePushedChatMessages(eventId);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const endOfChatRef = useRef<HTMLDivElement>(null);
@@ -83,9 +75,13 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         endOfChatRef.current.scrollIntoView({
           behavior: "instant",
         });
+      } else if (endOfChatRef.current && isAtEndOfChatRef.current) {
+        //scroll down to see latest message
+        endOfChatRef.current.scrollIntoView({
+          behavior: "smooth",
+        });
       } else if (secondPageRef.current) {
-        //otherwise person scrolled up to fetch earlier messages..
-        //keep _view_ at same place rather than keeeping _scroll_ at at same place (scroll is at top)
+        //otherwise person scrolled up... keep view at same place after earlier messages have loaded
         secondPageRef.current.scrollIntoView({
           behavior: "instant",
           block: "start",
@@ -93,16 +89,6 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
       }
     }
   }, [infiniteMessages]);
-
-  useEffect(() => {
-    if (endOfChatRef.current && isAtEndOfChatRef.current) {
-      if (pushedMessages.length > 0) {
-        endOfChatRef.current.scrollIntoView({
-          behavior: "smooth",
-        });
-      }
-    }
-  }, [pushedMessages]);
 
   const endOfChatRef2 = useIntersectionObserverCallback<HTMLDivElement>(([entry]) => {
     const isIntersecting = !!entry?.isIntersecting;
@@ -158,26 +144,6 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
                     </div>
                   );
                 })}
-            </div>
-          );
-        })}
-
-        {pushedMessages.map((message) => {
-          const isNotMe = message.userId !== userId;
-          return (
-            <div key={message.id} className={cn("flex p-2", isNotMe ? " w-4/5" : "justify-end gap-2")}>
-              {isNotMe && <LinkUserImageFromId userId={message.userId} />}
-              <div className={cn("flex flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
-                <p
-                  className={cn(
-                    "text-tweet rounded-lg p-2 font-medium",
-                    isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
-                  )}
-                >
-                  {message.text}
-                </p>
-                <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
-              </div>
             </div>
           );
         })}
