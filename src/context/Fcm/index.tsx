@@ -74,19 +74,18 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
           } else if (messageData.type === "chat") {
             const parsed = chatDataSchema.safeParse(messageData);
             if (parsed.success) {
+              setChatMessages((prev) => [...prev, parsed.data]);
+
+              //might aswell set data on messages rather than rendering a separate identically styled list of "fcmChatMessages"
               const newChatMessage = parsed.data as Optional<ChatMessageData, "type" | "title">;
               delete newChatMessage.type;
               delete newChatMessage.title;
 
-              //const prevData = apiContext.eventchat.infiniteMessages.getInfiniteData();
-
-              //might aswell set data on messages rather than rendering a separate identically styled list of "fcmChatMessages"
-              apiContext.eventchat.infiniteMessages.setInfiniteData({ eventId: newChatMessage.eventId }, (oldData) => {
-                const newData = structuredClone(oldData);
-                newData?.pages.at(-1)?.messages.unshift(newChatMessage);
-                return newData;
+              apiContext.eventchat.infiniteMessages.setInfiniteData({ eventId: newChatMessage.eventId }, (prev) => {
+                const data = structuredClone(prev);
+                data?.pages.at(-1)?.messages.unshift(newChatMessage);
+                return data;
               });
-              //setChatMessages((v) => [...v, parsed.data]);
             }
           } else {
             console.log("ignoring payload.data: ", payload.data);
