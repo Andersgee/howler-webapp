@@ -79,13 +79,12 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
 
               //const prevData = apiContext.eventchat.infiniteMessages.getInfiniteData();
 
+              //might aswell set data on messages rather than rendering a separate identically styled list of "fcmChatMessages"
               apiContext.eventchat.infiniteMessages.setInfiniteData({ eventId: newChatMessage.eventId }, (oldData) => {
-                oldData?.pages.at(-1)?.messages.unshift(newChatMessage);
-                console.log("oldData after update:", oldData);
-                const newData = Object.assign({}, oldData); //new reference for state
+                const newData = structuredClone(oldData);
+                newData?.pages.at(-1)?.messages.unshift(newChatMessage);
                 return newData;
               });
-
               //setChatMessages((v) => [...v, parsed.data]);
             }
           } else {
