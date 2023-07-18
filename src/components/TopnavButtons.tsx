@@ -140,7 +140,7 @@ function groupChatMessagesByEventId(messages: ChatMessageData[]) {
 }
 
 /** returns a list of [eventId,messages] (ignores my own messages) */
-function groupOtherChatMessagesByEventId(messages: ChatMessageData[], userId: number) {
+function groupChatMessagesFromOthersByEventId(messages: ChatMessageData[], userId: number) {
   const groupedMessages: Map<number, ChatMessageData[]> = new Map();
   for (const message of messages) {
     if (message.userId === userId) continue;
@@ -161,7 +161,7 @@ export function ChatNotificationsButton({ user }: { user: TokenUser }) {
   //const [unseenNumber, setUnseenNumber] = useState(0);
 
   const groupedChatMessages = useMemo(
-    () => groupOtherChatMessagesByEventId(chatMessages, user.id),
+    () => groupChatMessagesFromOthersByEventId(chatMessages, user.id),
     [chatMessages, user]
   );
 

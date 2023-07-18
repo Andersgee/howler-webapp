@@ -82,13 +82,13 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
               delete newChatMessage.title;
 
               apiContext.eventchat.infiniteMessages.setInfiniteData({ eventId: newChatMessage.eventId }, (prev) => {
-                const data = structuredClone(prev);
+                const data = structuredClone(prev); //dont mutate prev
                 data?.pages.at(-1)?.messages.unshift(newChatMessage);
                 return data;
               });
             }
           } else {
-            console.log("ignoring payload.data: ", payload.data);
+            console.log("ignoring pushmessage, payload.data: ", payload.data);
           }
         });
         if (fcmRef.current.fcmToken) {
