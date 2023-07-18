@@ -156,6 +156,7 @@ function groupChatMessagesFromOthersByEventId(messages: ChatMessageData[], userI
   return Array.from(groupedMessages);
 }
 
+/*
 function useGroupedLatest10Chat(userId: number) {
   const { data } = api.notification.latest10chat.useQuery();
   const groupedMessagesList = useMemo(() => {
@@ -177,12 +178,13 @@ function useGroupedLatest10Chat(userId: number) {
 
   return groupedMessagesList;
 }
-
+*/
 export function ChatNotificationsButton({ user }: { user: TokenUser }) {
   const { fcmToken, getFcmToken, chatMessages } = useFcmContext();
 
   //const [unseenNumber, setUnseenNumber] = useState(0);
-  const groupeLatest10Chat = useGroupedLatest10Chat(user.id);
+  //const groupeLatest10Chat = useGroupedLatest10Chat(user.id);
+  const { data: groupedLatest10Chat } = api.notification.latest10chat.useQuery();
 
   const groupedChatMessages = useMemo(
     () => groupChatMessagesFromOthersByEventId(chatMessages, user.id),
@@ -211,7 +213,7 @@ export function ChatNotificationsButton({ user }: { user: TokenUser }) {
         </div>
         <Separator />
         <ul>
-          {groupeLatest10Chat.map(([eventId, messages]) => (
+          {groupedLatest10Chat?.map(({ eventId, messages }) => (
             <li key={eventId}>
               <Link
                 className="hover:bg-secondary block border-b py-4 transition-colors"
@@ -223,7 +225,7 @@ export function ChatNotificationsButton({ user }: { user: TokenUser }) {
                       <EventWhatFromId eventId={eventId} />
                     </h3>
                     <p>{messages[0].text}</p>
-                    {messages.length > 1 && <p>{`...and ${messages.length - 1} more`}</p>}
+                    {messages.length > 1 && <p>{`...and ${messages.length > 9 ? "9+" : messages.length - 1} more`}</p>}
                   </div>
                   <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                 </div>

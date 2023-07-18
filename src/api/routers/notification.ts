@@ -1,3 +1,4 @@
+import { jsonArrayFrom } from "kysely/helpers/mysql";
 import { z } from "zod";
 import { db } from "#src/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -14,7 +15,7 @@ export const notificationRouter = createTRPCRouter({
 
     return notifications;
   }),
-  latest10chat: protectedProcedure.query(async ({ ctx }) => {
+  oldlatest10chat: protectedProcedure.query(async ({ ctx }) => {
     const chatMessages = await db
       .selectFrom("UserEventPivot as p")
       .where("p.userId", "=", ctx.user.id)
@@ -27,5 +28,26 @@ export const notificationRouter = createTRPCRouter({
       .execute();
 
     return chatMessages;
+  }),
+  latest10chat: protectedProcedure.query(async ({ ctx }) => {
+    const userEventPivots = await db
+      .selectFrom("UserEventPivot as p")
+      .where("p.userId", "=", ctx.user.id)
+      .select((eb) => [
+        "p.eventId",
+        jsonArrayFrom(
+          eb
+            .selectFrom("Eventchatmessage as m")
+            .select(["m.id", "m.createdAt", "m.text", "m.eventId", "m.userId"]) //(can not use selectAll in subquery)
+            .whereRef("m.eventId", "=", "p.eventId")
+            //.where("Eventchatmessage.userId","!=",ctx.user.id)
+            .orderBy("m.id", "desc")
+            .limit(10)
+        ).as("messages"),
+      ])
+      .limit(10)
+      .execute();
+
+    return userEventPivots;
   }),
 });
