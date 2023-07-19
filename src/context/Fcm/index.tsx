@@ -32,6 +32,7 @@ type Value = {
   getFcmToken: () => Promise<string | null>;
   notificationMessages: NotificationMessageData[];
   chatMessages: ChatMessageData[];
+  clearChatMessages: () => void;
 };
 
 const Context = createContext<undefined | Value>(undefined);
@@ -48,6 +49,29 @@ async function postFcmToken(fcmToken: string) {
   return false;
 }
 
+/** returns a list of [eventId,messages] */
+function groupChatMessagesByEventId(messages: ChatMessageData[]) {
+  //const groupedMessages:{eventId:number,messages:ChatMessageData[]}[] = []
+
+  const groupedMessages: Map<number, Omit<ChatMessageData, "type" | "title">[]> = new Map();
+  for (const message of messages) {
+    const newMessage = message as Optional<ChatMessageData, "type" | "title">;
+    delete newMessage.type;
+    delete newMessage.title;
+
+    //const a = groupedMessages[message.eventId]
+    const eventMessages = groupedMessages.get(newMessage.eventId);
+    if (eventMessages) {
+      eventMessages.push(newMessage);
+    } else {
+      groupedMessages.set(message.eventId, [newMessage]);
+    }
+  }
+
+  //return Array.from(groupedMessages);
+  return Array.from(groupedMessages).map((x) => ({ eventId: x[0], messages: x[1] }));
+}
+
 /** setup service worker and firebase cloud messaging */
 export function FcmProvider({ children }: { children: React.ReactNode }) {
   const fcmRef = useRef<FirebaseCloudMessaging | null>(null);
@@ -55,6 +79,27 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
   const [notificationMessages, setNotificationMessages] = useState<NotificationMessageData[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageData[]>([]);
   const apiContext = api.useContext();
+
+  const clearChatMessages = useCallback(() => {
+    const groupedChatMessages = groupChatMessagesByEventId(chatMessages);
+    apiContext.notification.latest10chat.setData(undefined, (prev) => {
+      if (!prev) return prev;
+
+      const data = structuredClone(prev);
+      for (const m of groupedChatMessages) {
+        const i = data.findIndex((d) => d.eventId === m.eventId);
+        if (i !== -1) {
+          data[i].messages = [...m.messages, ...data[i].messages];
+        } else {
+          data.push(m);
+        }
+      }
+
+      return prev;
+    });
+
+    setChatMessages([]);
+  }, [chatMessages]);
 
   useEffect(() => {
     setupMessaging()
@@ -74,14 +119,32 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
           } else if (messageData.type === "chat") {
             const parsed = chatDataSchema.safeParse(messageData);
             if (parsed.success) {
-              setChatMessages((prev) => [...prev, parsed.data]);
+              //setChatMessages((prev) => [...prev, parsed.data]);
 
-              //might aswell set data on messages rather than rendering a separate identically styled list of "fcmChatMessages"
               const newChatMessage = parsed.data as Optional<ChatMessageData, "type" | "title">;
               delete newChatMessage.type;
               delete newChatMessage.title;
 
+              //1. update chat notifications
+              apiContext.notification.latest10chat.setData(undefined, (prev) => {
+                if (!prev) return prev;
+                const data = structuredClone(prev); //dont mutate prev
+
+                const existingPivot = data.find((x) => x.eventId === newChatMessage.eventId);
+                if (existingPivot) {
+                  existingPivot.messages.unshift(newChatMessage);
+                } else {
+                  data.unshift({
+                    eventId: newChatMessage.eventId,
+                    messages: [newChatMessage],
+                  });
+                }
+                return data;
+              });
+
+              //2. update chat messages
               apiContext.eventchat.infiniteMessages.setInfiniteData({ eventId: newChatMessage.eventId }, (prev) => {
+                if (!prev) return prev;
                 const data = structuredClone(prev); //dont mutate prev
                 data?.pages.at(-1)?.messages.unshift(newChatMessage);
                 return data;
@@ -123,7 +186,7 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <Context.Provider value={{ fcmToken, getFcmToken, notificationMessages, chatMessages }}>
+    <Context.Provider value={{ fcmToken, getFcmToken, notificationMessages, chatMessages, clearChatMessages }}>
       {children}
     </Context.Provider>
   );

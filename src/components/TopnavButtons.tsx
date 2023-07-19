@@ -180,11 +180,13 @@ function useGroupedLatest10Chat(userId: number) {
 }
 */
 export function ChatNotificationsButton({ user }: { user: TokenUser }) {
-  const { fcmToken, getFcmToken, chatMessages } = useFcmContext();
+  const { fcmToken, getFcmToken, chatMessages, clearChatMessages } = useFcmContext();
 
   //const [unseenNumber, setUnseenNumber] = useState(0);
   //const groupeLatest10Chat = useGroupedLatest10Chat(user.id);
   const { data: groupedLatest10Chat } = api.notification.latest10chat.useQuery();
+
+  const apiContext = api.useContext();
 
   const groupedChatMessages = useMemo(
     () => groupChatMessagesFromOthersByEventId(chatMessages, user.id),
@@ -197,6 +199,7 @@ export function ChatNotificationsButton({ user }: { user: TokenUser }) {
       <PopoverTrigger
         onClick={async () => {
           //setUnseenNumber(0);
+          if (chatMessages.length > 0) clearChatMessages();
           if (!fcmToken) {
             getFcmToken();
           }

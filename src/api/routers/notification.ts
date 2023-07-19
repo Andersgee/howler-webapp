@@ -33,6 +33,7 @@ export const notificationRouter = createTRPCRouter({
     const userEventPivots = await db
       .selectFrom("UserEventPivot as p")
       .where("p.userId", "=", ctx.user.id)
+      .orderBy("p.joinDate", "desc")
       .select((eb) => [
         "p.eventId",
         jsonArrayFrom(
