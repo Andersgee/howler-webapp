@@ -38,7 +38,7 @@ export const notificationRouter = createTRPCRouter({
         jsonArrayFrom(
           eb
             .selectFrom("Eventchatmessage as m")
-            .select(["m.id", "m.createdAt", "m.text", "m.eventId", "m.userId"]) //(can not use selectAll in subquery)
+            .select(["m.id", "m.createdAt", "m.text", "m.eventId", "m.userId"]) //(selectAll is not allowed in subquery)
             .whereRef("m.eventId", "=", "p.eventId")
             //.where("Eventchatmessage.userId","!=",ctx.user.id)
             .orderBy("m.id", "desc")

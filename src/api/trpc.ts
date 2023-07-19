@@ -2,17 +2,17 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import type { NextRequest } from "next/server";
 import { ZodError } from "zod";
-import { db } from "#src/db";
+//import { db } from "#src/db";
 import { getUserFromRequestCookie } from "#src/utils/token";
 import { transformer } from "./transformer";
 
-export const createTRPCContext = async (opts: FetchCreateContextFnOptions, nextRequest: NextRequest) => {
+export const createTRPCContext = async (_opts: FetchCreateContextFnOptions, nextRequest: NextRequest) => {
   const user = await getUserFromRequestCookie(nextRequest);
 
   return {
-    headers: opts.req.headers,
     user,
-    db: db,
+    //headers: opts.req.headers,
+    //db: db,
   };
 };
 
