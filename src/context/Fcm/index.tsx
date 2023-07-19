@@ -27,13 +27,15 @@ export function useFcmContext() {
 
 /////////////////////////////////////////////////
 
+type UnseenChatMessages = { eventId: number; unseen: number }[];
+
 type Value = {
   fcmToken: string | null;
   getFcmToken: () => Promise<string | null>;
   notificationMessages: NotificationMessageData[];
   //chatMessages: ChatMessageData[];
   clearChatNotifications: () => void;
-  unseenChatMessages: number;
+  unseenChatMessages: UnseenChatMessages;
 };
 
 const Context = createContext<undefined | Value>(undefined);
@@ -79,11 +81,11 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
   const [fcmToken, setFcmToken] = useState<string | null>(null);
   const [notificationMessages, setNotificationMessages] = useState<NotificationMessageData[]>([]);
   //const [chatMessages, setChatMessages] = useState<ChatMessageData[]>([]);
-  const [unseenChatMessages, setUnseenChatMessages] = useState(0);
+  const [unseenChatMessages, setUnseenChatMessages] = useState<UnseenChatMessages>([]);
   const apiContext = api.useContext();
 
   const clearChatNotifications = useCallback(() => {
-    setUnseenChatMessages(0);
+    setUnseenChatMessages([]);
   }, []);
 
   useEffect(() => {
@@ -135,7 +137,20 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
                 return data;
               });
 
-              setUnseenChatMessages((prev) => prev + 1);
+              setUnseenChatMessages((prev) => {
+                const eventId = newChatMessage.eventId;
+                const data = structuredClone(prev);
+                const existing = data.find((x) => x.eventId === eventId);
+                if (existing) {
+                  existing.unseen += 1;
+                } else {
+                  data.unshift({
+                    eventId,
+                    unseen: 1,
+                  });
+                }
+                return data;
+              });
             }
           } else {
             console.log("ignoring pushmessage, payload.data: ", payload.data);

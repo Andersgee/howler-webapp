@@ -194,7 +194,7 @@ export function ChatNotificationsButton({ user }: { user: TokenUser }) {
           }
         }}
       >
-        <IconChatWithNumber number={unseenChatMessages} />
+        <IconChatWithNumber number={unseenChatMessages.length} />
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex items-center justify-between">
