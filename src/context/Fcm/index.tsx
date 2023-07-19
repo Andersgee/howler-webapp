@@ -31,8 +31,9 @@ type Value = {
   fcmToken: string | null;
   getFcmToken: () => Promise<string | null>;
   notificationMessages: NotificationMessageData[];
-  chatMessages: ChatMessageData[];
-  clearChatMessages: () => void;
+  //chatMessages: ChatMessageData[];
+  clearChatNotifications: () => void;
+  unseenChatMessages: number;
 };
 
 const Context = createContext<undefined | Value>(undefined);
@@ -77,29 +78,13 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
   const fcmRef = useRef<FirebaseCloudMessaging | null>(null);
   const [fcmToken, setFcmToken] = useState<string | null>(null);
   const [notificationMessages, setNotificationMessages] = useState<NotificationMessageData[]>([]);
-  const [chatMessages, setChatMessages] = useState<ChatMessageData[]>([]);
+  //const [chatMessages, setChatMessages] = useState<ChatMessageData[]>([]);
+  const [unseenChatMessages, setUnseenChatMessages] = useState(0);
   const apiContext = api.useContext();
 
-  const clearChatMessages = useCallback(() => {
-    const groupedChatMessages = groupChatMessagesByEventId(chatMessages);
-    apiContext.notification.latest10chat.setData(undefined, (prev) => {
-      if (!prev) return prev;
-
-      const data = structuredClone(prev);
-      for (const m of groupedChatMessages) {
-        const i = data.findIndex((d) => d.eventId === m.eventId);
-        if (i !== -1) {
-          data[i].messages = [...m.messages, ...data[i].messages];
-        } else {
-          data.push(m);
-        }
-      }
-
-      return prev;
-    });
-
-    setChatMessages([]);
-  }, [chatMessages]);
+  const clearChatNotifications = useCallback(() => {
+    setUnseenChatMessages(0);
+  }, []);
 
   useEffect(() => {
     setupMessaging()
@@ -149,6 +134,8 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
                 data?.pages.at(-1)?.messages.unshift(newChatMessage);
                 return data;
               });
+
+              setUnseenChatMessages((prev) => prev + 1);
             }
           } else {
             console.log("ignoring pushmessage, payload.data: ", payload.data);
@@ -186,7 +173,9 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <Context.Provider value={{ fcmToken, getFcmToken, notificationMessages, chatMessages, clearChatMessages }}>
+    <Context.Provider
+      value={{ fcmToken, getFcmToken, notificationMessages, unseenChatMessages, clearChatNotifications }}
+    >
       {children}
     </Context.Provider>
   );

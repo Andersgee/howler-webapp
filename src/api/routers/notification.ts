@@ -1,5 +1,5 @@
 import { jsonArrayFrom } from "kysely/helpers/mysql";
-import { z } from "zod";
+//import { z } from "zod";
 import { db } from "#src/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -14,20 +14,6 @@ export const notificationRouter = createTRPCRouter({
       .execute();
 
     return notifications;
-  }),
-  oldlatest10chat: protectedProcedure.query(async ({ ctx }) => {
-    const chatMessages = await db
-      .selectFrom("UserEventPivot as p")
-      .where("p.userId", "=", ctx.user.id)
-      .orderBy("p.eventId", "desc")
-      .limit(10)
-      .innerJoin("Eventchatmessage", "Eventchatmessage.eventId", "p.eventId")
-      .orderBy("Eventchatmessage.id", "desc")
-      .limit(10)
-      .selectAll("Eventchatmessage")
-      .execute();
-
-    return chatMessages;
   }),
   latest10chat: protectedProcedure.query(async ({ ctx }) => {
     const userEventPivots = await db
