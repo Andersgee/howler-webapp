@@ -35,6 +35,7 @@ type Value = {
   notificationMessages: NotificationMessageData[];
   //chatMessages: ChatMessageData[];
   clearChatNotifications: () => void;
+  clearEventChatNotifications: (eventId: number) => void;
   unseenChatMessages: UnseenChatMessages;
 };
 
@@ -88,6 +89,10 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
     setUnseenChatMessages([]);
   }, []);
 
+  const clearEventChatNotifications = useCallback((eventId: number) => {
+    setUnseenChatMessages((prev) => prev.filter((x) => x.eventId !== eventId));
+  }, []);
+
   useEffect(() => {
     setupMessaging()
       .then((fcm) => {
@@ -129,14 +134,6 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
                 return data;
               });
 
-              //2. update chat messages
-              apiContext.eventchat.infiniteMessages.setInfiniteData({ eventId: newChatMessage.eventId }, (prev) => {
-                if (!prev) return prev;
-                const data = structuredClone(prev); //dont mutate prev
-                data?.pages.at(-1)?.messages.unshift(newChatMessage);
-                return data;
-              });
-
               setUnseenChatMessages((prev) => {
                 const eventId = newChatMessage.eventId;
                 const data = structuredClone(prev);
@@ -149,6 +146,14 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
                     unseen: 1,
                   });
                 }
+                return data;
+              });
+
+              //2. update chat messages
+              apiContext.eventchat.infiniteMessages.setInfiniteData({ eventId: newChatMessage.eventId }, (prev) => {
+                if (!prev) return prev;
+                const data = structuredClone(prev); //dont mutate prev
+                data?.pages.at(-1)?.messages.unshift(newChatMessage);
                 return data;
               });
             }
@@ -189,7 +194,14 @@ export function FcmProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <Context.Provider
-      value={{ fcmToken, getFcmToken, notificationMessages, unseenChatMessages, clearChatNotifications }}
+      value={{
+        fcmToken,
+        getFcmToken,
+        notificationMessages,
+        unseenChatMessages,
+        clearChatNotifications,
+        clearEventChatNotifications,
+      }}
     >
       {children}
     </Context.Provider>

@@ -43,6 +43,7 @@ type Props = {
 };
 
 export function EventChat({ eventId, userId, initialIsJoined }: Props) {
+  const { clearEventChatNotifications } = useFcmContext();
   const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
   const {
     data: infiniteMessages,
@@ -80,6 +81,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         endOfChatRef.current.scrollIntoView({
           behavior: "smooth",
         });
+        clearEventChatNotifications(eventId);
       } else if (secondPageRef.current) {
         //otherwise person scrolled up... keep view at same place after earlier messages have loaded
         secondPageRef.current.scrollIntoView({
@@ -88,7 +90,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
         });
       }
     }
-  }, [infiniteMessages]);
+  }, [infiniteMessages, eventId, clearEventChatNotifications]);
 
   const endOfChatRef2 = useIntersectionObserverCallback<HTMLDivElement>(([entry]) => {
     const isIntersecting = !!entry?.isIntersecting;
