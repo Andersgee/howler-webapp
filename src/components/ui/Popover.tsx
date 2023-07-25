@@ -8,6 +8,7 @@ const Popover = PopoverPrimitive.Root;
 
 const PopoverTrigger = PopoverPrimitive.Trigger;
 
+/*
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
@@ -26,8 +27,8 @@ const PopoverContent = React.forwardRef<
   </PopoverPrimitive.Portal>
 ));
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
+*/
 
-/*
 //in regular function style instead of arrow function:
 type PopoverContentProps = React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>;
 type PopoverContentRef = React.ElementRef<typeof PopoverPrimitive.Content>;
@@ -50,6 +51,5 @@ const PopoverContent = React.forwardRef<PopoverContentRef, PopoverContentProps>(
     </PopoverPrimitive.Portal>
   );
 });
-*/
 
 export { Popover, PopoverTrigger, PopoverContent };
