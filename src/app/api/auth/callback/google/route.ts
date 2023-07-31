@@ -62,7 +62,9 @@ export async function GET(request: NextRequest) {
     // regarding verifying id_token, see https://developers.google.com/identity/openid-connect/openid-connect#obtainuserinfo
     // TLDR; no need to validate since we used client_secret and response came directly from google
     // so just grab the payload part of the Base64-encoded object
-    const userInfo = GOOGLE_USERINFO.parse(JSON.parse(Buffer.from(token.id_token.split(".")[1], "base64").toString()));
+    const id_token_payload = token.id_token.split(".")[1];
+    if (!id_token_payload) throw new Error("no id token");
+    const userInfo = GOOGLE_USERINFO.parse(JSON.parse(Buffer.from(id_token_payload, "base64").toString()));
 
     // Authenticate the user
     const existingUser = await getUserByEmail(userInfo.email);

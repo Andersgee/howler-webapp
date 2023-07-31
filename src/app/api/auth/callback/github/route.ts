@@ -72,7 +72,9 @@ export async function GET(request: NextRequest) {
           headers: { Authorization: `${token.token_type} ${token.access_token}` },
         }).then((res) => res.json())
       );
-      userInfo.email = (emailInfo.find((e) => e.primary) ?? emailInfo[0]).email;
+      userInfo.email = emailInfo.find((e) => e.primary)?.email ?? emailInfo[0]?.email;
+      //userInfo.email = (emailInfo.find((e) => e.primary) ?? emailInfo[0]).email;
+      if (!userInfo.email) throw new Error("no email");
     }
 
     //userInfo.name might not be set by user on their github profile, but userInfo.login is always there
