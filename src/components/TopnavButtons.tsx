@@ -216,7 +216,7 @@ export function ChatNotificationsButton({ user }: { user: TokenUser }) {
                     <h3 className="capitalize-first shrink truncate text-base font-normal">
                       <EventWhatFromId eventId={eventId} />
                     </h3>
-                    <p>{messages[0].text}</p>
+                    <p>{messages[0]?.text || "O_o"}</p>
                     {messages.length > 1 && <p>{`...and ${messages.length > 9 ? "9+" : messages.length - 1} more`}</p>}
                   </div>
                   <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
