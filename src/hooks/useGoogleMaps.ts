@@ -29,12 +29,13 @@ export function useGoogleMaps<T extends HTMLElement>() {
     googlemaps.current.setZoom(zoom);
   }, []);
 
+  //https://developers.google.com/maps/documentation/javascript/markers
   const addMarker = useCallback(({ lng, lat }: { lng: number; lat: number }) => {
     if (!googlemaps.current) return;
 
     const marker = new google.maps.Marker({
       position: { lng, lat },
-      title: "Hello World!",
+      title: "This is you!",
     });
 
     marker.setMap(googlemaps.current); //add maker to map
