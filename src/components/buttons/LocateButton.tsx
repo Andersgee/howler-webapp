@@ -32,6 +32,10 @@ export function LocateButton({ className, onLocated, label }: Props) {
               onLocated(pos);
             },
             () => {
+              alert(
+                "Accessing location is blocked. Please open your browser preferences or click the lock near the address bar to allow access to your location."
+              );
+
               //handleLocationError(true, infoWindow, map.getCenter());
             }
           );

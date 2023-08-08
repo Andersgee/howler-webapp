@@ -5,12 +5,14 @@ import { useGoogleMaps } from "#src/hooks/useGoogleMaps";
 import { LocateButton, type Pos } from "./buttons/LocateButton";
 
 export function GoogleMap() {
-  const { elementRef, googlemaps, setPos } = useGoogleMaps<HTMLDivElement>();
+  const { elementRef, googlemaps, setPos, addMarker } = useGoogleMaps<HTMLDivElement>();
   const [userPos, setUserPos] = useState<Pos | undefined>();
 
   useEffect(() => {
     if (!userPos) return;
-    setPos({ lng: userPos.lng, lat: userPos.lat, zoom: 10 });
+    const { lng, lat } = userPos;
+    setPos({ lng, lat, zoom: 10 });
+    addMarker({ lng, lat });
   }, [userPos, setPos]);
 
   return (

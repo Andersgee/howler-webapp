@@ -29,5 +29,16 @@ export function useGoogleMaps<T extends HTMLElement>() {
     googlemaps.current.setZoom(zoom);
   }, []);
 
-  return { elementRef, googlemaps, setPos };
+  const addMarker = useCallback(({ lng, lat }: { lng: number; lat: number }) => {
+    if (!googlemaps.current) return;
+
+    const marker = new google.maps.Marker({
+      position: { lng, lat },
+      title: "Hello World!",
+    });
+
+    marker.setMap(googlemaps.current); //add maker to map
+  }, []);
+
+  return { elementRef, googlemaps, setPos, addMarker };
 }
