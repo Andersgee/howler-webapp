@@ -2,7 +2,7 @@
 
 import { DialogProvider } from "./DialogContext";
 import { FcmProvider } from "./Fcm";
-import { MapProvider } from "./Map";
+import { GoogleMapsProvider } from "./GoogleMaps";
 import { TrpcProvider } from "./Trpc";
 import { UserProvider } from "./UserContext";
 
@@ -12,7 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <TrpcProvider>
         <FcmProvider>
           <DialogProvider>
-            <MapProvider>{children}</MapProvider>
+            <GoogleMapsProvider>{children}</GoogleMapsProvider>
           </DialogProvider>
         </FcmProvider>
       </TrpcProvider>

@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { createContext, useContext, useEffect, useState } from "react";
+import { GOOGLE_MAPS_ELEMENT_ID, googleMaps } from "./google-maps";
 
 type Value = { isLoaded: boolean };
 const Context = createContext<Value | undefined>(undefined);
@@ -12,8 +13,20 @@ export function useMapContext() {
   return ctx;
 }
 
-export function MapProvider({ children }: { children: React.ReactNode }) {
+export function GoogleMapsProvider({ children }: { children: React.ReactNode }) {
+  const [libIsLoaded, setLibIsloaded] = useState(false);
   const [value, setValue] = useState({ isLoaded: false });
+
+  useEffect(() => {
+    googleMaps
+      .initialize(GOOGLE_MAPS_ELEMENT_ID)
+      .then(() => {
+        setValue({ isLoaded: true });
+      })
+      .catch(() => {
+        //ignore
+      });
+  }, [libIsLoaded]);
 
   return (
     <Context.Provider value={value}>
@@ -21,7 +34,7 @@ export function MapProvider({ children }: { children: React.ReactNode }) {
       <Script
         src="https://howler.andyfx.net/google-maps.js"
         strategy="lazyOnload"
-        onLoad={() => setValue({ isLoaded: true })}
+        onLoad={() => setLibIsloaded(true)}
       />
     </Context.Provider>
   );
