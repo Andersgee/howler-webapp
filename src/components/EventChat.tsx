@@ -116,7 +116,7 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
           height: 100%;
         }
       `}</style>
-      <div className="chatheight container relative max-w-lg overflow-y-scroll shadow-sm">
+      <div className="chatheight container relative max-w-lg overflow-y-scroll break-words shadow-sm">
         <div className="text-paragraph bg-card/50 absolute inset-x-0 m-auto text-center" ref={ref}>
           {isFetchingNextPage ? "loading..." : hasNextPage ? "-" : "this is the beginning of conversation"}
         </div>
