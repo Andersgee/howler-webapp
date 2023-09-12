@@ -130,18 +130,18 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
                 .map((message) => {
                   const isNotMe = message.userId !== userId;
                   return (
-                    <div key={message.id} className={cn("flex p-2", isNotMe ? " w-4/5" : "justify-end gap-2")}>
+                    <div key={message.id} className={cn("flex p-2", isNotMe ? "w-4/5" : "justify-end gap-2")}>
                       {isNotMe && <LinkUserImageFromId userId={message.userId} />}
-                      <div className={cn("flex flex-col break-words", isNotMe ? "items-start" : "w-4/5 items-end")}>
+                      <div className={cn("flex w-full flex-col", isNotMe ? "items-start" : "w-4/5 items-end")}>
                         <p
                           className={cn(
-                            "text-tweet rounded-lg p-2 font-medium",
+                            "max-w-full break-words rounded-lg p-2 font-medium",
                             isNotMe ? "bg-secondary mt-1.5" : "mt-2 bg-blue-600 text-white"
                           )}
                         >
                           {message.text}
                         </p>
-                        <p className="text-xs">{prettyDateShort(message.createdAt)}</p>
+                        <p className={cn("text-xs", isNotMe && "ml-2")}>{prettyDateShort(message.createdAt)}</p>
                       </div>
                     </div>
                   );
