@@ -18,6 +18,8 @@ export function GoogleMapsProvider({ children }: { children: React.ReactNode }) 
   const [value, setValue] = useState({ isLoaded: false });
 
   useEffect(() => {
+    if (!libIsLoaded) return;
+
     googleMaps
       .initialize(GOOGLE_MAPS_ELEMENT_ID)
       .then(() => {
