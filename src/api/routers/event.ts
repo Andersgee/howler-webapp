@@ -179,6 +179,7 @@ export const eventRouter = createTRPCRouter({
       //https://github.com/vercel/next.js/issues/52020
       //revalidateTag(tagEvents());
       revalidateTag(tagEventLocation({ eventId: input.eventId }));
+      revalidateTag(tagEventInfo({ eventId: input.eventId }));
 
       return eventLocation;
     }),
