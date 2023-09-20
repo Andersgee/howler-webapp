@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps) {
 
   return seo({
     title: `${event.what || "anything"} | Howler`,
-    description: `howl by ${event.creator.name}, with who: ${event.who || "anyone"}`,
+    description: `where: ${event.where || "anywhere"}, who: ${event.who || "anyone"}`,
     url: `/event/${params.hashid}`,
     image: "/icons/favicon-512x512.png",
   });
