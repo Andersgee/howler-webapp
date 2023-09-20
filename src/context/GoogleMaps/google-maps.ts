@@ -18,6 +18,7 @@ class GoogleMaps {
   isReady: boolean;
   currentCenter: { lng: number; lat: number } | null;
   currentCenterMarker: google.maps.marker.AdvancedMarkerElement | null;
+  showCenterMarker: boolean;
 
   constructor() {
     //this.Map = null;
@@ -28,6 +29,7 @@ class GoogleMaps {
     this.markers = [];
     this.isReady = false;
     this.currentCenterMarker = null;
+    this.showCenterMarker = false;
   }
 
   async init() {
@@ -56,18 +58,20 @@ class GoogleMaps {
     this.map.addListener("center_changed", () => {
       const c = this.map?.getCenter();
       this.currentCenter = c ? { lng: c.lng(), lat: c.lat() } : null;
-      if (this.currentCenterMarker) {
+      if (this.currentCenterMarker && this.showCenterMarker) {
         this.currentCenterMarker.position = this.currentCenter;
       }
     });
   }
 
   showCurrentCenterMarker() {
+    this.showCenterMarker = true;
     if (this.currentCenterMarker) {
       this.currentCenterMarker.position = this.currentCenter;
     }
   }
   hideCurrentCenterMarker() {
+    this.showCenterMarker = false;
     if (this.currentCenterMarker) {
       this.currentCenterMarker.position = null;
     }
