@@ -46,12 +46,12 @@ export function GoogleMapsProvider({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     if (!libIsLoaded || value.googleMapIsReady) return;
 
-    console.log("google maps init");
+    //console.log("google maps init");
     googleMaps
       .init()
       .then(() => {
         dispatch({ type: "ready" });
-        console.log("google maps ready");
+        //console.log("google maps ready");
         //setGoogleMapIsReady(true);
       })
       .catch(() => {

@@ -97,7 +97,13 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
           {location ? (
             <Button
               variant="secondary"
-              onClick={() => mapDispatch({ type: "toggle", name: "map" })}
+              onClick={() => {
+                mapDispatch({ type: "toggle", name: "map" });
+                if (googleMapIsReady) {
+                  googleMaps.hideCurrentCenterMarker();
+                }
+              }}
+
               //className="bg-white px-2 py-1 dark:bg-black"
             >
               {mapIsVisible ? "hide map" : "show map"}
