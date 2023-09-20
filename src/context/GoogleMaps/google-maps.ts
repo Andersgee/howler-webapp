@@ -3,43 +3,74 @@ const TEST_MAP_ID = "478ad7a3d9f73ca4";
 
 export const GOOGLE_MAPS_ELEMENT_ID = "google-maps-div";
 
+//https://developers.google.com/maps/documentation/javascript/events
+
 /**
  * simpler wrapper for interacting with google maps
  */
 class GoogleMaps {
-  map: google.maps.Map | null;
-  AdvancedMarkerElement: typeof google.maps.marker.AdvancedMarkerElement | null;
+  Map!: typeof google.maps.Map;
+  AdvancedMarkerElement!: typeof google.maps.marker.AdvancedMarkerElement;
 
+  mapDivId: string | null;
+  map: google.maps.Map | null;
   markers: google.maps.marker.AdvancedMarkerElement[];
   isReady: boolean;
+  currentCenter: { lng: number; lat: number } | null;
+  currentCenterMarker: google.maps.marker.AdvancedMarkerElement | null;
 
   constructor() {
+    //this.Map = null;
+    //this.AdvancedMarkerElement = null;
+    this.mapDivId = null;
     this.map = null;
-    this.AdvancedMarkerElement = null;
-
+    this.currentCenter = null;
     this.markers = [];
-
     this.isReady = false;
+    this.currentCenterMarker = null;
   }
 
-  async initialize(elementId: string) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-
-    //load libs
+  async init() {
+    //load relevant libs
     const { Map } = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
     const { AdvancedMarkerElement } = (await google.maps.importLibrary("marker")) as google.maps.MarkerLibrary;
 
-    //initiailize
-    this.map = new Map(element, {
+    this.Map = Map;
+    this.AdvancedMarkerElement = AdvancedMarkerElement;
+    this.isReady = true;
+  }
+
+  render(element: HTMLDivElement) {
+    this.map = new this.Map(element, {
       center: { lat: -34.397, lng: 150.644 },
       zoom: 8,
-      mapId: TEST_MAP_ID, //required for AdvancedMarkerElement
+      mapId: TEST_MAP_ID, //required for some libs like AdvancedMarkerElement
     });
 
-    this.AdvancedMarkerElement = AdvancedMarkerElement;
+    this.currentCenterMarker = new this.AdvancedMarkerElement({
+      map: this.map,
+      position: null,
+      title: "Placed pin",
+    });
 
-    this.isReady = true;
+    this.map.addListener("center_changed", () => {
+      const c = this.map?.getCenter();
+      this.currentCenter = c ? { lng: c.lng(), lat: c.lat() } : null;
+      if (this.currentCenterMarker) {
+        this.currentCenterMarker.position = this.currentCenter;
+      }
+    });
+  }
+
+  showCurrentCenterMarker() {
+    if (this.currentCenterMarker) {
+      this.currentCenterMarker.position = this.currentCenter;
+    }
+  }
+  hideCurrentCenterMarker() {
+    if (this.currentCenterMarker) {
+      this.currentCenterMarker.position = null;
+    }
   }
 
   setPos({ lng, lat, zoom }: { lng: number; lat: number; zoom: number }) {
@@ -67,10 +98,77 @@ class GoogleMaps {
     this.markers.push(marker);
   }
 
+  addMarkers(markers: { lng: number; lat: number; title: string; infoWindowElementId: string }[]) {
+    if (!this.AdvancedMarkerElement || !this.map) return;
+
+    //const marker = new google.maps.Marker({
+    //  position: { lng, lat },
+    //  title: "This is you!",
+    //});
+    //marker.setMap(googlemaps.current); //add maker to map
+
+    for (const marker of markers) {
+      const infowindow = new google.maps.InfoWindow({
+        content: document.getElementById(marker.infoWindowElementId),
+        ariaLabel: marker.title,
+      });
+
+      const m = new this.AdvancedMarkerElement({
+        map: this.map,
+        position: { lat: marker.lat, lng: marker.lng },
+        title: marker.title,
+      });
+      m.addListener("click", () => {
+        infowindow.open({
+          anchor: m,
+          map: this.map,
+        });
+      });
+
+      this.markers.push(m);
+    }
+  }
+
+  showEventMarker({ lng, lat }: { lng: number; lat: number }) {
+    if (!this.map) return;
+
+    /*
+    const m = new this.AdvancedMarkerElement({
+      map: this.map,
+      position: { lat: marker.lat, lng: marker.lng },
+      title: marker.title,
+    });
+    */
+
+    //this.map.getBounds();
+    //this.map.setCenter({ lat: -34, lng: 151 });
+    //const norrsalbo = { lat: 59.9123376, lng: 16.3244494 };
+    //const salbohed = { lat: 59.9137589, lng: 16.3495998 };
+    this.clearMarkers();
+    this.map.setCenter({ lng, lat });
+    this.map.setZoom(14);
+
+    const marker = new this.AdvancedMarkerElement({
+      map: this.map,
+      position: { lng, lat },
+      title: "This is where it happens",
+    });
+
+    this.markers.push(marker);
+  }
+
+  getCenter() {
+    if (!this.map) return;
+
+    const c = this.map.getCenter();
+    return c ? { lng: c.lng(), lat: c.lat() } : undefined;
+  }
+
   clearMarkers() {
     this.markers.forEach((marker) => {
       marker.position = null;
     });
+    this.markers = [];
   }
 }
 

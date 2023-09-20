@@ -45,6 +45,22 @@ export async function getHasJoinedEvent(p: HasJoinedEventParams, cached = true) 
   return false;
 }
 
+type EventLocationParams = { eventId: number };
+
+export function tagEventLocation(p: EventLocationParams) {
+  return `eventinfo-${p.eventId}`;
+}
+export async function getEventLocation(p: EventLocationParams, cached = true) {
+  return await db
+    .selectFrom("EventLocation")
+    .selectAll("EventLocation")
+    .where("EventLocation.eventId", "=", p.eventId)
+    .getFirst({
+      cache: cached ? "force-cache" : "no-cache",
+      next: { tags: [tagEventLocation(p)] },
+    });
+}
+
 type EventInfoParams = { eventId: number };
 
 export function tagEventInfo(p: EventInfoParams) {
@@ -60,6 +76,16 @@ export async function getEventInfo(p: EventInfoParams, cached = true) {
         eb.selectFrom("User").select(["User.id", "User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
       ).as("creator"),
     ])
+    //.$if(true, (eb) =>
+    //  eb.select((eb) => [
+    //    jsonObjectFrom(
+    //      eb
+    //        .selectFrom("EventLocation")
+    //        .select(["EventLocation.lng", "EventLocation.lat"])
+    //        .whereRef("EventLocation.eventId", "=", "Event.id")
+    //    ).as("location"),
+    //  ])
+    //)
     .getFirst({
       cache: cached ? "force-cache" : "no-cache",
       next: { tags: [tagEventInfo(p)] },

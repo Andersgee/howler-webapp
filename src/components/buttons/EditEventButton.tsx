@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "#src/components/ui/Dialog";
+import { useMapDispatch } from "#src/context/GoogleMaps";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { datetimelocalString } from "#src/utils/date";
 import { IconArrowDown, IconEdit, IconWhat, IconWhen, IconWhere, IconWho } from "../Icons";
@@ -21,12 +22,15 @@ import { Input } from "../ui/Input";
 type Props = {
   eventId: number;
   initialEventInfo: NonNullable<RouterOutputs["event"]["info"]>;
+  initialEventLocation: RouterOutputs["event"]["location"];
 };
 
-export function EditEventButton({ eventId, initialEventInfo }: Props) {
+export function EditEventButton({ eventId, initialEventInfo, initialEventLocation }: Props) {
   const [open, setOpen] = useState(false);
+  const mapDispatch = useMapDispatch();
 
   const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
+  const { data: location } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
   //const { data: event } = api.event.info.useQuery({ eventId });
 
   const apiContext = api.useContext();
@@ -82,6 +86,8 @@ export function EditEventButton({ eventId, initialEventInfo }: Props) {
                   <IconWhere />
                   <span className="ml-2">Where?</span>
                 </div>
+                <button onClick={() => mapDispatch({ type: "show", name: "map" })}>pick location</button>
+                {/*
                 <Input
                   type="text"
                   name="where"
@@ -91,6 +97,7 @@ export function EditEventButton({ eventId, initialEventInfo }: Props) {
                   onChange={(e) => setWhere(e.target.value)}
                   aria-label="where"
                 />
+  */}
               </div>
               {/* Who */}
               <div className="my-2 flex items-center">

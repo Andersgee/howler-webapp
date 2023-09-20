@@ -1,33 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { GOOGLE_MAPS_ELEMENT_ID, googleMaps } from "#src/context/GoogleMaps/google-maps";
-import { LocateButton, type Pos } from "./buttons/LocateButton";
-import { Button } from "./ui/Button";
+import { useEffect, useRef } from "react";
+import { useMapContext } from "#src/context/GoogleMaps";
+import { googleMaps } from "#src/context/GoogleMaps/google-maps";
 
 export function GoogleMap() {
-  const [userPos, setUserPos] = useState<Pos | undefined>();
-
+  const mapRef = useRef(null);
+  const { googleMapIsReady, visible } = useMapContext();
+  //const mapDispatch = useMapDispatch();
   useEffect(() => {
-    if (!userPos) return;
-    const { lng, lat } = userPos;
-    googleMaps.setPos({ lng, lat, zoom: 10 });
-    googleMaps.addMarker({ lng, lat });
-  }, [userPos]);
-
+    if (!googleMapIsReady || !mapRef.current) return;
+    googleMaps.render(mapRef.current);
+  }, [googleMapIsReady]);
   return (
-    <>
-      <style jsx global>{`
-        html,
-        body {
-          height: 100%;
-        }
-      `}</style>
-      <div className="absolute inset-x-0 bottom-4 z-50 mx-auto">
-        <LocateButton onLocated={(pos) => setUserPos(pos)} label="Go to your position" />
-        <Button onClick={() => googleMaps.clearMarkers()}>clear markers</Button>
+    <div className="container">
+      <div className="flex flex-col items-center">
+        {/*<Button variant="secondary" onClick={() => mapDispatch({ type: "toggle", name: "map" })}>
+          Show map
+        </Button>
+  */}
+        <div
+          ref={mapRef}
+          data-visible={visible || undefined}
+          className="invisible h-0 w-full
+            data-[visible]:visible data-[visible]:h-96"
+        />
       </div>
-      <div id={GOOGLE_MAPS_ELEMENT_ID} className="h-full-minus-nav w-full" />
-    </>
+    </div>
   );
 }

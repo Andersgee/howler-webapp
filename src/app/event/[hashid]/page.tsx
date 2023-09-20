@@ -9,7 +9,7 @@ import { IconChat } from "#src/components/Icons";
 import { Button } from "#src/components/ui/Button";
 import { idFromHashid } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
-import { getEventInfo, getHasJoinedEvent } from "#src/utils/tags";
+import { getEventInfo, getEventLocation, getHasJoinedEvent } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
 
@@ -34,19 +34,23 @@ export default async function Page({ params }: PageProps) {
   if (!eventId) notFound();
   const event = await getEventInfo({ eventId });
   if (!event) notFound();
+  const location = await getEventLocation({ eventId });
+
   const user = await getUserFromCookie();
   const hasJoinedEvent = user ? await getHasJoinedEvent({ eventId, userId: user.id }) : false;
-
+  const isCreator = user?.id === event.creatorId;
   return (
     <>
       <div className="container flex justify-center">
         <div className="">
-          <EventInfo eventId={eventId} initialEventInfo={event} />
+          <EventInfo eventId={eventId} initialEventInfo={event} initialEventLocation={location} isCreator={isCreator} />
           <div className="my-4 flex justify-center">
             <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
           </div>
           <div className="flex gap-2">
-            {event.creatorId === user?.id && <EditEventButton eventId={eventId} initialEventInfo={event} />}
+            {isCreator && (
+              <EditEventButton eventId={eventId} initialEventInfo={event} initialEventLocation={location} />
+            )}
             <ShareButton title={event.what} />
             {user && (
               <Button variant="secondary" asChild>
@@ -56,7 +60,7 @@ export default async function Page({ params }: PageProps) {
               </Button>
             )}
           </div>
-          {user?.id === event.creatorId && (
+          {isCreator && (
             <div className="my-8">
               <DeleteEventButton eventId={event.id} />
             </div>

@@ -3,7 +3,15 @@ import { z } from "zod";
 import { db } from "#src/db";
 import { hashidFromId } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
-import { getEventInfo, getHasJoinedEvent, tagEventInfo, tagEvents, tagHasJoinedEvent } from "#src/utils/tags";
+import {
+  getEventInfo,
+  getEventLocation,
+  getHasJoinedEvent,
+  tagEventInfo,
+  tagEventLocation,
+  tagEvents,
+  tagHasJoinedEvent,
+} from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
@@ -12,6 +20,9 @@ export const eventRouter = createTRPCRouter({
   }),
   info: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
     return getEventInfo({ eventId: input.eventId });
+  }),
+  location: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
+    return getEventLocation({ eventId: input.eventId });
   }),
   join: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
     const _insertResult = await db
@@ -128,5 +139,36 @@ export const eventRouter = createTRPCRouter({
       revalidateTag(tagEventInfo({ eventId: input.eventId }));
 
       return eventInfo;
+    }),
+
+  updateLocation: protectedProcedure
+    .input(
+      z.object({
+        eventId: z.number(),
+        lng: z.number(),
+        lat: z.number(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      //await artificialDelay()
+
+      const _updateResult = await db
+        .updateTable("EventLocation")
+        .where("eventId", "=", input.eventId)
+        .set({
+          eventId: input.eventId,
+          lng: input.lng,
+          lat: input.lat,
+        })
+        .executeTakeFirstOrThrow();
+
+      const eventLocation = await getEventLocation({ eventId: input.eventId }, false);
+
+      //cant revalidateTag multiple times.. only the last call does stuff:
+      //https://github.com/vercel/next.js/issues/52020
+      //revalidateTag(tagEvents());
+      revalidateTag(tagEventLocation({ eventId: input.eventId }));
+
+      return eventLocation;
     }),
 });

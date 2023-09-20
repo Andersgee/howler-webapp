@@ -142,4 +142,16 @@ model Event {
 
     joinedUsers      UserEventPivot[]
     eventchatmessage Eventchatmessage[]
+    eventLocation    EventLocation?
+}
+
+model EventLocation {
+    id  Int   @id @default(autoincrement())
+    lng Float
+    lat Float
+
+    event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    eventId Int   @unique
+    //user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    //userId  Int
 }

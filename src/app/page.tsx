@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ActivateNotificationsButton } from "#src/components/buttons/ActivateNotificationsButton";
-import { MaplinkButton } from "#src/components/buttons/MaplinkButton";
 import { CreateEventForm } from "#src/components/CreateEventForm";
 import { IconArrowLink } from "#src/components/Icons";
 import { WhenText } from "#src/components/WhenText";
@@ -50,7 +49,6 @@ export default async function Page() {
               ))}
             </ul>
             <ActivateNotificationsButton />
-            <MaplinkButton />
           </div>
         </div>
       </div>

@@ -21,6 +21,12 @@ export type Eventchatmessage = {
   eventId: number;
   userId: number;
 };
+export type EventLocation = {
+  id: Generated<number>;
+  lng: number;
+  lat: number;
+  eventId: number;
+};
 export type Example = {
   id: Generated<number>;
   createdAt: Generated<Timestamp>;
@@ -64,6 +70,7 @@ export type UserUserPivot = {
 export type DB = {
   Event: Event;
   Eventchatmessage: Eventchatmessage;
+  EventLocation: EventLocation;
   Example: Example;
   FcmToken: FcmToken;
   Notification: Notification;
