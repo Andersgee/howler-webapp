@@ -5,6 +5,11 @@ export const GOOGLE_MAPS_ELEMENT_ID = "google-maps-div";
 
 //https://developers.google.com/maps/documentation/javascript/events
 
+/*
+also geocoding:
+https://developers.google.com/maps/documentation/geocoding/overview
+*/
+
 /**
  * simpler wrapper for interacting with google maps
  */
