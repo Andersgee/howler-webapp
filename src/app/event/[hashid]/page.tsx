@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: PageProps) {
   if (!event) notFound();
 
   return seo({
-    title: `${event.what} | Howler`,
-    description: `where: ${event.where} who: ${event.who} info: ${event.info}`,
+    title: `${event.what || "anything"} | Howler`,
+    description: `howl by ${event.creator.name}, with who: ${event.who || "anyone"}`,
     url: `/event/${params.hashid}`,
     image: "/icons/favicon-512x512.png",
   });
