@@ -152,15 +152,26 @@ export const eventRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       //await artificialDelay()
 
-      const _updateResult = await db
+      const updateResult = await db
         .updateTable("EventLocation")
         .where("eventId", "=", input.eventId)
         .set({
-          eventId: input.eventId,
           lng: input.lng,
           lat: input.lat,
         })
         .executeTakeFirstOrThrow();
+
+      const numUpdatedRows = Number(updateResult.numUpdatedRows);
+      if (!numUpdatedRows) {
+        const _insertResult = await db
+          .insertInto("EventLocation")
+          .values({
+            eventId: input.eventId,
+            lng: input.lng,
+            lat: input.lat,
+          })
+          .executeTakeFirstOrThrow();
+      }
 
       const eventLocation = await getEventLocation({ eventId: input.eventId }, false);
 
