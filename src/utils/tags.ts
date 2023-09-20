@@ -48,7 +48,7 @@ export async function getHasJoinedEvent(p: HasJoinedEventParams, cached = true) 
 type EventLocationParams = { eventId: number };
 
 export function tagEventLocation(p: EventLocationParams) {
-  return `eventinfo-${p.eventId}`;
+  return `eventlocation-${p.eventId}`;
 }
 export async function getEventLocation(p: EventLocationParams, cached = true) {
   return await db
