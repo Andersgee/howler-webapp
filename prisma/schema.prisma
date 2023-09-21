@@ -146,9 +146,10 @@ model Event {
 }
 
 model EventLocation {
-    id  Int   @id @default(autoincrement())
-    lng Float
-    lat Float
+    id        Int     @id @default(autoincrement())
+    lng       Float
+    lat       Float
+    placeName String? //from google geocoding api (reverseGeocoding from lng lat)
 
     event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
     eventId Int   @unique

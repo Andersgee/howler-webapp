@@ -77,7 +77,7 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
             }}
             //className="bg-white px-2 py-1 dark:bg-black"
           >
-            {mapIsVisible ? "hide map" : "show map"}
+            {mapIsVisible ? "hide map" : location?.placeName ?? "show map"}
           </Button>
           <Button
             disabled={!mapIsVisible}
@@ -106,7 +106,7 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
 
               //className="bg-white px-2 py-1 dark:bg-black"
             >
-              {mapIsVisible ? "hide map" : "show map"}
+              {mapIsVisible ? "hide map" : location?.placeName ?? "show map"}
             </Button>
           ) : (
             <div className="bg-white px-2 py-1 dark:bg-black">anywhere</div>

@@ -25,6 +25,7 @@ export type EventLocation = {
   id: Generated<number>;
   lng: number;
   lat: number;
+  placeName: string | null;
   eventId: number;
 };
 export type Example = {

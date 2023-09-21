@@ -19,6 +19,16 @@ export async function generateMetadata({ params }: PageProps) {
   const event = await getEventInfo({ eventId });
   if (!event) notFound();
 
+  const location = await getEventLocation({ eventId });
+  if (location?.placeName) {
+    return seo({
+      title: `${event.what || "anything"} | Howler`,
+      description: `where: ${location.placeName}, who: ${event.who || "anyone"}`,
+      url: `/event/${params.hashid}`,
+      image: "/icons/favicon-512x512.png",
+    });
+  }
+
   return seo({
     title: `${event.what || "anything"} | Howler`,
     description: `where: ${event.where || "anywhere"}, who: ${event.who || "anyone"}`,

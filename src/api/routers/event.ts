@@ -1,6 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { db } from "#src/db";
+import { getGoogleReverseGeocoding } from "#src/utils/geocoding";
 import { hashidFromId } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
 import {
@@ -152,12 +153,15 @@ export const eventRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       //await artificialDelay()
 
+      const placeName = await getGoogleReverseGeocoding({ lng: input.lng, lat: input.lat });
+
       const updateResult = await db
         .updateTable("EventLocation")
         .where("eventId", "=", input.eventId)
         .set({
           lng: input.lng,
           lat: input.lat,
+          placeName: placeName,
         })
         .executeTakeFirstOrThrow();
 
@@ -169,6 +173,7 @@ export const eventRouter = createTRPCRouter({
             eventId: input.eventId,
             lng: input.lng,
             lat: input.lat,
+            placeName: placeName,
           })
           .executeTakeFirstOrThrow();
       }
