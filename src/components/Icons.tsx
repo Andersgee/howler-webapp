@@ -7,6 +7,23 @@ type IconClickableProps = { clickable?: boolean } & IconProps;
 //size of clickable area should be atleast 48x48
 const clickableStyles = "w-6 h-6 p-3 rounded-full hover:bg-secondary";
 
+export function IconArrowLeft({ className, clickable, ...props }: IconClickableProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className={cn("h-6 w-6", clickable && clickableStyles, className)}
+      {...props}
+    >
+      <path d="m12 19-7-7 7-7" />
+      <path d="M19 12H5" />
+    </svg>
+  );
+}
+
 export function IconArrowDown({ className, ...props }: IconProps) {
   return (
     <svg

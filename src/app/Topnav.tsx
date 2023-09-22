@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { IconHowler } from "#src/components/Icons";
+import { HomeButton } from "#src/components/HomeButton";
 import {
   ChatNotificationsButton,
   NotificationsButton,
@@ -13,9 +13,8 @@ export async function Topnav() {
   return (
     <div className="container">
       <div className="flex justify-between">
-        <Link href="/">
-          <IconHowler clickable />
-        </Link>
+        <HomeButton />
+
         {user ? (
           <div className="flex">
             <ChatNotificationsButton user={user} />
