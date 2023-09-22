@@ -3,7 +3,7 @@ import { SigninButtons } from "#src/components/buttons/SigninButtons";
 import { EventChat } from "#src/components/EventChat";
 import { idFromHashid } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
-import { getEventInfo, getHasJoinedEvent } from "#src/utils/tags";
+import { getEventInfo, getEventLocation, getHasJoinedEvent } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
 
@@ -13,10 +13,20 @@ export async function generateMetadata({ params }: PageProps) {
   const event = await getEventInfo({ eventId });
   if (!event) notFound();
 
+  const location = await getEventLocation({ eventId });
+  if (location?.placeName) {
+    return seo({
+      title: `${event.what || "anything"} | chat | Howler`,
+      description: `where: ${location.placeName}, who: ${event.who || "anyone"}`,
+      url: `/event/${params.hashid}`,
+      image: "/icons/favicon-512x512.png",
+    });
+  }
+
   return seo({
-    title: `${event.what} | chat | Howler`,
-    description: `where: ${event.where} who: ${event.who} info: ${event.info}`,
-    url: `/event/${params.hashid}/chat`,
+    title: `${event.what || "anything"} | chat | Howler`,
+    description: `where: ${event.where || "anywhere"}, who: ${event.who || "anyone"}`,
+    url: `/event/${params.hashid}`,
     image: "/icons/favicon-512x512.png",
   });
 }
