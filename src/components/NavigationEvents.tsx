@@ -2,12 +2,14 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { useMapDispatch } from "#src/context/GoogleMaps";
+import { useMapContext, useMapDispatch } from "#src/context/GoogleMaps";
+import { googleMaps } from "#src/context/GoogleMaps/google-maps";
 
 export function NavigationEvents() {
   const pathname = usePathname();
   //const searchParams = useSearchParams();
   const mapDispatch = useMapDispatch();
+  const { googleMapIsReady } = useMapContext();
 
   useEffect(() => {
     //const url = `${pathname}?${searchParams}`;
@@ -15,8 +17,11 @@ export function NavigationEvents() {
     const isEventPage = paths.length === 3 && paths[1] === "event";
     if (!isEventPage) {
       mapDispatch({ type: "hide", name: "map" });
+      if (googleMapIsReady) {
+        googleMaps.clearMarkers();
+      }
     }
-  }, [pathname, mapDispatch]);
+  }, [pathname, mapDispatch, googleMapIsReady]);
 
   return null;
 }

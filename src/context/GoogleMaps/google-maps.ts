@@ -178,6 +178,7 @@ class GoogleMaps {
       marker.position = null;
     });
     this.markers = [];
+    this.hideCurrentCenterMarker();
   }
 }
 
