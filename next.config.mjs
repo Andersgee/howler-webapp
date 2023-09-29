@@ -1,4 +1,5 @@
 import "./src/utils/validate-process-env.mjs";
+import { withPlausibleProxy } from "next-plausible";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -23,4 +24,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withPlausibleProxy()(nextConfig);
