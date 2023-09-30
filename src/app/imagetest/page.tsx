@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
 const fileTypes = [
   "image/apng",
@@ -18,7 +20,9 @@ async function upload(signedUrl: string, buf: ArrayBuffer) {
   const res = await fetch(signedUrl, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/octet-stream",
+      //"Content-Type": "application/octet-stream",
+      //"Content-Type": "image/jpeg",
+      "Content-Type": "image/png",
     },
     body: buf,
   });
@@ -42,9 +46,22 @@ async function getGcsSignedUrl({ eventId }: { eventId: number }) {
   return null;
 }
 
-export default async function Page() {
+//https://storage.googleapis.com/howler-event-images/1-1.png
+
+export default function Page() {
   return (
     <div>
+      <img
+        className="h-24 w-24"
+        src="https://storage.googleapis.com/howler-event-images/1-1.png"
+        alt="img-some-event"
+      />
+      <Image
+        src="https://storage.googleapis.com/howler-event-images/1-1.png"
+        alt="nextimg-some-event"
+        width={100}
+        height={100}
+      />
       <div>upload test</div>
       <input
         type="file"

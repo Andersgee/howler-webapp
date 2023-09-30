@@ -20,8 +20,15 @@ const nextConfig = {
         hostname: "*.googleusercontent.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: "/howler-event-images/**",
+      },
     ],
   },
 };
+
+//https://storage.cloud.google.com/howler-event-images/1-1
 
 export default withPlausibleProxy()(nextConfig);
