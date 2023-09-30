@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
+import { api } from "#src/hooks/api";
 
 // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
 const fileTypes = [
@@ -16,82 +18,79 @@ const fileTypes = [
   "image/x-icon",
 ];
 
-async function upload(signedUrl: string, buf: ArrayBuffer) {
-  const res = await fetch(signedUrl, {
-    method: "PUT",
-    headers: {
-      //"Content-Type": "application/octet-stream",
-      //"Content-Type": "image/jpeg",
-      "Content-Type": "image/png",
-    },
-    body: buf,
-  });
-  console.log({ res });
-  if (res.ok) return true;
-  return false;
-}
-
-async function getGcsSignedUrl({ eventId }: { eventId: number }) {
-  const res = await fetch("/api/gcs", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ eventId }),
-  });
-  if (res.ok) {
-    const url = await res.text();
-    return url;
-  }
-  return null;
-}
-
 //https://storage.googleapis.com/howler-event-images/1-1.png
 
 export default function Page() {
+  const { mutateAsync: getSignedUrls } = api.gcs.signedUrls.useMutation();
+  const [isUploading, setIsUploading] = useState(false);
+  const [imgSrc, setImgSrc] = useState<string | null>(null);
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      console.log("no file");
+      return;
+    }
+
+    if (!(file.type === "image/png" || file.type === "image/jpeg")) {
+      alert("Only jpeg or png images please.");
+      return;
+    }
+    if (file.size > 10000000) {
+      alert("Only images smaller than 10MB please.");
+      return;
+    }
+
+    setIsUploading(true);
+    const { imageUrl, signedUrls } = await getSignedUrls({ eventId: 2 });
+    if (!signedUrls) {
+      console.log("no signedUrls");
+      setIsUploading(false);
+      return;
+    }
+
+    if (file.type === "image/png") {
+      const res = await fetch(signedUrls.signedUrlPng, {
+        method: "PUT",
+        headers: {
+          //"Content-Type": "application/octet-stream",
+          "Content-Type": "image/png",
+        },
+        body: file,
+      });
+      if (res.ok) {
+        setImgSrc(imageUrl);
+      }
+    } else if (file.type === "image/jpeg") {
+      const res = await fetch(signedUrls.signedUrlJpeg, {
+        method: "PUT",
+        headers: {
+          //"Content-Type": "application/octet-stream",
+          "Content-Type": "image/jpeg",
+        },
+        body: file,
+      });
+      if (res.ok) {
+        setImgSrc(imageUrl);
+      }
+    }
+    setIsUploading(false);
+  };
+
   return (
     <div>
-      <img
-        className="h-24 w-24"
-        src="https://storage.googleapis.com/howler-event-images/1-1.png"
-        alt="img-some-event"
-      />
-      <Image
-        src="https://storage.googleapis.com/howler-event-images/1-1.png"
-        alt="nextimg-some-event"
-        width={100}
-        height={100}
-      />
+      {isUploading && <div>is uploading</div>}
+      <div>img:</div>
+      {imgSrc && <img className="h-24 w-24" src={imgSrc} alt="img-some-event" />}
+      <div>Image:</div>
+      {imgSrc && <Image src={imgSrc} alt="nextimg-some-event" width={96} height={96} />}
       <div>upload test</div>
       <input
         type="file"
+        disabled={isUploading}
         accept="image/png, image/jpeg"
-        onChange={async (e) => {
-          const file = e.target.files?.[0];
-          if (!file) {
-            console.log("no file");
-            return;
-          }
-          console.log({ file });
-
-          const signedUrl = await getGcsSignedUrl({ eventId: 1 });
-          if (!signedUrl) {
-            console.log("no signedUrl");
-            return;
-          }
-
-          const buf = await file.arrayBuffer();
-          console.log({ buf });
-          if (buf.byteLength > 10000000) {
-            //might aswell check size client side aswell
-            alert("Size of image too large (max 10MB). Please pick a smaller image.");
-            return;
-          }
-
-          const success = await upload(signedUrl, buf);
-
-          console.log({ success });
-        }}
+        onChange={handleChange}
+        className="disabled:bg-red-400"
       />
     </div>
   );

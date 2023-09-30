@@ -1,25 +1,24 @@
-import { cloudStorageUrlSchema } from "./schema";
+import { signedUrlsSchema } from "./schema";
 
 type P = {
-  eventId: number;
-  userId: number;
+  fileName: string;
 };
 
-export async function getUploadCloudStoragSignedUrl({ eventId, userId }: P) {
+export async function getUploadCloudStoragSignedUrl({ fileName }: P) {
   try {
-    const url = `${process.env.DATABASE_HTTP_URL}/generateV4UploadSignedUrl`;
-    const { googleCloudStorageSignedUrl } = cloudStorageUrlSchema.parse(
+    const url = `${process.env.DATABASE_HTTP_URL}/signedurls`;
+    const signedUrls = signedUrlsSchema.parse(
       await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: process.env.DATABASE_HTTP_AUTH_HEADER,
         },
-        body: JSON.stringify({ eventId, userId }),
+        body: JSON.stringify({ fileName }),
       }).then((r) => r.json())
     );
 
-    return googleCloudStorageSignedUrl;
+    return signedUrls;
   } catch (error) {
     return null;
   }
