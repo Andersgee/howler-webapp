@@ -41,8 +41,8 @@ export async function GET(request: NextRequest) {
     // Exchange the code for an access token
     const token = DISCORD_TOKEN.parse(
       await fetch(DISCORD_TOKEN_URL, {
-        cache: "no-store",
         method: "POST",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },

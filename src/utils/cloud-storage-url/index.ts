@@ -11,6 +11,7 @@ export async function getUploadCloudStoragSignedUrl({ fileName, contentType }: P
     const data = signedUrlSchema.parse(
       await fetch(url, {
         method: "POST",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/json",
           Authorization: process.env.DATABASE_HTTP_AUTH_HEADER,

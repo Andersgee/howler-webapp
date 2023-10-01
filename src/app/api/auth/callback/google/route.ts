@@ -43,8 +43,8 @@ export async function GET(request: NextRequest) {
     // https://developers.google.com/identity/openid-connect/openid-connect#exchangecode
     const token = GOOGLE_TOKEN.parse(
       await fetch(token_endpoint, {
-        cache: "no-store",
         method: "POST",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },

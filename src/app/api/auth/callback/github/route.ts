@@ -39,8 +39,8 @@ export async function GET(request: NextRequest) {
     // Exchange the code for an access token
     const token = GITHUB_TOKEN.parse(
       await fetch(GITHUB_TOKEN_URL, {
-        cache: "no-store",
         method: "POST",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           Accept: "application/json", //ask for json (by default response is just a "search params string")

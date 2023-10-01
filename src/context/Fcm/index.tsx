@@ -44,6 +44,7 @@ const Context = createContext<undefined | Value>(undefined);
 async function postFcmToken(fcmToken: string) {
   const res = await fetch("/api/fcmtoken", {
     method: "POST",
+    cache: "no-store",
     body: JSON.stringify({ fcmToken }),
   });
   if (res.status === 200) {
