@@ -139,6 +139,7 @@ model Event {
     whenEnd DateTime
     who     String
     info    String
+    image   String?
 
     joinedUsers      UserEventPivot[]
     eventchatmessage Eventchatmessage[]

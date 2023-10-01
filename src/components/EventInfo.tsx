@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useMapContext, useMapDispatch } from "#src/context/GoogleMaps";
 import { googleMaps } from "#src/context/GoogleMaps/google-maps";
 import { api, type RouterOutputs } from "#src/hooks/api";
+import { useImageUpload } from "#src/hooks/useImageUpload";
+import { EventImage } from "./EventImage";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
 import { Button } from "./ui/Button";
 import { LinkUserImage } from "./UserImage";
@@ -19,10 +21,22 @@ type Props = {
 export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isCreator }: Props) {
   const { googleMapIsReady, visible: mapIsVisible } = useMapContext();
   const mapDispatch = useMapDispatch();
-  const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
-  const { data: location } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
 
   const apiContext = api.useContext();
+  const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
+  const { data: location } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
+  const { uploadFile, isUploading: imageIsUploading } = useImageUpload(
+    { eventId },
+    {
+      onSuccess: ({ imageUrl }) =>
+        apiContext.event.info.setData({ eventId }, (prev) => {
+          if (!prev) return prev;
+          const data = structuredClone(prev); //dont mutate prev
+          return { ...data, image: imageUrl };
+        }),
+    }
+  );
+
   const eventLocationUpdate = api.event.updateLocation.useMutation({
     onSuccess: (updatedLocation) => {
       if (updatedLocation) {
@@ -51,8 +65,37 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
     //mapDispatch({ type: "show", name: "map" });
   };
 
+  const handleFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!(file.type === "image/png" || file.type === "image/jpeg")) {
+      alert("Only jpeg or png images please.");
+      return;
+    }
+    if (file.size > 10000000) {
+      alert("Only images smaller than 10MB please.");
+      return;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-3">
+      {event.image && <EventImage alt={event.what} src={event.image} />}
+      {isCreator && (
+        <input
+          type="file"
+          disabled={imageIsUploading}
+          accept="image/png, image/jpeg"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              uploadFile(file);
+            }
+          }}
+          className="disabled:bg-red-400"
+        />
+      )}
       <div className="flex items-center text-sm">
         <div>created by </div>
         <LinkUserImage src={event.creator.image!} alt={event.creator.name} userId={event.creator.id} />

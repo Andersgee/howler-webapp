@@ -21,7 +21,7 @@ const fileTypes = [
 //https://storage.googleapis.com/howler-event-images/1-1.png
 
 export default function Page() {
-  const { mutateAsync: getSignedUrls } = api.gcs.signedUrls.useMutation();
+  const { mutateAsync: getSignedUrl } = api.gcs.signedUrl.useMutation();
   const [isUploading, setIsUploading] = useState(false);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
 
@@ -42,37 +42,20 @@ export default function Page() {
     }
 
     setIsUploading(true);
-    const { imageUrl, signedUrls } = await getSignedUrls({ eventId: 2 });
-    if (!signedUrls) {
+    const { imageUrl, signedUrl } = await getSignedUrl({ eventId: 2, contentType: file.type });
+    if (!signedUrl) {
       console.log("no signedUrls");
       setIsUploading(false);
       return;
     }
 
-    if (file.type === "image/png") {
-      const res = await fetch(signedUrls.signedUrlPng, {
-        method: "PUT",
-        headers: {
-          //"Content-Type": "application/octet-stream",
-          "Content-Type": "image/png",
-        },
-        body: file,
-      });
-      if (res.ok) {
-        setImgSrc(imageUrl);
-      }
-    } else if (file.type === "image/jpeg") {
-      const res = await fetch(signedUrls.signedUrlJpeg, {
-        method: "PUT",
-        headers: {
-          //"Content-Type": "application/octet-stream",
-          "Content-Type": "image/jpeg",
-        },
-        body: file,
-      });
-      if (res.ok) {
-        setImgSrc(imageUrl);
-      }
+    const res = await fetch(signedUrl, {
+      method: "PUT",
+      headers: { "Content-Type": file.type },
+      body: file,
+    });
+    if (res.ok) {
+      setImgSrc(imageUrl);
     }
     setIsUploading(false);
   };
@@ -81,9 +64,9 @@ export default function Page() {
     <div>
       {isUploading && <div>is uploading</div>}
       <div>img:</div>
-      {imgSrc && <img className="h-24 w-24" src={imgSrc} alt="img-some-event" />}
+      {imgSrc && <img className="h-48 w-48" src={imgSrc} alt="img-some-event" />}
       <div>Image:</div>
-      {imgSrc && <Image src={imgSrc} alt="nextimg-some-event" width={96} height={96} />}
+      {imgSrc && <Image src={imgSrc} alt="nextimg-some-event" width={192} height={192} />}
       <div>upload test</div>
       <input
         type="file"

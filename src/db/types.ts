@@ -13,6 +13,7 @@ export type Event = {
   whenEnd: Timestamp;
   who: string;
   info: string;
+  image: string | null;
 };
 export type Eventchatmessage = {
   id: Generated<number>;
