@@ -134,9 +134,6 @@ export const eventRouter = createTRPCRouter({
 
       const eventInfo = await getEventInfo({ eventId: input.eventId }, false);
 
-      //cant revalidateTag multiple times.. only the last call does stuff:
-      //https://github.com/vercel/next.js/issues/52020
-      //revalidateTag(tagEvents());
       revalidateTag(tagEventInfo({ eventId: input.eventId }));
 
       return eventInfo;
@@ -180,9 +177,6 @@ export const eventRouter = createTRPCRouter({
 
       const eventLocation = await getEventLocation({ eventId: input.eventId }, false);
 
-      //cant revalidateTag multiple times.. only the last call does stuff:
-      //https://github.com/vercel/next.js/issues/52020
-      //revalidateTag(tagEvents());
       revalidateTag(tagEventLocation({ eventId: input.eventId }));
       revalidateTag(tagEventInfo({ eventId: input.eventId }));
 
@@ -197,7 +191,7 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const updateResult = await db
+      const _updateResult = await db
         .updateTable("Event")
         .where("id", "=", input.eventId)
         .set({
@@ -205,9 +199,10 @@ export const eventRouter = createTRPCRouter({
         })
         .executeTakeFirstOrThrow();
 
-      const numUpdatedRows = Number(updateResult.numUpdatedRows);
-      if (!numUpdatedRows) return false;
+      //const numUpdatedRows = Number(updateResult.numUpdatedRows);
+      //if (!numUpdatedRows) return false;
 
+      //does this even work?
       revalidateTag(tagEventInfo({ eventId: input.eventId }));
       return true;
     }),
