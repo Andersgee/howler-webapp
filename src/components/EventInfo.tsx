@@ -25,15 +25,22 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
   const apiContext = api.useContext();
   const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
   const { data: location } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
+
+  const { mutate: updateImage } = api.event.updateImage.useMutation();
+
   const { uploadFile, isUploading: imageIsUploading } = useImageUpload(
     { eventId },
     {
-      onSuccess: ({ imageUrl }) =>
+      onSuccess: ({ imageUrl }) => {
+        //optimistic
         apiContext.event.info.setData({ eventId }, (prev) => {
           if (!prev) return prev;
           const data = structuredClone(prev); //dont mutate prev
           return { ...data, image: imageUrl };
-        }),
+        });
+        //update db
+        updateImage({ eventId, image: imageUrl });
+      },
     }
   );
 

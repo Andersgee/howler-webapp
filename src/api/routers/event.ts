@@ -188,4 +188,27 @@ export const eventRouter = createTRPCRouter({
 
       return eventLocation;
     }),
+
+  updateImage: protectedProcedure
+    .input(
+      z.object({
+        eventId: z.number(),
+        image: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const updateResult = await db
+        .updateTable("Event")
+        .where("id", "=", input.eventId)
+        .set({
+          image: input.image,
+        })
+        .executeTakeFirstOrThrow();
+
+      const numUpdatedRows = Number(updateResult.numUpdatedRows);
+      if (!numUpdatedRows) return false;
+
+      revalidateTag(tagEventInfo({ eventId: input.eventId }));
+      return true;
+    }),
 });
