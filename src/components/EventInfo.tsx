@@ -8,6 +8,8 @@ import { useImageUpload } from "#src/hooks/useImageUpload";
 import { EventImage } from "./EventImage";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
 import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
+import { Label } from "./ui/Label";
 import { LinkUserImage } from "./UserImage";
 import { WhenText } from "./WhenText";
 
@@ -76,18 +78,22 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
     <div className="flex flex-col gap-3">
       {event.image && <EventImage alt={event.what} src={event.image} />}
       {isCreator && (
-        <input
-          type="file"
-          disabled={imageIsUploading}
-          accept="image/png, image/jpeg"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-              uploadFile(file);
-            }
-          }}
-          className="disabled:bg-red-400"
-        />
+        <div>
+          <Label htmlFor="picture">Picture</Label>
+          <Input
+            id="picture"
+            type="file"
+            disabled={imageIsUploading}
+            accept="image/png, image/jpeg"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                uploadFile(file);
+              }
+            }}
+            className="cursor-pointer"
+          />
+        </div>
       )}
       <div className="flex items-center text-sm">
         <div>created by </div>
