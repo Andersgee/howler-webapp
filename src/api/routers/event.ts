@@ -202,7 +202,7 @@ export const eventRouter = createTRPCRouter({
       //const numUpdatedRows = Number(updateResult.numUpdatedRows);
       //if (!numUpdatedRows) return false;
 
-      //does this even work?
+      //does this even work?..
       revalidateTag(tagEventInfo({ eventId: input.eventId }));
       return true;
     }),
