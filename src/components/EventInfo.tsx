@@ -65,20 +65,6 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
     //mapDispatch({ type: "show", name: "map" });
   };
 
-  const handleFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!(file.type === "image/png" || file.type === "image/jpeg")) {
-      alert("Only jpeg or png images please.");
-      return;
-    }
-    if (file.size > 10000000) {
-      alert("Only images smaller than 10MB please.");
-      return;
-    }
-  };
-
   return (
     <div className="flex flex-col gap-3">
       {event.image && <EventImage alt={event.what} src={event.image} />}

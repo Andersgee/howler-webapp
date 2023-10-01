@@ -5,17 +5,19 @@ import { useState } from "react";
 import { api } from "#src/hooks/api";
 
 // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
-const fileTypes = [
-  "image/apng",
-  "image/bmp",
-  "image/gif",
+// next/image only allows jpeg, png, webp and avif?
+const imageTypes = [
   "image/jpeg",
-  "image/pjpeg",
   "image/png",
-  "image/svg+xml",
-  "image/tiff",
+  "image/avif",
   "image/webp",
-  "image/x-icon",
+  //"image/apng",
+  //"image/bmp",
+  //"image/gif",
+  //"image/pjpeg",
+  //"image/svg+xml",
+  //"image/tiff",
+  //"image/x-icon",
 ];
 
 //https://storage.googleapis.com/howler-event-images/1-1.png
