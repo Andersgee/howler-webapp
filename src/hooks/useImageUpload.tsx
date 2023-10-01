@@ -37,19 +37,19 @@ export function useImageUpload(input: Input, options?: Options) {
       }
 
       setIsUploading(true);
-      const { imageUrl, signedUrl } = await getSignedUrl({ eventId: input.eventId, contentType: file.type });
-      if (!signedUrl) {
+      const gcs = await getSignedUrl({ eventId: input.eventId, contentType: file.type });
+      if (!gcs) {
         options?.onError?.("Something went wrong. Try again.");
         return;
       }
 
-      const res = await fetch(signedUrl, {
+      const res = await fetch(gcs.signedUploadUrl, {
         method: "PUT",
         headers: { "Content-Type": file.type },
         body: file,
       });
       if (res.ok) {
-        options?.onSuccess?.({ imageUrl });
+        options?.onSuccess?.({ imageUrl: gcs.imageUrl });
       } else {
         options?.onError?.("Something went wrong. Try again.");
       }

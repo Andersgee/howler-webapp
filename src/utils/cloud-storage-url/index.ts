@@ -19,7 +19,7 @@ export async function getUploadCloudStoragSignedUrl({ fileName, contentType }: P
       }).then((r) => r.json())
     );
 
-    return data.signedUrl;
+    return data;
   } catch (error) {
     return null;
   }
