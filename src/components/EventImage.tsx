@@ -7,8 +7,8 @@ type Props = {
 
 export function EventImage({ src, alt }: Props) {
   return (
-    <div className="relative mt-2 h-48 w-48">
-      <Image src={src} alt={alt} sizes="192px" fill className="object-cover" />
+    <div className="relative h-64 w-64">
+      <Image src={src} alt={alt} sizes="256px" fill priority className="object-cover" />
     </div>
   );
 }

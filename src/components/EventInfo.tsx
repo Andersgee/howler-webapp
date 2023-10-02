@@ -76,7 +76,11 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
 
   return (
     <div className="flex flex-col gap-3">
-      {event.image && <EventImage alt={event.what} src={event.image} />}
+      {event.image && (
+        <div className="mt-2 flex justify-center">
+          <EventImage alt={event.what} src={event.image} />
+        </div>
+      )}
       {isCreator && (
         <div>
           <Label htmlFor="picture">Picture</Label>
