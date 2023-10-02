@@ -1,6 +1,18 @@
 import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { db } from "#src/db";
 
+/*
+note to self:
+nextjs is still working on caching behaviour for regular fetch() and things seems to change with updates
+"no-cache" used to work in next 13.4? aka getting fresh data AND updating cache
+
+- see https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#opting-out-of-data-caching
+- and https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
+
+*/
+const CACHED: RequestCache = "force-cache"; //default in nextjs
+const FRESH: RequestCache = "no-store"; //
+
 type IsFollowingUserParams = { myUserId: number; otherUserId: number };
 
 export function tagIsFollowingUser(p: IsFollowingUserParams) {
@@ -13,7 +25,7 @@ export async function getIsFollowingUser(p: IsFollowingUserParams, cached = true
     .where("followerId", "=", p.myUserId)
     .where("userId", "=", p.otherUserId)
     .getFirst({
-      cache: cached ? "force-cache" : "no-cache",
+      cache: cached ? CACHED : FRESH,
       next: {
         tags: [tagIsFollowingUser(p)],
       },
@@ -35,7 +47,7 @@ export async function getHasJoinedEvent(p: HasJoinedEventParams, cached = true) 
     .where("userId", "=", p.userId)
     .where("eventId", "=", p.eventId)
     .getFirst({
-      cache: cached ? "force-cache" : "no-cache",
+      cache: cached ? CACHED : FRESH,
       next: {
         tags: [tagHasJoinedEvent(p)],
       },
@@ -56,7 +68,7 @@ export async function getEventLocation(p: EventLocationParams, cached = true) {
     .selectAll("EventLocation")
     .where("EventLocation.eventId", "=", p.eventId)
     .getFirst({
-      cache: cached ? "force-cache" : "no-cache",
+      cache: cached ? CACHED : FRESH,
       next: { tags: [tagEventLocation(p)] },
     });
 }
@@ -76,18 +88,8 @@ export async function getEventInfo(p: EventInfoParams, cached = true) {
         eb.selectFrom("User").select(["User.id", "User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
       ).as("creator"),
     ])
-    //.$if(true, (eb) =>
-    //  eb.select((eb) => [
-    //    jsonObjectFrom(
-    //      eb
-    //        .selectFrom("EventLocation")
-    //        .select(["EventLocation.lng", "EventLocation.lat"])
-    //        .whereRef("EventLocation.eventId", "=", "Event.id")
-    //    ).as("location"),
-    //  ])
-    //)
     .getFirst({
-      cache: cached ? "force-cache" : "no-cache",
+      cache: cached ? CACHED : FRESH,
       next: { tags: [tagEventInfo(p)] },
     });
 }
@@ -122,7 +124,7 @@ export async function getUserInfo(p: UserInfoParams, cached = true) {
     .selectAll()
     .where("User.id", "=", p.userId)
     .getFirst({
-      cache: cached ? "force-cache" : "no-cache",
+      cache: cached ? CACHED : FRESH,
       next: { tags: [tagUserInfo(p)] },
     });
 }
@@ -132,7 +134,7 @@ export async function getUserInfoPublic(p: UserInfoParams, cached = true) {
     .select(["id", "name", "image"])
     .where("User.id", "=", p.userId)
     .getFirst({
-      cache: cached ? "force-cache" : "no-cache",
+      cache: cached ? CACHED : FRESH,
       next: { tags: [tagUserInfo(p)] },
     });
 }
