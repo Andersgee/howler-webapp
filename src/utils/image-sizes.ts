@@ -1,5 +1,5 @@
 /*
-tilwind breakpoints -> DEVICE_SIZES as written in next.config.mjs
+tiilwind breakpoints -> DEVICE_SIZES as written in next.config.mjs
 also make sure these match the actual tailwind SCREENS in tailwind.config.ts
 */
 const SCREENS = {
@@ -8,7 +8,7 @@ const SCREENS = {
   lg: 1024,
   xl: 1280,
   xl2: 1536,
-};
+} as const;
 
 /** tw width -> pixels as IMAGE_SIZES written in next.config.mjs */
 const SIZES = {
