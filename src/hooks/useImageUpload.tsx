@@ -45,7 +45,10 @@ export function useImageUpload(input: Input, options?: Options) {
 
       const res = await fetch(gcs.signedUploadUrl, {
         method: "PUT",
-        headers: { "Content-Type": file.type },
+        headers: {
+          "Content-Type": file.type,
+          "Cache-Control": "public, max-age=2592000",
+        },
         body: file,
       });
       if (res.ok) {

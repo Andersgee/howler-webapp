@@ -1,13 +1,35 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
+import { type ScreensConfig } from "tailwindcss/types/config";
+
+//https://tailwindcss.com/docs/screens
+const TAILWIND_SCREENS_DEFAULT: ScreensConfig = {
+  sm: "640px",
+  md: "768px",
+  lg: "1024px",
+  xl: "1280px",
+  "2xl": "1536px",
+};
+
+const SCREENS_MUSKER: ScreensConfig = {
+  sm: "500px",
+  md: "600px",
+  lg: "700px",
+  xl: "988px",
+  "2xl": "1078px",
+  "3xl": "1266px",
+};
 
 export default {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
+    screens: TAILWIND_SCREENS_DEFAULT,
     container: {
+      screens: TAILWIND_SCREENS_DEFAULT,
       center: true,
     },
+
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
