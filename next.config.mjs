@@ -40,6 +40,8 @@ const IMAGE_SIZES = [24, 32, 48, 64, 96, 128, 256, 384];
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    imageSizes: IMAGE_SIZES,
+    deviceSizes: DEVICE_SIZES,
     remotePatterns: [
       {
         protocol: "https",
