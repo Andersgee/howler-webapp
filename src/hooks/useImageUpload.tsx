@@ -43,18 +43,23 @@ export function useImageUpload(input: Input, options?: Options) {
         return;
       }
 
-      const res = await fetch(gcs.signedUploadUrl, {
-        method: "PUT",
-        headers: {
-          "Content-Type": file.type,
-          "Cache-Control": "public, max-age=2592000",
-        },
-        body: file,
-      });
-      if (res.ok) {
-        options?.onSuccess?.({ imageUrl: gcs.imageUrl });
-      } else {
-        options?.onError?.("Something went wrong. Try again.");
+      try {
+        const res = await fetch(gcs.signedUploadUrl, {
+          method: "PUT",
+          headers: {
+            "Content-Type": file.type,
+            "Cache-Control": "public, max-age=2592000",
+            "X-Goog-Content-Length-Range": "0,10000000",
+          },
+          body: file,
+        });
+        if (res.ok) {
+          options?.onSuccess?.({ imageUrl: gcs.imageUrl });
+        } else {
+          options?.onError?.("Something went wrong. Try again.");
+        }
+      } catch (error) {
+        console.log(error);
       }
 
       setIsUploading(false);
