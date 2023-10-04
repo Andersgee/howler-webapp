@@ -33,10 +33,11 @@ function findSimpleName(data: ReverseGeoCodingResponseSchema) {
   //could use the "formatted_adress" but its a bit to formal
   for (const result of data.results) {
     for (const address_component of result.address_components) {
-      if (!hasNumbers(address_component.long_name)) {
+      const isNotPlusCode = address_component.types[0] !== "plus_code";
+      if (isNotPlusCode && !hasNumbers(address_component.long_name)) {
         return address_component.long_name;
       }
-      if (!hasNumbers(address_component.short_name)) {
+      if (isNotPlusCode && !hasNumbers(address_component.short_name)) {
         return address_component.short_name;
       }
     }
