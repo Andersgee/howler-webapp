@@ -27,9 +27,9 @@ export function SigninButtons() {
 
   if (!browserInfo.isConsideredSafeForOauth) {
     return (
-      <div>
-        <p className="mb-2 text-sm font-semibold">Cant sign in with Facebook in-app browser</p>
-        <p className="text-sm">Please use a normal browser like Chrome, Safari, Firefox etc.</p>
+      <div className="bg-white">
+        <p className="mb-2 text-sm font-semibold text-black">Cant sign in with Facebook in-app browser</p>
+        <p className="text-sm text-black">Please use a normal browser like Chrome, Safari, Firefox etc.</p>
       </div>
     );
   }
