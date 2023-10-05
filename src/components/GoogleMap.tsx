@@ -15,7 +15,7 @@ export function GoogleMap() {
   }, [googleMapIsReady]);
 
   return (
-    <div className="container mx-4">
+    <div className="container px-4">
       <div className="relative flex flex-col items-center">
         <div
           ref={mapRef}
