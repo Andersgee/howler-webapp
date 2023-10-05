@@ -8,14 +8,14 @@ import { LocateButton } from "./buttons/LocateButton";
 export function GoogleMap() {
   const mapRef = useRef(null);
   const { googleMapIsReady, visible } = useMapContext();
-  //const mapDispatch = useMapDispatch();
+
   useEffect(() => {
     if (!googleMapIsReady || !mapRef.current) return;
     googleMaps.render(mapRef.current);
   }, [googleMapIsReady]);
 
   return (
-    <div className="container">
+    <div className="container mx-4">
       <div className="relative flex flex-col items-center">
         <div
           ref={mapRef}

@@ -8,6 +8,7 @@ import { cn } from "#src/utils/cn";
 import { prettyDateShort } from "#src/utils/date";
 import { JoinEventButton } from "./buttons/JoinEventButton";
 import { IconSend } from "./Icons";
+import { MainShell } from "./MainShell";
 import { Button } from "./ui/Button";
 import { LinkUserImageFromId } from "./UserImageQuery";
 
@@ -99,12 +100,10 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
 
   if (!isJoined) {
     return (
-      <div className="container flex justify-center">
-        <div>
-          <h1>Need to join to chat</h1>
-          <JoinEventButton initialIsJoined={initialIsJoined} eventId={eventId} />
-        </div>
-      </div>
+      <MainShell>
+        <h1>Need to join to chat</h1>
+        <JoinEventButton initialIsJoined={initialIsJoined} eventId={eventId} />
+      </MainShell>
     );
   }
 

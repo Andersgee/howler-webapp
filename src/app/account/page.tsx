@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { SigninButtons } from "#src/components/buttons/SigninButtons";
+import { MainShell } from "#src/components/MainShell";
 import { getUserInfo } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 
@@ -23,10 +24,10 @@ export default async function Page(props: Props) {
   if (!user) notFound();
 
   return (
-    <div>
+    <>
       <h1>Account</h1>
       <p>signed in as {tokenUser.name}</p>
       <p>todo</p>
-    </div>
+    </>
   );
 }

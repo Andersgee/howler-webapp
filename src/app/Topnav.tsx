@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { HomeButton } from "#src/components/HomeButton";
 import {
   ChatNotificationsButton,
@@ -11,7 +10,7 @@ import { getUserFromCookie } from "#src/utils/token";
 export async function Topnav() {
   const user = await getUserFromCookie();
   return (
-    <div className="container">
+    <nav className="container">
       <div className="flex justify-between">
         <HomeButton />
 
@@ -27,6 +26,6 @@ export async function Topnav() {
           </div>
         )}
       </div>
-    </div>
+    </nav>
   );
 }

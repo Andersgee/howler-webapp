@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { SigninButtons } from "#src/components/buttons/SigninButtons";
 import { EventChat } from "#src/components/EventChat";
+import { MainShell } from "#src/components/MainShell";
 import { idFromHashid } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
 import { getEventInfo, getEventLocation, getHasJoinedEvent } from "#src/utils/tags";
@@ -42,10 +43,10 @@ export default async function Page({ params }: PageProps) {
 
   if (!user) {
     return (
-      <div>
+      <MainShell>
         <h1>Sign in and join event to chat</h1>
         <SigninButtons />
-      </div>
+      </MainShell>
     );
   }
 

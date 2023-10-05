@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { FollowUserButton } from "#src/components/buttons/FollowUserButton";
+import { MainShell } from "#src/components/MainShell";
 import { UserImage } from "#src/components/UserImage";
 import { idFromHashid } from "#src/utils/hashid";
 import { getIsFollowingUser, getUserInfoPublic } from "#src/utils/tags";
@@ -18,14 +19,12 @@ export default async function Page({ params }: { params: { hashid: string } }) {
   const isFollowing = user ? await getIsFollowingUser({ myUserId: user.id, otherUserId: profileUserId }) : false;
 
   return (
-    <main className="container flex justify-center">
-      <div>
-        <div className="flex items-center">
-          <UserImage src={profileUser.image || ""} alt={profileUser.name} />
-          <h1 className="ml-2">{profileUser.name}</h1>
-        </div>
-        <FollowUserButton userId={profileUserId} initialIsFollowing={isFollowing} />
+    <MainShell>
+      <div className="flex items-center">
+        <UserImage src={profileUser.image || ""} alt={profileUser.name} />
+        <h1 className="ml-2">{profileUser.name}</h1>
       </div>
-    </main>
+      <FollowUserButton userId={profileUserId} initialIsFollowing={isFollowing} />
+    </MainShell>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ActivateNotificationsButton } from "#src/components/buttons/ActivateNotificationsButton";
 import { CreateEventForm } from "#src/components/CreateEventForm";
 import { IconArrowLink } from "#src/components/Icons";
+import { MainShell } from "#src/components/MainShell";
 import { WhenText } from "#src/components/WhenText";
 import { hashidFromId } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
@@ -21,7 +22,7 @@ export default async function Page() {
   const events = await getEventsLatest10();
 
   return (
-    <main className="container px-4">
+    <MainShell>
       <CreateEventForm />
       <div className="mt-10 flex justify-center">
         <div>
@@ -50,6 +51,6 @@ export default async function Page() {
           <ActivateNotificationsButton />
         </div>
       </div>
-    </main>
+    </MainShell>
   );
 }

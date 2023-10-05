@@ -6,6 +6,7 @@ import { JoinEventButton } from "#src/components/buttons/JoinEventButton";
 import { ShareButton } from "#src/components/buttons/ShareButton";
 import { EventInfo } from "#src/components/EventInfo";
 import { IconChat } from "#src/components/Icons";
+import { MainShell } from "#src/components/MainShell";
 import { Button } from "#src/components/ui/Button";
 import { idFromHashid } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
@@ -50,31 +51,27 @@ export default async function Page({ params }: PageProps) {
   const hasJoinedEvent = user ? await getHasJoinedEvent({ eventId, userId: user.id }) : false;
   const isCreator = user?.id === event.creatorId;
   return (
-    <>
-      <div className="container flex justify-center px-4">
-        <div className="">
-          <EventInfo eventId={eventId} initialEventInfo={event} initialEventLocation={location} isCreator={isCreator} />
-          <div className="my-4 flex justify-center">
-            <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
-          </div>
-          <div className="flex gap-2">
-            {isCreator && <EditEventButton eventId={eventId} initialEventInfo={event} />}
-            <ShareButton title={event.what} />
-            {user && (
-              <Button variant="secondary" asChild>
-                <Link href={`/event/${params.hashid}/chat`}>
-                  <IconChat /> <span className="ml-2">Chat</span>
-                </Link>
-              </Button>
-            )}
-          </div>
-          {isCreator && (
-            <div className="my-8">
-              <DeleteEventButton eventId={event.id} />
-            </div>
-          )}
-        </div>
+    <MainShell>
+      <EventInfo eventId={eventId} initialEventInfo={event} initialEventLocation={location} isCreator={isCreator} />
+      <div className="my-4 flex justify-center">
+        <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
       </div>
-    </>
+      <div className="flex gap-2">
+        {isCreator && <EditEventButton eventId={eventId} initialEventInfo={event} />}
+        <ShareButton title={event.what} />
+        {user && (
+          <Button variant="secondary" asChild>
+            <Link href={`/event/${params.hashid}/chat`}>
+              <IconChat /> <span className="ml-2">Chat</span>
+            </Link>
+          </Button>
+        )}
+      </div>
+      {isCreator && (
+        <div className="my-8">
+          <DeleteEventButton eventId={event.id} />
+        </div>
+      )}
+    </MainShell>
   );
 }

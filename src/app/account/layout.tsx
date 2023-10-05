@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MainShell } from "#src/components/MainShell";
 
 type Props = {
   children: React.ReactNode;
@@ -8,7 +9,7 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="container">
+    <MainShell>
       <div className="flex gap-4">
         <div className="border-r pr-4">
           <h1>Settings</h1>
@@ -23,6 +24,6 @@ export default function Layout({ children }: Props) {
         </div>
         <div className="flex grow justify-center">{children}</div>
       </div>
-    </div>
+    </MainShell>
   );
 }
