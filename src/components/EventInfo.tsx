@@ -5,6 +5,7 @@ import { useMapContext, useMapDispatch } from "#src/context/GoogleMaps";
 import { googleMaps } from "#src/context/GoogleMaps/google-maps";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { useImageUpload } from "#src/hooks/useImageUpload";
+import { FullsizeImageButton } from "./buttons/FullsizeImageButton";
 import { EventImage } from "./EventImage";
 import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
 import { Button } from "./ui/Button";
@@ -78,7 +79,9 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
     <div className="flex flex-col gap-3">
       {event.image && (
         <div className="mt-2 flex justify-center">
-          <EventImage alt={event.what} src={event.image} />
+          <FullsizeImageButton title={event.what} src={event.image} alt={event.what}>
+            <EventImage src={event.image} alt={event.what} />
+          </FullsizeImageButton>
         </div>
       )}
       {isCreator && (

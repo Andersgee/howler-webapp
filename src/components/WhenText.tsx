@@ -6,11 +6,12 @@ import { prettyDate } from "#src/utils/date";
 
 type Props = {
   date: Date;
+  className?: string;
 };
 
-export function WhenText({ date }: Props) {
+export function WhenText({ date, className }: Props) {
   const { datestr, isMounted } = useFormatDate(date);
-  return <span>{datestr}</span>;
+  return <span className={className}>{datestr}</span>;
 }
 
 /**

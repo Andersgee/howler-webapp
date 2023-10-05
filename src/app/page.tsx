@@ -37,7 +37,7 @@ export default async function Page() {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="capitalize-first shrink text-base font-normal">{event.what || "anything"}</h3>
+                      <h3 className="capitalize-first shrink text-base font-medium">{event.what || "anything"}</h3>
                       <p>
                         <WhenText date={event.when} />
                       </p>
