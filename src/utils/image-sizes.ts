@@ -35,14 +35,14 @@ type Options = {
 };
 
 //the browser goes over the list of sources and picks the first one that matches
-//so order matters, default is last
+//so order matters, meaning default value last without media query condition
 
 /**
- * helper for `<Image sizes="..."/>` media query prop/> matching tailwind sizes
+ * helper for `<Image sizes="..."/>` media query prop with matching tailwind sizes
  * ### example usage
  * ```jsx
  * <div className="relative h-64 w-64 sm:h-96 sm:w-96">
- *     <Image src={src} alt={alt} sizes={imageSizes("w-64", { sm: "w-96" })} fill priority className="object-contain" />
+ *     <Image src={src} alt={alt} sizes={imageSizes("w-64", { sm: "w-96" })} fill className="object-contain" />
  * </div>
  * ```
  */

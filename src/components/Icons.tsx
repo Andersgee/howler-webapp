@@ -5,7 +5,7 @@ type IconProps = ComponentProps<"svg">;
 type IconClickableProps = { clickable?: boolean } & IconProps;
 
 //size of clickable area should be atleast 48x48
-const clickableStyles = "w-6 h-6 p-3 rounded-full hover:bg-secondary";
+const clickableStyles = "hover:bg-secondary h-6 w-6 rounded-full p-3";
 
 export function IconArrowLeft({ className, clickable, ...props }: IconClickableProps) {
   return (
@@ -489,6 +489,25 @@ export function IconLocate({ className, clickable, ...props }: IconClickableProp
       <line x1="12" x2="12" y1="19" y2="22" />
       <circle cx="12" cy="12" r="7" />
       <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+export function IconClose({ className, clickable, ...props }: IconClickableProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn("h-6 w-6", clickable && clickableStyles, className)}
+      {...props}
+    >
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
     </svg>
   );
 }
