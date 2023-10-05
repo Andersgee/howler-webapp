@@ -21,35 +21,33 @@ export default async function Page() {
   const events = await getEventsLatest10();
 
   return (
-    <main className="">
-      <div className="container">
-        <CreateEventForm />
-        <div className="mt-10 flex justify-center">
-          <div>
-            <h2 className="text-center">Latest howls</h2>
-            <ul className="max-w-md">
-              {events.map((event) => (
-                <li key={event.id}>
-                  <Link
-                    className="hover:bg-secondary block border-b py-4 transition-colors"
-                    prefetch={false}
-                    href={`/event/${hashidFromId(event.id)}`}
-                  >
-                    <div className="flex items-center justify-between px-4">
-                      <div>
-                        <h3 className="capitalize-first shrink text-base font-normal">{event.what || "anything"}</h3>
-                        <p>
-                          <WhenText date={event.when} />
-                        </p>
-                      </div>
-                      <IconArrowLink className="shrink-0" />
+    <main className="container px-4">
+      <CreateEventForm />
+      <div className="mt-10 flex justify-center">
+        <div>
+          <h2 className="text-center">Latest howls</h2>
+          <ul className="max-w-md">
+            {events.map((event) => (
+              <li key={event.id}>
+                <Link
+                  className="hover:bg-secondary block border-b py-4 transition-colors"
+                  prefetch={false}
+                  href={`/event/${hashidFromId(event.id)}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="capitalize-first shrink text-base font-normal">{event.what || "anything"}</h3>
+                      <p>
+                        <WhenText date={event.when} />
+                      </p>
                     </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <ActivateNotificationsButton />
-          </div>
+                    <IconArrowLink className="shrink-0" />
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ActivateNotificationsButton />
         </div>
       </div>
     </main>

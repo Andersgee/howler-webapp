@@ -51,16 +51,14 @@ export default async function Page({ params }: PageProps) {
   const isCreator = user?.id === event.creatorId;
   return (
     <>
-      <div className="container flex justify-center">
+      <div className="container flex justify-center px-4">
         <div className="">
           <EventInfo eventId={eventId} initialEventInfo={event} initialEventLocation={location} isCreator={isCreator} />
           <div className="my-4 flex justify-center">
             <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
           </div>
           <div className="flex gap-2">
-            {isCreator && (
-              <EditEventButton eventId={eventId} initialEventInfo={event} initialEventLocation={location} />
-            )}
+            {isCreator && <EditEventButton eventId={eventId} initialEventInfo={event} />}
             <ShareButton title={event.what} />
             {user && (
               <Button variant="secondary" asChild>

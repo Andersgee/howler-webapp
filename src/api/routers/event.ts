@@ -111,7 +111,6 @@ export const eventRouter = createTRPCRouter({
       z.object({
         eventId: z.number(),
         what: z.string(),
-        where: z.string(),
         when: z.date(),
         whenEnd: z.date(),
         who: z.string(),
@@ -125,7 +124,6 @@ export const eventRouter = createTRPCRouter({
         .where("id", "=", input.eventId)
         .set({
           what: input.what,
-          where: input.where,
           when: input.when,
           whenEnd: input.whenEnd,
           who: input.who,

@@ -22,15 +22,12 @@ import { Input } from "../ui/Input";
 type Props = {
   eventId: number;
   initialEventInfo: NonNullable<RouterOutputs["event"]["info"]>;
-  initialEventLocation: RouterOutputs["event"]["location"];
 };
 
-export function EditEventButton({ eventId, initialEventInfo, initialEventLocation }: Props) {
+export function EditEventButton({ eventId, initialEventInfo }: Props) {
   const [open, setOpen] = useState(false);
-  const mapDispatch = useMapDispatch();
 
   const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
-  const { data: location } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
   //const { data: event } = api.event.info.useQuery({ eventId });
 
   const apiContext = api.useContext();
@@ -43,7 +40,6 @@ export function EditEventButton({ eventId, initialEventInfo, initialEventLocatio
     onSettled: () => setOpen(false),
   });
   const [what, setWhat] = useState(event?.what || "");
-  const [where, setWhere] = useState(event?.where || "");
   const [who, setWho] = useState(event?.who || "");
   const [when, setWhen] = useState(event?.when || new Date());
   const [whenEnd, setWhenEnd] = useState(event?.whenEnd || new Date());
@@ -79,25 +75,6 @@ export function EditEventButton({ eventId, initialEventInfo, initialEventLocatio
                   onChange={(e) => setWhat(e.target.value)}
                   aria-label="what"
                 />
-              </div>
-              {/* Where */}
-              <div className="my-2 flex items-center">
-                <div className="flex w-24">
-                  <IconWhere />
-                  <span className="ml-2">Where?</span>
-                </div>
-                <button onClick={() => mapDispatch({ type: "show", name: "map" })}>pick location</button>
-                {/*
-                <Input
-                  type="text"
-                  name="where"
-                  placeholder="anywhere"
-                  className="block"
-                  value={where}
-                  onChange={(e) => setWhere(e.target.value)}
-                  aria-label="where"
-                />
-  */}
               </div>
               {/* Who */}
               <div className="my-2 flex items-center">
@@ -164,7 +141,6 @@ export function EditEventButton({ eventId, initialEventInfo, initialEventLocatio
                 eventUpdate.mutate({
                   eventId: eventId,
                   what: what,
-                  where: where,
                   who: who,
                   when: when,
                   whenEnd: whenEnd,
