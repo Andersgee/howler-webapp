@@ -35,6 +35,10 @@ const buttonVariants = cva(
   }
 );
 
+const buttonStylesDefault = buttonVariants({ variant: "default" });
+const buttonStylesSecondary = buttonVariants({ variant: "secondary" });
+const buttonStylesOutline = buttonVariants({ variant: "outline" });
+
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -49,4 +53,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
+export { Button, buttonVariants, buttonStylesDefault, buttonStylesSecondary, buttonStylesOutline };

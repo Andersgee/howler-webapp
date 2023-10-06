@@ -5,9 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "#src/utils/cn";
 import { IconArrowLeft, IconHowler } from "./Icons";
-import { buttonVariants } from "./ui/Button";
-
-const buttonStyles = buttonVariants({ variant: "secondary" });
+import { buttonStylesSecondary } from "./ui/Button";
 
 export function HomeButton() {
   const pathname = usePathname();
@@ -26,7 +24,7 @@ export function HomeButton() {
 
   if (eventHashId) {
     return (
-      <Link href={`/event/${eventHashId}`} className={cn(buttonStyles, "h-12")}>
+      <Link href={`/event/${eventHashId}`} className={cn(buttonStylesSecondary, "h-12")}>
         <IconArrowLeft /> <span className="ml-2">Event</span>
       </Link>
     );

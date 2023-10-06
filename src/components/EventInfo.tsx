@@ -6,9 +6,10 @@ import { googleMaps } from "#src/context/GoogleMaps/google-maps";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { useImageUpload } from "#src/hooks/useImageUpload";
 import { FullsizeImageButton } from "./buttons/FullsizeImageButton";
+import { InputFileButton } from "./buttons/InputFileButton";
 import { EventImage } from "./EventImage";
-import { IconArrowDown, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
-import { Button } from "./ui/Button";
+import { IconArrowDown, IconImage, IconLoadingSpinner, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
+import { Button, buttonStylesDefault, buttonStylesSecondary } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
 import { LinkUserImage } from "./UserImage";
@@ -85,22 +86,27 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
         </div>
       )}
       {isCreator && (
-        <div>
-          <Label htmlFor="picture">Picture</Label>
-          <Input
-            id="picture"
-            type="file"
-            disabled={imageIsUploading}
-            accept="image/png, image/jpeg"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                uploadFile(file);
-              }
-            }}
-            className="cursor-pointer"
-          />
-        </div>
+        <InputFileButton
+          disabled={imageIsUploading}
+          accept="image/png, image/jpeg"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              uploadFile(file);
+            }
+          }}
+          className={buttonStylesSecondary}
+        >
+          {imageIsUploading ? (
+            <>
+              <IconLoadingSpinner /> <span className="ml-2">Uploading</span>
+            </>
+          ) : (
+            <>
+              <IconImage /> <span className="ml-2">Select Picture...</span>
+            </>
+          )}
+        </InputFileButton>
       )}
       <div className="flex items-center text-sm">
         <div>created by </div>
