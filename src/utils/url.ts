@@ -22,6 +22,8 @@ export function encodeParams(params: Record<string, string | number | boolean>) 
  * utility for absolute url from relative urls such as "/about"
  *
  * (for either server or client environment)
+ *
+ * fallbacks to `localhost:3000` if no `process.env.NEXT_PUBLIC_DOMAIN_URL`
  */
 export function absUrl(url = "") {
   const path = url === "/" ? "" : url;

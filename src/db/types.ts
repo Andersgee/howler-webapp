@@ -29,6 +29,10 @@ export type EventLocation = {
   placeName: string | null;
   eventId: number;
 };
+export type EventLocationTilePivot = {
+  eventLocationId: number;
+  tileId: string;
+};
 export type Example = {
   id: Generated<number>;
   createdAt: Generated<Timestamp>;
@@ -46,6 +50,9 @@ export type Notification = {
   imageUrl: string | null;
   linkUrl: string;
   relativeLinkUrl: string;
+};
+export type Tile = {
+  id: string;
 };
 export type User = {
   id: Generated<number>;
@@ -73,9 +80,11 @@ export type DB = {
   Event: Event;
   Eventchatmessage: Eventchatmessage;
   EventLocation: EventLocation;
+  EventLocationTilePivot: EventLocationTilePivot;
   Example: Example;
   FcmToken: FcmToken;
   Notification: Notification;
+  Tile: Tile;
   User: User;
   UserEventPivot: UserEventPivot;
   UserNotificationPivot: UserNotificationPivot;

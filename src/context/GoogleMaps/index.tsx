@@ -11,6 +11,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
+import { absUrl } from "#src/utils/url";
 import { GOOGLE_MAPS_ELEMENT_ID, googleMaps } from "./google-maps";
 
 type Value = {
@@ -63,7 +64,7 @@ export function GoogleMapsProvider({ children }: { children: React.ReactNode }) 
     <Context.Provider value={value}>
       <Dispatch.Provider value={dispatch}>{children}</Dispatch.Provider>
       <Script
-        src="https://howler.andyfx.net/google-maps.js"
+        src={absUrl("/google-maps.js")} //"https://howler.andyfx.net/google-maps.js"
         strategy="lazyOnload"
         onLoad={() => setLibIsloaded(true)}
       />

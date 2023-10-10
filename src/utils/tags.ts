@@ -138,3 +138,23 @@ export async function getUserInfoPublic(p: UserInfoParams, cached = true) {
       next: { tags: [tagUserInfo(p)] },
     });
 }
+
+type TileParams = { tileId: string };
+
+export function tagTile(p: TileParams) {
+  return `tile-${p.tileId}`;
+}
+
+export async function getTile(p: TileParams, cached = true) {
+  const eventLocations = await db
+    .selectFrom("EventLocationTilePivot as p")
+    .where("p.tileId", "=", p.tileId)
+    .innerJoin("EventLocation", "EventLocation.id", "p.eventLocationId")
+    .selectAll("EventLocation")
+    .get({
+      cache: cached ? CACHED : FRESH,
+      next: { tags: [tagTile(p)] },
+    });
+
+  return eventLocations;
+}
