@@ -1,7 +1,7 @@
+import { increaseBears } from "#src/hooks/store";
+
 //https://console.cloud.google.com/google/maps-apis/studio/maps
 const TEST_MAP_ID = "478ad7a3d9f73ca4";
-
-export const GOOGLE_MAPS_ELEMENT_ID = "google-maps-div";
 
 //https://developers.google.com/maps/documentation/javascript/events
 
@@ -80,6 +80,10 @@ class GoogleMaps {
     if (this.currentCenterMarker) {
       this.currentCenterMarker.position = null;
     }
+  }
+
+  testReactStateUpdate(x: number) {
+    increaseBears(x);
   }
 
   setPos({ lng, lat, zoom }: { lng: number; lat: number; zoom: number }) {

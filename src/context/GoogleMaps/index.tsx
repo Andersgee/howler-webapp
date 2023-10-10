@@ -1,18 +1,9 @@
 "use client";
 
 import Script from "next/script";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { createContext, useContext, useEffect, useReducer, useState, type Dispatch } from "react";
 import { absUrl } from "#src/utils/url";
-import { GOOGLE_MAPS_ELEMENT_ID, googleMaps } from "./google-maps";
+import { googleMaps } from "./google-maps";
 
 type Value = {
   googleMapIsReady: boolean;
