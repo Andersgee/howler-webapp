@@ -8,6 +8,15 @@ const TEST_MAP_ID = "478ad7a3d9f73ca4";
 /*
 also geocoding:
 https://developers.google.com/maps/documentation/geocoding/overview
+
+also samples:
+https://github.com/googlemaps/js-samples/tree/main/samples
+
+clustering markers:
+https://developers.google.com/maps/documentation/javascript/marker-clustering
+
+tiling, how google handles map and tile coordinates:
+https://developers.google.com/maps/documentation/javascript/coordinates
 */
 
 /**
@@ -39,6 +48,7 @@ class GoogleMaps {
 
   async init() {
     //load relevant libs
+    //https://developers.google.com/maps/documentation/javascript/libraries#libraries-for-dynamic-library-import
     const { Map } = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
     const { AdvancedMarkerElement } = (await google.maps.importLibrary("marker")) as google.maps.MarkerLibrary;
 
