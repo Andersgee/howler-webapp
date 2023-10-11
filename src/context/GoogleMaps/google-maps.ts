@@ -1,4 +1,5 @@
 import { increaseBears } from "#src/hooks/store";
+import { tilesFromBounds } from "./utils";
 
 //https://console.cloud.google.com/google/maps-apis/studio/maps
 const TEST_MAP_ID = "478ad7a3d9f73ca4";
@@ -26,7 +27,6 @@ class GoogleMaps {
   Map!: typeof google.maps.Map;
   AdvancedMarkerElement!: typeof google.maps.marker.AdvancedMarkerElement;
 
-  mapDivId: string | null;
   map: google.maps.Map | null;
   markers: google.maps.marker.AdvancedMarkerElement[];
   isReady: boolean;
@@ -37,7 +37,6 @@ class GoogleMaps {
   constructor() {
     //this.Map = null;
     //this.AdvancedMarkerElement = null;
-    this.mapDivId = null;
     this.map = null;
     this.currentCenter = null;
     this.markers = [];
@@ -76,6 +75,17 @@ class GoogleMaps {
       if (this.currentCenterMarker && this.showCenterMarker) {
         this.currentCenterMarker.position = this.currentCenter;
       }
+    });
+
+    this.map.addListener("bounds_changed", () => {
+      // send the new bounds back to your server
+      const bounds = this.map?.getBounds();
+      const zoom = this.map?.getZoom();
+      if (bounds && zoom) {
+        const tiles = tilesFromBounds(bounds, zoom);
+        console.log("tiles:", tiles);
+      }
+      //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)
     });
   }
 
