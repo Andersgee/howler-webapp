@@ -5,7 +5,7 @@ import { googleMaps } from "#src/context/GoogleMaps/google-maps";
 import { increaseBears, useBearStore } from "#src/hooks/store";
 
 export default function Page() {
-  const { bears } = useBearStore();
+  const { bears, tileIdsInView } = useBearStore();
   return (
     <MainShell>
       <div>bears: {bears}</div>
@@ -22,6 +22,11 @@ export default function Page() {
       >
         increase bears by 3 via googleMaps method
       </button>
+      <ul>
+        {tileIdsInView.map((tileId) => (
+          <li key={tileId}>tileId: {tileId}</li>
+        ))}
+      </ul>
     </MainShell>
   );
 }

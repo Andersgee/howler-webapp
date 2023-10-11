@@ -20,6 +20,13 @@ function range(start: number, stop: number, step = 1) {
   return Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
 }
 
+//wrappedRange(28, 2, 32) => [28, 29, 30, 31, 1, 2]
+//wrappedRange(28, 30, 100) => [28, 29, 30]
+function wrappedRange(start: number, stop: number, wrapAt: number) {
+  const length = stop < start ? wrapAt - start + stop + 1 : stop - start + 1;
+  return Array.from({ length }, (_, i) => (start + i) % wrapAt);
+}
+
 function clamp(x: number, a: number, b: number) {
   return Math.max(a, Math.min(b, x));
 }
@@ -31,9 +38,13 @@ export function tileNamesForAllZoomLevels({ lng, lat }: { lng: number; lat: numb
 }
 
 export function tileNamesInView(bounds: google.maps.LatLngBounds, z: number) {
-  const zoom = clamp(z, MIN_ZOOM, MAX_ZOOM);
+  //const zoom = clamp(z, MIN_ZOOM, MAX_ZOOM);
+  const zoom = z;
   const ne = bounds.getNorthEast();
   const sw = bounds.getSouthWest();
+
+  //for a given zoom, this is the grid width and height of tiles
+  const gridSize = 1 << Math.floor(z);
 
   const topLeft = coordinates(new google.maps.LatLng(ne.lat(), sw.lng()), zoom);
   const botRight = coordinates(new google.maps.LatLng(sw.lat(), ne.lng()), zoom);
@@ -44,11 +55,11 @@ export function tileNamesInView(bounds: google.maps.LatLngBounds, z: number) {
   const minY = topLeft.tileCoordinate.y;
   const maxY = botRight.tileCoordinate.y;
 
-  //const tiles: { z: number; x: number; y: number }[] = [];
+  const ys = wrappedRange(minY, maxY, gridSize);
+  const xs = wrappedRange(minX, maxX, gridSize);
   const tiles: string[] = [];
-  for (let y = minY; y <= maxY; y++) {
-    for (let x = minX; x <= maxX; x++) {
-      //tiles.push({ z: Math.floor(zoom), x, y });
+  for (const y of ys) {
+    for (const x of xs) {
       tiles.push(tileNameFromCoord({ x, y, zoom }));
     }
   }
