@@ -1,5 +1,5 @@
 import { increaseBears } from "#src/hooks/store";
-import { tilesFromBounds } from "./utils";
+import { tileNamesInView } from "./utils";
 
 //https://console.cloud.google.com/google/maps-apis/studio/maps
 const TEST_MAP_ID = "478ad7a3d9f73ca4";
@@ -82,7 +82,7 @@ class GoogleMaps {
       const bounds = this.map?.getBounds();
       const zoom = this.map?.getZoom();
       if (bounds && zoom) {
-        const tiles = tilesFromBounds(bounds, zoom);
+        const tiles = tileNamesInView(bounds, zoom);
         console.log("tiles:", tiles);
       }
       //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)
