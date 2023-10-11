@@ -169,22 +169,7 @@ model EventLocationTilePivot {
 }
 
 model Tile {
-    id String @id //"z-x-y" eg "8-56-34"
+    id String @id //"z-x-y" eg "5-10-11"
 
     eventLocations EventLocationTilePivot[]
-
-    //this is how wide tiles are at different zooms
-    //{ z: 2, km: 4609.70225462561 }
-    //{ z: 3, km: 2455.9571245307357 }
-    //{ z: 4, km: 1246.3000685428867 }
-    //{ z: 5, km: 625.4228244928763 }
-    //{ z: 6, km: 312.9973141994474 }
-    //{ z: 7, km: 156.5368106508794 }
-    //{ z: 8, km: 78.27282633643645 }
-    //{ z: 9, km: 39.13974872306097 }
-    //{ z: 10, km: 19.575509406400275 }
-    //{ z: 11, km: 9.7905463316118 }
-    //{ z: 12, km: 4.898057233831856 }
-    //{ z: 13, km: 2.454594726549455 }
-    //{ z: 14, km: 1.2300803675466883 }
 }

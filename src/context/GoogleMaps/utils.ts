@@ -40,7 +40,7 @@ function coordinates(latLng: google.maps.LatLng, zoom: number) {
     Math.floor((worldCoordinate.y * scale) / TILE_SIZE)
   );
 
-  return { pixelCoordinate, tileCoordinate };
+  return { worldCoordinate, pixelCoordinate, tileCoordinate };
 }
 
 // The mapping between latitude, longitude and pixels is defined by the web
