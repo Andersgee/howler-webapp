@@ -20,11 +20,24 @@ function range(start: number, stop: number, step = 1) {
   return Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
 }
 
-//wrappedRange(28, 2, 32) => [28, 29, 30, 31, 1, 2]
-//wrappedRange(28, 30, 100) => [28, 29, 30]
+function mod(n: number, m: number) {
+  return ((n % m) + m) % m;
+}
+
+function unique(v: number[]) {
+  return Array.from(new Set(v));
+}
+
+/**
+ * ```
+ * wrappedRange(28, 2, 32) // [28, 29, 30, 31, 1, 2]
+ * wrappedRange(28, 30, 32) // [28, 29, 30]
+ * wrappedRange(-2, 3, 32) // [ 30, 31, 0, 1, 2, 3 ]
+ * ```
+ */
 function wrappedRange(start: number, stop: number, wrapAt: number) {
   const length = stop < start ? wrapAt - start + stop + 1 : stop - start + 1;
-  return Array.from({ length }, (_, i) => (start + i) % wrapAt);
+  return unique(Array.from({ length }, (_, i) => mod(start + i, wrapAt)));
 }
 
 function clamp(x: number, a: number, b: number) {
@@ -46,17 +59,12 @@ export function tileNamesInView(bounds: google.maps.LatLngBounds, z: number) {
   //for a given zoom, this is the grid width and height of tiles
   const gridSize = 1 << Math.floor(z);
 
-  const topLeft = coordinates(new google.maps.LatLng(ne.lat(), sw.lng()), zoom);
-  const botRight = coordinates(new google.maps.LatLng(sw.lat(), ne.lng()), zoom);
+  const { tileCoordinate: topLeft } = coordinates(new google.maps.LatLng(ne.lat(), sw.lng()), zoom);
+  const { tileCoordinate: botRight } = coordinates(new google.maps.LatLng(sw.lat(), ne.lng()), zoom);
 
-  const minX = topLeft.tileCoordinate.x;
-  const maxX = botRight.tileCoordinate.x;
+  const ys = wrappedRange(topLeft.y, botRight.y, gridSize);
+  const xs = wrappedRange(topLeft.x, botRight.x, gridSize);
 
-  const minY = topLeft.tileCoordinate.y;
-  const maxY = botRight.tileCoordinate.y;
-
-  const ys = wrappedRange(minY, maxY, gridSize);
-  const xs = wrappedRange(minX, maxX, gridSize);
   const tiles: string[] = [];
   for (const y of ys) {
     for (const x of xs) {
