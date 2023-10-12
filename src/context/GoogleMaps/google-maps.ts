@@ -61,6 +61,7 @@ class GoogleMaps {
       center: { lat: -34.397, lng: 150.644 },
       zoom: 8,
       mapId: TEST_MAP_ID, //required for some libs like AdvancedMarkerElement
+      minZoom: 3,
     });
 
     this.currentCenterMarker = new this.AdvancedMarkerElement({

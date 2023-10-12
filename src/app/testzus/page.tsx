@@ -23,8 +23,10 @@ export default function Page() {
         increase bears by 3 via googleMaps method
       </button>
       <ul>
-        {tileIdsInView.map((tileId) => (
-          <li key={tileId}>tileId: {tileId}</li>
+        {tileIdsInView.map((tileId, i) => (
+          <li key={tileId}>
+            i: {i}: tileId: {tileId}
+          </li>
         ))}
       </ul>
     </MainShell>
