@@ -51,13 +51,13 @@ export function tileNamesForAllZoomLevels({ lng, lat }: { lng: number; lat: numb
 }
 
 export function tileNamesInView(bounds: google.maps.LatLngBounds, z: number) {
-  //const zoom = clamp(z, MIN_ZOOM, MAX_ZOOM);
-  const zoom = z;
+  const zoom = clamp(z, MIN_ZOOM, MAX_ZOOM);
+  //const zoom = z;
   const ne = bounds.getNorthEast();
   const sw = bounds.getSouthWest();
 
   //for a given zoom, this is the grid width and height of tiles
-  const gridSize = 1 << Math.floor(z);
+  const gridSize = 1 << Math.floor(zoom);
 
   const { tileCoordinate: topLeft } = coordinates(new google.maps.LatLng(ne.lat(), sw.lng()), zoom);
   const { tileCoordinate: botRight } = coordinates(new google.maps.LatLng(sw.lat(), ne.lng()), zoom);
