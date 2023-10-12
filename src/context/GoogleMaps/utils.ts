@@ -2,7 +2,7 @@ const TILE_SIZE = 256;
 
 //const MIN_ZOOM_GOOGLE = 0
 //const MAX_ZOOM_GOOGLE = 22
-const MIN_ZOOM = 4;
+const MIN_ZOOM = 3;
 const MAX_ZOOM = 5;
 
 function tileName({ lng, lat, zoom }: { lng: number; lat: number; zoom: number }) {
@@ -57,7 +57,7 @@ export function tileNamesInView(bounds: google.maps.LatLngBounds, z: number) {
   const sw = bounds.getSouthWest();
 
   //for a given zoom, this is the grid width and height of tiles
-  const gridSize = 1 << Math.floor(zoom);
+  const gridSize = 1 << zoom;
 
   const { tileCoordinate: topLeft } = coordinates(new google.maps.LatLng(ne.lat(), sw.lng()), zoom);
   const { tileCoordinate: botRight } = coordinates(new google.maps.LatLng(sw.lat(), ne.lng()), zoom);
