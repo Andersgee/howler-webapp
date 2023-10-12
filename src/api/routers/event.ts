@@ -176,7 +176,7 @@ export const eventRouter = createTRPCRouter({
       const eventLocation = await getEventLocation({ eventId: input.eventId }, false);
 
       revalidateTag(tagEventLocation({ eventId: input.eventId }));
-      revalidateTag(tagEventInfo({ eventId: input.eventId }));
+      //revalidateTag(tagEventInfo({ eventId: input.eventId }));
 
       return eventLocation;
     }),

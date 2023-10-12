@@ -2,8 +2,14 @@ const TILE_SIZE = 256;
 
 //const MIN_ZOOM_GOOGLE = 0
 //const MAX_ZOOM_GOOGLE = 22
-const MIN_ZOOM = 3;
-const MAX_ZOOM = 5;
+const MIN_ZOOM = 4;
+const MAX_ZOOM = 4;
+
+export function tileNamesForAllZoomLevels({ lng, lat }: { lng: number; lat: number }) {
+  //const zooms = range(0, 8);
+  const zooms = range(MIN_ZOOM, MAX_ZOOM);
+  return zooms.map((zoom) => tileName({ lng, lat, zoom }));
+}
 
 function tileName({ lng, lat, zoom }: { lng: number; lat: number; zoom: number }) {
   const latLng = new google.maps.LatLng(lat, lng);
@@ -42,12 +48,6 @@ function wrappedRange(start: number, stop: number, wrapAt: number) {
 
 function clamp(x: number, a: number, b: number) {
   return Math.max(a, Math.min(b, x));
-}
-
-export function tileNamesForAllZoomLevels({ lng, lat }: { lng: number; lat: number }) {
-  //const zooms = range(0, 8);
-  const zooms = range(MIN_ZOOM, MAX_ZOOM);
-  return zooms.map((zoom) => tileName({ lng, lat, zoom }));
 }
 
 export function tileNamesInView(bounds: google.maps.LatLngBounds, z: number) {
