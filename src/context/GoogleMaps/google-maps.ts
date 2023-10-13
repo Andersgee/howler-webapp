@@ -1,4 +1,4 @@
-import { increaseBears, setTileIdsInView } from "#src/hooks/store";
+import { setTileIdsInView } from "#src/store";
 import { tileNamesInView } from "./utils";
 
 //https://console.cloud.google.com/google/maps-apis/studio/maps
@@ -83,7 +83,10 @@ class GoogleMaps {
       const bounds = this.map?.getBounds();
       const zoom = this.map?.getZoom();
       if (bounds && zoom) {
-        const tiles = tileNamesInView(bounds, zoom);
+        const ne = bounds.getNorthEast();
+        const sw = bounds.getSouthWest();
+
+        const tiles = tileNamesInView({ lng: ne.lng(), lat: ne.lat() }, { lng: sw.lng(), lat: sw.lat() }, zoom);
         setTileIdsInView(tiles);
         //console.log("tiles:", tiles);
       }
@@ -102,10 +105,6 @@ class GoogleMaps {
     if (this.currentCenterMarker) {
       this.currentCenterMarker.position = null;
     }
-  }
-
-  testReactStateUpdate(x: number) {
-    increaseBears(x);
   }
 
   setPos({ lng, lat, zoom }: { lng: number; lat: number; zoom: number }) {

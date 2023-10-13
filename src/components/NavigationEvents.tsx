@@ -12,20 +12,18 @@ export function NavigationEvents() {
   const { googleMapIsReady } = useMapContext();
 
   useEffect(() => {
-    mapDispatch({ type: "show", name: "map" }); //debug
+    //mapDispatch({ type: "show", name: "map" }); //debug
 
     //const url = `${pathname}?${searchParams}`;
     const paths = pathname.split("/");
     const isEventPage = paths.length === 3 && paths[1] === "event";
 
-    /*
     if (!isEventPage) {
       mapDispatch({ type: "hide", name: "map" });
       if (googleMapIsReady) {
         googleMaps.clearMarkers();
       }
     }
-    */
   }, [pathname, mapDispatch, googleMapIsReady]);
 
   return null;

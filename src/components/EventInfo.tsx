@@ -9,9 +9,7 @@ import { FullsizeImageButton } from "./buttons/FullsizeImageButton";
 import { InputFileButton } from "./buttons/InputFileButton";
 import { EventImage } from "./EventImage";
 import { IconArrowDown, IconImage, IconLoadingSpinner, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
-import { Button, buttonStylesDefault, buttonStylesSecondary } from "./ui/Button";
-import { Input } from "./ui/Input";
-import { Label } from "./ui/Label";
+import { Button, buttonStylesSecondary } from "./ui/Button";
 import { LinkUserImage } from "./UserImage";
 import { WhenText } from "./WhenText";
 

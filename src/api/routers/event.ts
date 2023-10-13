@@ -1,5 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
+import { tileIdsFromLngLat } from "#src/context/GoogleMaps/utils";
 import { db } from "#src/db";
 import { getGoogleReverseGeocoding } from "#src/utils/geocoding";
 import { hashidFromId } from "#src/utils/hashid";
@@ -12,6 +13,7 @@ import {
   tagEventLocation,
   tagEvents,
   tagHasJoinedEvent,
+  tagTile,
 } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -150,19 +152,36 @@ export const eventRouter = createTRPCRouter({
 
       const placeName = await getGoogleReverseGeocoding({ lng: input.lng, lat: input.lat });
 
-      const updateResult = await db
-        .updateTable("EventLocation")
+      const existingEventLocation = await db
+        .selectFrom("EventLocation")
+        .select("id")
         .where("eventId", "=", input.eventId)
-        .set({
-          lng: input.lng,
-          lat: input.lat,
-          placeName: placeName,
-        })
+        .executeTakeFirst();
+      const tileIds = tileIdsFromLngLat({ lng: input.lng, lat: input.lat });
+
+      //make sure tiles exist
+      const _insertResult_Tiles = await db
+        .insertInto("Tile")
+        .ignore() //ignore the insert if already exists
+        .values(tileIds.map((tileId) => ({ id: tileId })))
         .executeTakeFirstOrThrow();
 
-      const numUpdatedRows = Number(updateResult.numUpdatedRows);
-      if (!numUpdatedRows) {
-        const _insertResult = await db
+      //update or insert location
+      let eventLocationId: number;
+      if (existingEventLocation) {
+        const _updateResult_EventLocation = await db
+          .updateTable("EventLocation")
+          .where("eventId", "=", input.eventId)
+          .set({
+            lng: input.lng,
+            lat: input.lat,
+            placeName: placeName,
+          })
+          .executeTakeFirstOrThrow();
+
+        eventLocationId = existingEventLocation.id;
+      } else {
+        const insertResult_EventLocation = await db
           .insertInto("EventLocation")
           .values({
             eventId: input.eventId,
@@ -171,12 +190,29 @@ export const eventRouter = createTRPCRouter({
             placeName: placeName,
           })
           .executeTakeFirstOrThrow();
+
+        eventLocationId = Number(insertResult_EventLocation.insertId);
       }
+
+      //also make sure pivots exist
+      const _insertResult_EventLocationTilePivot = await db
+        .insertInto("EventLocationTilePivot")
+        .ignore() //ignore the insert if already exists
+        .values(
+          tileIds.map((tileId) => ({
+            eventLocationId: eventLocationId,
+            tileId: tileId,
+          }))
+        )
+        .executeTakeFirst();
 
       const eventLocation = await getEventLocation({ eventId: input.eventId }, false);
 
+      revalidateTag(tagEventInfo({ eventId: input.eventId }));
       revalidateTag(tagEventLocation({ eventId: input.eventId }));
-      //revalidateTag(tagEventInfo({ eventId: input.eventId }));
+      for (const tileId of tileIds) {
+        revalidateTag(tagTile({ tileId }));
+      }
 
       return eventLocation;
     }),
@@ -197,10 +233,6 @@ export const eventRouter = createTRPCRouter({
         })
         .executeTakeFirstOrThrow();
 
-      //const numUpdatedRows = Number(updateResult.numUpdatedRows);
-      //if (!numUpdatedRows) return false;
-
-      //does this even work?..
       revalidateTag(tagEventInfo({ eventId: input.eventId }));
       return true;
     }),
