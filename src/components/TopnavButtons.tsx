@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
-import { useDialogContext, useDialogDispatch } from "#src/context/DialogContext";
 import { useFcmContext } from "#src/context/Fcm";
 import { type ChatMessageData } from "#src/context/Fcm/message-schema";
-import { api, type RouterOutputs } from "#src/hooks/api";
+import { api } from "#src/hooks/api";
+import { useStore } from "#src/store";
 import { hashidFromId } from "#src/utils/hashid";
 import type { TokenUser } from "#src/utils/token/schema";
 import { SigninButtons } from "./buttons/SigninButtons";
@@ -42,11 +42,11 @@ export function ProfileButton({ user }: { user: TokenUser }) {
 }
 
 export function SigninButton() {
-  const dialog = useDialogContext();
-  const dialogDispatch = useDialogDispatch();
+  const dialogValue = useStore.select.dialogValue();
+  const dialogAction = useStore.select.dialogAction();
 
   return (
-    <Popover open={dialog === "signin"} onOpenChange={() => dialogDispatch({ type: "toggle", name: "signin" })}>
+    <Popover open={dialogValue === "signin"} onOpenChange={() => dialogAction({ type: "toggle", name: "signin" })}>
       <PopoverTrigger asChild>
         <Button className="my-1">sign in</Button>
       </PopoverTrigger>

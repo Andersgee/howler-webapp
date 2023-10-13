@@ -1,8 +1,8 @@
 "use client";
 
-import { useDialogDispatch } from "#src/context/DialogContext";
 import { useUserContext } from "#src/context/UserContext";
 import { api } from "#src/hooks/api";
+import { useStore } from "#src/store";
 import { Button } from "../ui/Button";
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
 export function JoinEventButton({ initialIsJoined, eventId }: Props) {
   const user = useUserContext();
   const apiContext = api.useContext();
-  const dialogDispatch = useDialogDispatch();
+  const dialogAction = useStore.select.dialogAction();
 
   const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
 
@@ -31,7 +31,7 @@ export function JoinEventButton({ initialIsJoined, eventId }: Props) {
       variant="optimisticdefault"
       onClick={async () => {
         if (!user) {
-          dialogDispatch({ type: "show", name: "signin" });
+          dialogAction({ type: "show", name: "signin" });
         } else if (isJoined) {
           eventLeave.mutate({ eventId });
         } else {

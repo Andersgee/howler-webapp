@@ -1,8 +1,8 @@
 "use client";
 
-import { useDialogDispatch } from "#src/context/DialogContext";
 import { useUserContext } from "#src/context/UserContext";
 import { api } from "#src/hooks/api";
+import { useStore } from "#src/store";
 import { Button } from "../ui/Button";
 
 type Props = {
@@ -13,7 +13,8 @@ type Props = {
 export function FollowUserButton({ initialIsFollowing, userId }: Props) {
   const user = useUserContext();
   const apiContext = api.useContext();
-  const dialogDispatch = useDialogDispatch();
+
+  const dialogAction = useStore.select.dialogAction();
 
   const { data: isFollowing } = api.user.isFollowing.useQuery({ userId }, { initialData: initialIsFollowing });
 
@@ -31,7 +32,7 @@ export function FollowUserButton({ initialIsFollowing, userId }: Props) {
       variant="optimisticdefault"
       onClick={async () => {
         if (!user) {
-          dialogDispatch({ type: "show", name: "signin" });
+          dialogAction({ type: "show", name: "signin" });
         } else if (isFollowing) {
           userUnFollow.mutate({ userId });
         } else {

@@ -1,9 +1,7 @@
 "use client";
 
 import PlausibleProvider from "next-plausible";
-import { DialogProvider } from "./DialogContext";
 import { FcmProvider } from "./Fcm";
-//import { GoogleMapsProvider } from "./GoogleMaps";
 import { TrpcProvider } from "./Trpc";
 import { UserProvider } from "./UserContext";
 
@@ -12,9 +10,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <PlausibleProvider domain="howler.andyfx.net">
       <UserProvider>
         <TrpcProvider>
-          <FcmProvider>
-            <DialogProvider>{children}</DialogProvider>
-          </FcmProvider>
+          <FcmProvider>{children}</FcmProvider>
         </TrpcProvider>
       </UserProvider>
     </PlausibleProvider>
