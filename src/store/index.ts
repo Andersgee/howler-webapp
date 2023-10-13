@@ -4,14 +4,16 @@ import { createDialogSlice, type DialogSlice } from "./dialog";
 import { createFishSlice, type FishSlice } from "./fish";
 import { createMapSlice, type MapSlice } from "./map";
 import { createSelectors } from "./selectors";
+import { createUserSlice, type Userlice } from "./user";
 
-type StoreState = BearSlice & FishSlice & DialogSlice & MapSlice;
+type StoreState = BearSlice & FishSlice & DialogSlice & MapSlice & Userlice;
 
 const useStoreBase = create<StoreState>()((...a) => ({
   ...createBearSlice(...a),
   ...createFishSlice(...a),
   ...createDialogSlice(...a),
   ...createMapSlice(...a),
+  ...createUserSlice(...a),
 }));
 
 export const useStore = createSelectors(useStoreBase);

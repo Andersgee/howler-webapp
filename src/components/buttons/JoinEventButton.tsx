@@ -1,6 +1,5 @@
 "use client";
 
-import { useUserContext } from "#src/context/UserContext";
 import { api } from "#src/hooks/api";
 import { useStore } from "#src/store";
 import { Button } from "../ui/Button";
@@ -11,7 +10,7 @@ type Props = {
 };
 
 export function JoinEventButton({ initialIsJoined, eventId }: Props) {
-  const user = useUserContext();
+  const user = useStore.select.user();
   const apiContext = api.useContext();
   const dialogAction = useStore.select.dialogAction();
 

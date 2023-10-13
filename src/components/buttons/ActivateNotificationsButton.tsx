@@ -1,13 +1,13 @@
 "use client";
 
 import { useFcmContext } from "#src/context/Fcm";
-import { useUserContext } from "#src/context/UserContext";
+import { useStore } from "#src/store";
 import { IconBell } from "../Icons";
 import { Button } from "../ui/Button";
 
 export function ActivateNotificationsButton() {
   const { getFcmToken, fcmToken } = useFcmContext();
-  const user = useUserContext();
+  const user = useStore.select.user();
   if (!user || fcmToken !== null) return null;
 
   return (
