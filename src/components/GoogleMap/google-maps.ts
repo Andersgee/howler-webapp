@@ -23,7 +23,7 @@ https://developers.google.com/maps/documentation/javascript/coordinates
 /**
  * simpler wrapper for interacting with google maps
  */
-class GoogleMaps {
+export class GoogleMaps {
   Map!: typeof google.maps.Map;
   AdvancedMarkerElement!: typeof google.maps.marker.AdvancedMarkerElement;
 
@@ -46,14 +46,19 @@ class GoogleMaps {
   }
 
   async init() {
-    //load relevant libs
-    //https://developers.google.com/maps/documentation/javascript/libraries#libraries-for-dynamic-library-import
-    const { Map } = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
-    const { AdvancedMarkerElement } = (await google.maps.importLibrary("marker")) as google.maps.MarkerLibrary;
+    try {
+      //load relevant libs
+      //https://developers.google.com/maps/documentation/javascript/libraries#libraries-for-dynamic-library-import
+      const { Map } = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
+      const { AdvancedMarkerElement } = (await google.maps.importLibrary("marker")) as google.maps.MarkerLibrary;
 
-    this.Map = Map;
-    this.AdvancedMarkerElement = AdvancedMarkerElement;
-    this.isReady = true;
+      this.Map = Map;
+      this.AdvancedMarkerElement = AdvancedMarkerElement;
+      this.isReady = true;
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   render(element: HTMLDivElement) {
@@ -207,4 +212,4 @@ class GoogleMaps {
   }
 }
 
-export const googleMaps = new GoogleMaps();
+//export const googleMaps = new GoogleMaps();

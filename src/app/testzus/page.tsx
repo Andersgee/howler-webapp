@@ -1,7 +1,6 @@
 "use client";
 
 import { MainShell } from "#src/components/MainShell";
-//import { googleMaps } from "#src/context/GoogleMaps/google-maps";
 import { useStore } from "#src/store";
 
 export default function Page() {

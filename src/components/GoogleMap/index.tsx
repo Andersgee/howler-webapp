@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useMapContext } from "#src/context/GoogleMaps";
-import { googleMaps } from "#src/context/GoogleMaps/google-maps";
-import { LocateButton } from "./buttons/LocateButton";
+import { LocateButton } from "#src/components/buttons/LocateButton";
+import { useStore } from "#src/store";
 
 export function GoogleMap() {
   const mapRef = useRef(null);
-  const { googleMapIsReady, visible } = useMapContext();
+  const googleMaps = useStore.select.googleMaps();
+  const visible = useStore.select.showGoogleMaps();
 
   useEffect(() => {
-    if (!googleMapIsReady || !mapRef.current) return;
+    if (!googleMaps || !mapRef.current) return;
     googleMaps.render(mapRef.current);
-  }, [googleMapIsReady]);
+  }, [googleMaps]);
 
   return (
     <div className="container px-4">
@@ -28,15 +28,13 @@ export function GoogleMap() {
           className="invisible absolute bottom-4 left-2 z-50 mx-auto data-[visible]:visible"
         >
           <LocateButton
-            onLocated={(pos) => {
-              if (googleMapIsReady) {
-                googleMaps.setPos({
-                  lat: pos.lat,
-                  lng: pos.lng,
-                  zoom: 10,
-                });
-              }
-            }}
+            onLocated={(pos) =>
+              googleMaps?.setPos({
+                lat: pos.lat,
+                lng: pos.lng,
+                zoom: 10,
+              })
+            }
             label="Go to your position"
           />
         </div>

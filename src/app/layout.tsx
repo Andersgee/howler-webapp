@@ -4,6 +4,7 @@ import { Topnav } from "./Topnav";
 import "./globals.css";
 import { Suspense } from "react";
 import { GoogleMap } from "#src/components/GoogleMap";
+import { GoogleMapsScript } from "#src/components/GoogleMap/GoogleMapsScript";
 import { NavigationEvents } from "#src/components/NavigationEvents";
 import { ScreenSizeIndicator } from "#src/components/ScreenSizeIndicator";
 import { Toaster } from "#src/context/Toaster";
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScreenSizeIndicator />
         <Toaster />
       </body>
+      <GoogleMapsScript />
     </html>
   );
 }

@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { useMapContext, useMapDispatch } from "#src/context/GoogleMaps";
-import { googleMaps } from "#src/context/GoogleMaps/google-maps";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { useImageUpload } from "#src/hooks/useImageUpload";
+import { useStore } from "#src/store";
 import { FullsizeImageButton } from "./buttons/FullsizeImageButton";
 import { InputFileButton } from "./buttons/InputFileButton";
 import { EventImage } from "./EventImage";
@@ -21,8 +20,10 @@ type Props = {
 };
 
 export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isCreator }: Props) {
-  const { googleMapIsReady, visible: mapIsVisible } = useMapContext();
-  const mapDispatch = useMapDispatch();
+  const toggleShowGoogleMaps = useStore.select.toggleShowGoogleMaps();
+
+  const mapIsVisible = useStore.select.showGoogleMaps();
+  const googleMaps = useStore.select.googleMaps();
 
   const apiContext = api.useContext();
   const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
@@ -56,15 +57,14 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
   });
 
   useEffect(() => {
-    if (!location || !googleMapIsReady) return;
-    //if (!event || !event.location) return;
+    if (!location || !googleMaps) return;
     googleMaps.showEventMarker({ lng: location.lng, lat: location.lat });
-  }, [location, googleMapIsReady]);
+  }, [location, googleMaps]);
 
   if (!event) return null;
 
   const handleSavePickedLocation = () => {
-    if (!googleMapIsReady) return;
+    if (!googleMaps) return;
 
     const c = googleMaps.currentCenter;
     if (c) {
@@ -123,10 +123,8 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
           <Button
             variant="secondary"
             onClick={() => {
-              mapDispatch({ type: "toggle", name: "map" });
-              if (googleMapIsReady) {
-                googleMaps.showCurrentCenterMarker();
-              }
+              toggleShowGoogleMaps();
+              googleMaps?.showCurrentCenterMarker();
             }}
             //className="bg-white px-2 py-1 dark:bg-black"
           >
@@ -151,13 +149,9 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
             <Button
               variant="secondary"
               onClick={() => {
-                mapDispatch({ type: "toggle", name: "map" });
-                if (googleMapIsReady) {
-                  googleMaps.hideCurrentCenterMarker();
-                }
+                toggleShowGoogleMaps();
+                googleMaps?.hideCurrentCenterMarker();
               }}
-
-              //className="bg-white px-2 py-1 dark:bg-black"
             >
               {mapIsVisible ? "hide map" : location?.placeName ?? "show map"}
             </Button>

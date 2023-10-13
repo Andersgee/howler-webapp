@@ -1,6 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { tileIdsFromLngLat } from "#src/context/GoogleMaps/utils";
+import { tileIdsFromLngLat } from "#src/components/GoogleMap/utils";
 import { db } from "#src/db";
 import { getGoogleReverseGeocoding } from "#src/utils/geocoding";
 import { hashidFromId } from "#src/utils/hashid";
