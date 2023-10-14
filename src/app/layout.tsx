@@ -3,8 +3,7 @@ import { seo } from "#src/utils/seo";
 import { Topnav } from "./Topnav";
 import "./globals.css";
 import { Suspense } from "react";
-import { GoogleMapInPortal } from "#src/components/GoogleMap/GoogleMapPortal";
-import { GoogleMapsScript } from "#src/components/GoogleMap/GoogleMapsScript";
+import { GoogleMapPortal, GoogleMapsScript } from "#src/components/GoogleMap";
 import { NavigationEvents } from "#src/components/NavigationEvents";
 import { ScreenSizeIndicator } from "#src/components/ScreenSizeIndicator";
 import { UserSession } from "#src/components/UserSession";
@@ -25,7 +24,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={fontSans.variable}>
         <Providers>
           <Topnav />
-          {/*<GoogleMap />*/}
           {children}
           <Suspense fallback={null}>
             <NavigationEvents />
@@ -33,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Providers>
         <ScreenSizeIndicator />
         <Toaster />
-        <GoogleMapInPortal />
+        <GoogleMapPortal />
       </body>
       <GoogleMapsScript />
       <UserSession />

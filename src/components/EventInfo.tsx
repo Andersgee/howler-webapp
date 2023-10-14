@@ -3,11 +3,11 @@
 import { useEffect } from "react";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { useImageUpload } from "#src/hooks/useImageUpload";
-import { OutPortal } from "#src/lib/reverse-portal";
 import { useStore } from "#src/store";
 import { FullsizeImageButton } from "./buttons/FullsizeImageButton";
 import { InputFileButton } from "./buttons/InputFileButton";
 import { EventImage } from "./EventImage";
+import { GoogleMap } from "./GoogleMap";
 import { IconArrowDown, IconImage, IconLoadingSpinner, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
 import { Button, buttonStylesSecondary } from "./ui/Button";
 import { LinkUserImage } from "./UserImage";
@@ -25,7 +25,6 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
 
   const mapIsVisible = useStore.select.showGoogleMaps();
   const googleMaps = useStore.select.googleMaps();
-  const mapPortalNode = useStore.select.mapPortalNode();
 
   const apiContext = api.useContext();
   const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
@@ -144,7 +143,9 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
       )}
 
       <div>portaled content below here?</div>
-      <div className="h-96 w-full">{mapPortalNode && <OutPortal node={mapPortalNode} />}</div>
+      <div className="h-96 w-full">
+        <GoogleMap />
+      </div>
       <div>portaled content above here?</div>
       {!isCreator && (
         <div className="flex items-center gap-1">

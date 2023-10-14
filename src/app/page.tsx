@@ -3,6 +3,7 @@ import { ActivateNotificationsButton } from "#src/components/buttons/ActivateNot
 import { CreateEventForm } from "#src/components/CreateEventForm";
 import { IconArrowLink } from "#src/components/Icons";
 import { MainShell } from "#src/components/MainShell";
+import { buttonStylesSecondary } from "#src/components/ui/Button";
 import { WhenText } from "#src/components/WhenText";
 import { hashidFromId } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
@@ -31,7 +32,7 @@ export default async function Page() {
             {events.map((event) => (
               <li key={event.id}>
                 <Link
-                  className="hover:bg-secondary block border-b py-4 transition-colors"
+                  className="hover:bg-secondary block border-b px-3 py-4 transition-colors"
                   prefetch={false}
                   href={`/event/${hashidFromId(event.id)}`}
                 >
@@ -49,6 +50,9 @@ export default async function Page() {
             ))}
           </ul>
           <ActivateNotificationsButton />
+          <Link href="/explore" className={buttonStylesSecondary}>
+            Explore
+          </Link>
         </div>
       </div>
     </MainShell>

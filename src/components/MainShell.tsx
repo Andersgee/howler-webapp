@@ -9,3 +9,11 @@ export function MainShell({ children }: Props) {
     </main>
   );
 }
+
+export function MainShellFull({ children }: Props) {
+  return (
+    <main className="container flex justify-center px-4">
+      <div className="w-full">{children}</div>
+    </main>
+  );
+}

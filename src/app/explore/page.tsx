@@ -1,12 +1,16 @@
 "use client";
 
-import { MainShell } from "#src/components/MainShell";
+import { GoogleMap } from "#src/components/GoogleMap";
+import { MainShellFull } from "#src/components/MainShell";
 import { useStore } from "#src/store";
 
 export default function Page() {
   const tileIdsInView = useStore.select.tileIdsInView();
   return (
-    <MainShell>
+    <MainShellFull>
+      <div className="h-96 w-full">
+        <GoogleMap />
+      </div>
       <ul>
         {tileIdsInView.map((tileId, i) => (
           <li key={tileId}>
@@ -14,6 +18,6 @@ export default function Page() {
           </li>
         ))}
       </ul>
-    </MainShell>
+    </MainShellFull>
   );
 }
