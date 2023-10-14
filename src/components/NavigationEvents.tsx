@@ -20,11 +20,11 @@ export function NavigationEvents() {
     const showMap = isEventPage || isTestPage;
 
     if (showMap) {
-      setShowGoogleMaps(true);
+      //setShowGoogleMaps(true);
       //googleMaps?.clearMarkers();
     } else {
       setShowGoogleMaps(false);
-      //googleMaps?.clearMarkers();
+      googleMaps?.clearMarkers();
     }
   }, [pathname, googleMaps, setShowGoogleMaps]);
 

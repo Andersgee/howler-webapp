@@ -28,7 +28,7 @@ export function CloudMessaging() {
     const dataStr = payload.data?.str;
     if (!dataStr) return;
 
-    console.log("CloudMessaging effect triggered");
+    //console.log("CloudMessaging effect triggered");
 
     const messageData = parse(dataStr) as FcmMessageData;
 
