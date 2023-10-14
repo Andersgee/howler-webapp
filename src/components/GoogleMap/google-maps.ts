@@ -1,4 +1,5 @@
 import { setTileIdsInView } from "#src/store";
+import { debounce } from "#src/utils/debounce";
 import { tileNamesInView } from "./utils";
 
 //https://console.cloud.google.com/google/maps-apis/studio/maps
@@ -83,20 +84,23 @@ export class GoogleMaps {
       }
     });
 
-    this.map.addListener("bounds_changed", () => {
-      // send the new bounds back to your server
-      const bounds = this.map?.getBounds();
-      const zoom = this.map?.getZoom();
-      if (bounds && zoom) {
-        const ne = bounds.getNorthEast();
-        const sw = bounds.getSouthWest();
+    this.map.addListener(
+      "bounds_changed",
+      debounce(() => {
+        // send the new bounds back to your server
+        const bounds = this.map?.getBounds();
+        const zoom = this.map?.getZoom();
+        if (bounds && zoom) {
+          const ne = bounds.getNorthEast();
+          const sw = bounds.getSouthWest();
 
-        const tiles = tileNamesInView({ lng: ne.lng(), lat: ne.lat() }, { lng: sw.lng(), lat: sw.lat() }, zoom);
-        setTileIdsInView(tiles);
-        //console.log("tiles:", tiles);
-      }
-      //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)
-    });
+          const tiles = tileNamesInView({ lng: ne.lng(), lat: ne.lat() }, { lng: sw.lng(), lat: sw.lat() }, zoom);
+          setTileIdsInView(tiles);
+          //console.log("tiles:", tiles);
+        }
+        //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)
+      }, 300)
+    );
   }
 
   showCurrentCenterMarker() {

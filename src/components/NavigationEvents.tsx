@@ -14,11 +14,17 @@ export function NavigationEvents() {
   useEffect(() => {
     //const url = `${pathname}?${searchParams}`;
     const paths = pathname.split("/");
+    //console.log({ paths }); // [ "", "test" ]
     const isEventPage = paths.length === 3 && paths[1] === "event";
+    const isTestPage = paths[1] === "explore";
+    const showMap = isEventPage || isTestPage;
 
-    if (!isEventPage) {
+    if (showMap) {
+      setShowGoogleMaps(true);
+      //googleMaps?.clearMarkers();
+    } else {
       setShowGoogleMaps(false);
-      googleMaps?.clearMarkers();
+      //googleMaps?.clearMarkers();
     }
   }, [pathname, googleMaps, setShowGoogleMaps]);
 

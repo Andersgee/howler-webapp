@@ -10,10 +10,12 @@ export type MapSlice = {
   toggleShowGoogleMaps: () => void;
 };
 
-export const createMapSlice: StateCreator<MapSlice, [], [], MapSlice> = (set) => ({
+export const createMapSlice: StateCreator<MapSlice, [], [], MapSlice> = (set, get) => ({
   tileIdsInView: [],
   googleMaps: null,
   initGoogleMaps: async () => {
+    if (get().googleMaps !== null) return;
+
     const googleMaps = new GoogleMaps();
     const ok = await googleMaps.init();
     if (ok) {
