@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "#src/components/ui/Popover";
-import { useFcmContext } from "#src/context/Fcm";
 import { type ChatMessageData } from "#src/context/Fcm/message-schema";
 import { api } from "#src/hooks/api";
 import { useStore } from "#src/store";
@@ -58,18 +57,13 @@ export function SigninButton() {
 }
 
 export function NotificationsButton({ user }: { user: TokenUser }) {
-  const { fcmToken, getFcmToken, notificationMessages } = useFcmContext();
+  const notificationMessages = useStore.select.fcmNotificationMessages();
+  const fcm = useStore.select.fcm();
   const notificationLatest10 = api.notification.latest10.useQuery();
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={(x) => setOpen(x)}>
-      <PopoverTrigger
-        onClick={async () => {
-          if (!fcmToken) {
-            getFcmToken();
-          }
-        }}
-      >
+      <PopoverTrigger onClick={() => fcm?.maybeRequestNotificationPermission()}>
         <IconBellWithNumber number={notificationMessages.length} />
       </PopoverTrigger>
       <PopoverContent>
@@ -180,7 +174,9 @@ function useGroupedLatest10Chat(userId: number) {
 }
 */
 export function ChatNotificationsButton({ user }: { user: TokenUser }) {
-  const { fcmToken, getFcmToken, unseenChatMessages, clearChatNotifications } = useFcmContext();
+  const fcm = useStore.select.fcm();
+  const unseenChatMessages = useStore.select.fcmUnseenChatMessages();
+  const clearChatNotifications = useStore.select.fcmClearChatNotifications();
   const { data: groupedLatest10Chat } = api.notification.latest10chat.useQuery();
 
   const [open, setOpen] = useState(false);
@@ -189,9 +185,7 @@ export function ChatNotificationsButton({ user }: { user: TokenUser }) {
       <PopoverTrigger
         onClick={async () => {
           clearChatNotifications();
-          if (!fcmToken) {
-            getFcmToken();
-          }
+          fcm?.maybeRequestNotificationPermission();
         }}
       >
         <IconChatWithNumber number={unseenChatMessages.length} />

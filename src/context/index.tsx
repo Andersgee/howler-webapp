@@ -1,14 +1,15 @@
 "use client";
 
 import PlausibleProvider from "next-plausible";
-import { FcmProvider } from "./Fcm";
+import { CloudMessaging } from "#src/components/CloudMessaging";
 import { TrpcProvider } from "./Trpc";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <PlausibleProvider domain="howler.andyfx.net">
       <TrpcProvider>
-        <FcmProvider>{children}</FcmProvider>
+        {children}
+        <CloudMessaging />
       </TrpcProvider>
     </PlausibleProvider>
   );

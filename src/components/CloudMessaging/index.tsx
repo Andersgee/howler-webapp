@@ -13,10 +13,15 @@ import { useStore } from "#src/store";
 import { type Optional } from "#src/utils/typescript";
 
 export function CloudMessaging() {
+  const initFcm = useStore.select.initFcm();
   const payload = useStore.select.fcmLatestMessagePayload();
   const fcmAddNotificationMessage = useStore.select.fcmAddNotificationMessage();
   const fcmAddUnseenChatMessage = useStore.select.fcmAddUnseenChatMessage();
   const apiContext = api.useContext();
+
+  useEffect(() => {
+    initFcm();
+  }, [initFcm]);
 
   useEffect(() => {
     if (!payload) return;

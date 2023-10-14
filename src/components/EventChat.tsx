@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useFcmContext } from "#src/context/Fcm";
 import { api } from "#src/hooks/api";
 import { useIntersectionObserverCallback } from "#src/hooks/useIntersectionObserverCallback";
+import { useStore } from "#src/store";
 import { cn } from "#src/utils/cn";
 import { prettyDateShort } from "#src/utils/date";
 import { JoinEventButton } from "./buttons/JoinEventButton";
@@ -44,7 +44,7 @@ type Props = {
 };
 
 export function EventChat({ eventId, userId, initialIsJoined }: Props) {
-  const { clearEventChatNotifications } = useFcmContext();
+  const clearEventChatNotifications = useStore.select.fcmClearEventChatNotifications();
   const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
   const {
     data: infiniteMessages,

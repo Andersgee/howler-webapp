@@ -12,11 +12,14 @@ type newChatMessage = Omit<ChatMessageData, "type" | "title">;
 
 export type FcmSlice = {
   fcm: FirebaseCloudMessaging | null;
+  initFcm: () => void;
   fcmLatestMessagePayload: MessagePayload | null;
   fcmNotificationMessages: NotificationMessageData[];
   fcmAddNotificationMessage: (d: NotificationMessageData) => void;
   fcmUnseenChatMessages: UnseenChatMessage[];
   fcmAddUnseenChatMessage: (d: newChatMessage) => void;
+  fcmClearChatNotifications: () => void;
+  fcmClearEventChatNotifications: (eventId: number) => void;
 };
 
 export const createFcmSlice: StateCreator<FcmSlice, [], [], FcmSlice> = (set, get) => ({
@@ -26,6 +29,8 @@ export const createFcmSlice: StateCreator<FcmSlice, [], [], FcmSlice> = (set, ge
   fcmAddNotificationMessage: (d) => set((prev) => ({ fcmNotificationMessages: [d, ...prev.fcmNotificationMessages] })),
   fcmUnseenChatMessages: [],
   initFcm: async () => {
+    if (get().fcm !== null) return;
+
     const registration = await registerSW();
     if (registration) {
       const fcm = new FirebaseCloudMessaging(registration);
@@ -49,6 +54,12 @@ export const createFcmSlice: StateCreator<FcmSlice, [], [], FcmSlice> = (set, ge
         unseen: 1,
       });
     }
+    set({ fcmUnseenChatMessages: data });
+  },
+  fcmClearChatNotifications: () => set({ fcmUnseenChatMessages: [] }),
+  fcmClearEventChatNotifications: (eventId) => {
+    const prev = get().fcmUnseenChatMessages;
+    const data = prev.filter((x) => x.eventId !== eventId);
     set({ fcmUnseenChatMessages: data });
   },
 });
