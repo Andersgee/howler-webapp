@@ -63,6 +63,7 @@ export class GoogleMaps {
   }
 
   render(element: HTMLDivElement) {
+    console.log("rendering google map now, this costs 0.007 USD");
     this.map = new this.Map(element, {
       center: { lat: -34.397, lng: 150.644 },
       zoom: 8,

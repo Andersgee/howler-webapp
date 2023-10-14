@@ -141,6 +141,9 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
         </div>
       )}
 
+      <div>portaled content below here?</div>
+      <div id="myhellodiv" className="h-96 w-full"></div>
+      <div>portaled content above here?</div>
       {!isCreator && (
         <div className="flex items-center gap-1">
           <IconWhere />
