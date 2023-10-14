@@ -11,7 +11,6 @@ import {
   getHasJoinedEvent,
   tagEventInfo,
   tagEventLocation,
-  tagEvents,
   tagHasJoinedEvent,
   tagTile,
 } from "#src/utils/tags";
@@ -21,10 +20,10 @@ export const eventRouter = createTRPCRouter({
   isJoined: protectedProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
     return getHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id });
   }),
-  info: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
+  info: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input }) => {
     return getEventInfo({ eventId: input.eventId });
   }),
-  location: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
+  location: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input }) => {
     return getEventLocation({ eventId: input.eventId });
   }),
   join: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
@@ -118,7 +117,7 @@ export const eventRouter = createTRPCRouter({
         who: z.string(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       //await artificialDelay()
 
       const _updateResult = await db
@@ -147,7 +146,7 @@ export const eventRouter = createTRPCRouter({
         lat: z.number(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       //await artificialDelay()
 
       const placeName = await getGoogleReverseGeocoding({ lng: input.lng, lat: input.lat });
@@ -224,7 +223,7 @@ export const eventRouter = createTRPCRouter({
         image: z.string(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       const _updateResult = await db
         .updateTable("Event")
         .where("id", "=", input.eventId)

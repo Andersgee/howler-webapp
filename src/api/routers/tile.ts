@@ -1,16 +1,14 @@
-import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { db } from "#src/db";
-import { getTile, tagEventInfo } from "#src/utils/tags";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { getTile } from "#src/utils/tags";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const tileRouter = createTRPCRouter({
-  tileLocations: protectedProcedure.input(z.object({ tileId: z.string() })).query(async ({ input, ctx }) => {
+  tileLocations: protectedProcedure.input(z.object({ tileId: z.string() })).query(async ({ input }) => {
     return getTile({ tileId: input.tileId });
   }),
   multipleTileLocations: protectedProcedure
     .input(z.object({ tileIds: z.array(z.string()) }))
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       /*
       const eventLocations = await db
         .selectFrom("EventLocationTilePivot as p")

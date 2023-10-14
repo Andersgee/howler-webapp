@@ -1,7 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { db } from "#src/db";
-import { idFromHashid } from "#src/utils/hashid";
 import { getIsFollowingUser, tagIsFollowingUser } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -9,7 +8,7 @@ export const userRouter = createTRPCRouter({
   isFollowing: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
     return getIsFollowingUser({ myUserId: ctx.user.id, otherUserId: input.userId });
   }),
-  image: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
+  image: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input }) => {
     return db
       .selectFrom("User")
       .select(["User.id", "User.image", "User.name"])

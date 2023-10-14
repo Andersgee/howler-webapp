@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-//import { formatDate } from "#src/utils/date";
 import { prettyDate } from "#src/utils/date";
 
 type Props = {
@@ -10,7 +9,7 @@ type Props = {
 };
 
 export function WhenText({ date, className }: Props) {
-  const { datestr, isMounted } = useFormatDate(date);
+  const { datestr } = useFormatDate(date);
   return <span className={className}>{datestr}</span>;
 }
 

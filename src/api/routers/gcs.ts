@@ -9,14 +9,14 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 export const gcsRouter = createTRPCRouter({
   signedUrl: protectedProcedure
     .input(z.object({ eventId: z.number(), contentType: z.string() }))
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       const hashId = hashidFromId(input.eventId);
       const uuid = crypto.randomUUID();
       const fileName = `${hashId}-${uuid}`;
       const data = await getUploadCloudStoragSignedUrl({ fileName, contentType: input.contentType });
       return data;
     }),
-  image: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
+  image: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input }) => {
     const event = await db.selectFrom("Event").where("id", "=", input.eventId).select("image").executeTakeFirst();
 
     if (!event?.image) return null;

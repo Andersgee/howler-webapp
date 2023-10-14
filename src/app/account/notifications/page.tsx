@@ -4,7 +4,7 @@ import { MainShell } from "#src/components/MainShell";
 import { getUserInfo } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 
-export const dynamic = "force-dynamic";
+//export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const tokenUser = await getUserFromCookie();

@@ -55,7 +55,7 @@ export function SigninButton() {
   );
 }
 
-export function NotificationsButton({ user }: { user: TokenUser }) {
+export function NotificationsButton(_props: { user: TokenUser }) {
   const notificationMessages = useStore.select.fcmNotificationMessages();
   const fcm = useStore.select.fcm();
   const notificationLatest10 = api.notification.latest10.useQuery();
@@ -116,7 +116,7 @@ export function NotificationsButton({ user }: { user: TokenUser }) {
   );
 }
 
-export function ChatNotificationsButton({ user }: { user: TokenUser }) {
+export function ChatNotificationsButton(_props: { user: TokenUser }) {
   const fcm = useStore.select.fcm();
   const unseenChatMessages = useStore.select.fcmUnseenChatMessages();
   const clearChatNotifications = useStore.select.fcmClearChatNotifications();

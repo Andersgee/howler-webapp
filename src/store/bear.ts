@@ -6,7 +6,7 @@ export type BearSlice = {
   increment: () => void;
 };
 
-export const createBearSlice: StateCreator<BearSlice, [], [], BearSlice> = (set, get) => ({
+export const createBearSlice: StateCreator<BearSlice, [], [], BearSlice> = (set) => ({
   bears: 0,
   color: "brown",
   increment: () => set((prev) => ({ bears: prev.bears + 1 })),

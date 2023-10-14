@@ -1,16 +1,9 @@
 import { notFound } from "next/navigation";
 import { SigninButtons } from "#src/components/buttons/SigninButtons";
-import { MainShell } from "#src/components/MainShell";
 import { getUserInfo } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 
-type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
-  /** adjust params according dynamic routes, eg if this is under a [slug] folder */
-  //params: { slug: string };
-};
-
-export default async function Page(props: Props) {
+export default async function Page() {
   const tokenUser = await getUserFromCookie();
   if (!tokenUser) {
     return (

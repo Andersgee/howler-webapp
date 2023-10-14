@@ -28,6 +28,8 @@ export function CloudMessaging() {
     const dataStr = payload.data?.str;
     if (!dataStr) return;
 
+    console.log("CloudMessaging effect triggered");
+
     const messageData = parse(dataStr) as FcmMessageData;
 
     if (messageData.type === "notification") {
@@ -72,6 +74,6 @@ export function CloudMessaging() {
     } else {
       console.log("ignoring pushmessage, payload.data: ", payload.data);
     }
-  }, [payload, fcmAddNotificationMessage, fcmAddUnseenChatMessage]);
+  }, [payload, fcmAddNotificationMessage, fcmAddUnseenChatMessage, apiContext]);
   return null;
 }

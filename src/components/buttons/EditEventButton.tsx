@@ -4,7 +4,6 @@ import { addHours, subHours } from "date-fns";
 import { useState } from "react";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -14,7 +13,7 @@ import {
 } from "#src/components/ui/Dialog";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { datetimelocalString } from "#src/utils/date";
-import { IconArrowDown, IconEdit, IconWhat, IconWhen, IconWhere, IconWho } from "../Icons";
+import { IconArrowDown, IconEdit, IconWhat, IconWhen, IconWho } from "../Icons";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 
