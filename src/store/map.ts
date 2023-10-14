@@ -1,5 +1,7 @@
+import type { Component } from "react";
 import type { StateCreator } from "zustand";
 import { GoogleMaps } from "#src/components/GoogleMap/google-maps";
+import type { HtmlPortalNode } from "#src/lib/reverse-portal";
 
 export type MapSlice = {
   tileIdsInView: string[];
@@ -8,6 +10,8 @@ export type MapSlice = {
   showGoogleMaps: boolean;
   setShowGoogleMaps: (b: boolean) => void;
   toggleShowGoogleMaps: () => void;
+  mapPortalNode: HtmlPortalNode<Component<any>> | null;
+  mapSetPortalNode: (node: HtmlPortalNode<Component<any>>) => void;
 };
 
 export const createMapSlice: StateCreator<MapSlice, [], [], MapSlice> = (set, get) => ({
@@ -25,4 +29,6 @@ export const createMapSlice: StateCreator<MapSlice, [], [], MapSlice> = (set, ge
   showGoogleMaps: false,
   setShowGoogleMaps: (b: boolean) => set({ showGoogleMaps: b }),
   toggleShowGoogleMaps: () => set((prev) => ({ showGoogleMaps: !prev.showGoogleMaps })),
+  mapPortalNode: null,
+  mapSetPortalNode: (node) => set({ mapPortalNode: node }),
 });

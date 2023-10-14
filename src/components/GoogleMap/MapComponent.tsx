@@ -10,5 +10,5 @@ export function MapComponent() {
     googleMaps.render(mapRef.current);
   }, [googleMaps]);
 
-  return <div ref={mapRef} className="h-full w-full" />;
+  return <div ref={mapRef} className="h-full w-full bg-purple-500" />;
 }

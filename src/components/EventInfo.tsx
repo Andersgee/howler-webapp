@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { useImageUpload } from "#src/hooks/useImageUpload";
+import { OutPortal } from "#src/lib/reverse-portal";
 import { useStore } from "#src/store";
 import { FullsizeImageButton } from "./buttons/FullsizeImageButton";
 import { InputFileButton } from "./buttons/InputFileButton";
@@ -24,6 +25,7 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
 
   const mapIsVisible = useStore.select.showGoogleMaps();
   const googleMaps = useStore.select.googleMaps();
+  const mapPortalNode = useStore.select.mapPortalNode();
 
   const apiContext = api.useContext();
   const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
@@ -142,7 +144,7 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
       )}
 
       <div>portaled content below here?</div>
-      <div id="myhellodiv" className="h-96 w-full"></div>
+      <div className="h-96 w-full">{mapPortalNode && <OutPortal node={mapPortalNode} />}</div>
       <div>portaled content above here?</div>
       {!isCreator && (
         <div className="flex items-center gap-1">
