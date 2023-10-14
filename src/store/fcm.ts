@@ -1,7 +1,7 @@
 import type { MessagePayload } from "firebase/messaging";
 import type { StateCreator } from "zustand";
 import { FirebaseCloudMessaging } from "#src/components/CloudMessaging/firebase-cloud-messaging";
-import type { ChatMessageData, NotificationMessageData } from "#src/context/Fcm/message-schema";
+import type { ChatMessageData, NotificationMessageData } from "#src/components/CloudMessaging/message-schema";
 import { registerSW } from "#src/utils/service-worker";
 
 //import { GoogleMaps } from "#src/components/GoogleMap/google-maps";

@@ -7,7 +7,7 @@ import {
   notificationDataSchema,
   type ChatMessageData,
   type FcmMessageData,
-} from "#src/context/Fcm/message-schema";
+} from "#src/components/CloudMessaging/message-schema";
 import { api } from "#src/hooks/api";
 import { useStore } from "#src/store";
 import { type Optional } from "#src/utils/typescript";
