@@ -20,7 +20,7 @@ const FIREBASE_CONFIG = {
 
 /**
  * simpler wrapper for interacting with Firebase cloud messaging service
- * */
+ */
 export class FirebaseCloudMessaging {
   app: FirebaseApp;
   messaging: Messaging;
