@@ -6,9 +6,7 @@ import { useStore } from ".";
 
 /** for GoogleMaps external class */
 export const setMapBounds = (tileIdsInView: string[], mapBounds: { ne: LngLat; sw: LngLat }) => {
-  const prev = useStore.getState();
-
-  if (isIdenticalLists(prev.tileIdsInView, tileIdsInView)) {
+  if (isIdenticalLists(useStore.getState().tileIdsInView, tileIdsInView)) {
     useStore.setState({ mapBounds });
   } else {
     useStore.setState({ tileIdsInView, mapBounds });
