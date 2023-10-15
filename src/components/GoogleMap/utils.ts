@@ -89,8 +89,8 @@ function isBetween(x: number, min: number, max: number) {
   return x >= min && x <= max;
 }
 
-type Primitive = string | number | boolean;
-export function isIdenticalLists(a: Array<Primitive>, b: Array<Primitive>) {
+type PrimitiveList = Array<string | number | boolean>;
+export function isIdenticalLists(a: PrimitiveList, b: PrimitiveList) {
   if (a.length != b.length) return false;
 
   for (let i = 0; i < a.length; i++) {

@@ -1,7 +1,7 @@
 import { initializeApp, type FirebaseApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import type { MessagePayload, Messaging } from "firebase/messaging";
-import { setFcmLatestMessagePayload } from "#src/store";
+import { setFcmLatestMessagePayload } from "#src/store/actions";
 import { notificationsAlreadyGranted, requestNotificationPermission } from "#src/utils/notification";
 import { postFcmToken } from "./utils";
 

@@ -1,4 +1,4 @@
-import { setMapBounds } from "#src/store";
+import { setMapBounds } from "#src/store/actions";
 import { debounce } from "#src/utils/debounce";
 import { calcTileIdsInView } from "./utils";
 
