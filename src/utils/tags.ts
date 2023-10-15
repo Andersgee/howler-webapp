@@ -147,10 +147,18 @@ export function tagTile(p: TileParams) {
 
 export async function getTile(p: TileParams, cached = true) {
   const eventLocations = await db
-    .selectFrom("EventLocationTilePivot as p")
-    .where("p.tileId", "=", p.tileId)
-    .innerJoin("EventLocation", "EventLocation.id", "p.eventLocationId")
-    .selectAll("EventLocation")
+    .selectFrom("EventLocationTilePivot")
+    .where("EventLocationTilePivot.tileId", "=", p.tileId)
+    .innerJoin("EventLocation", "EventLocation.id", "EventLocationTilePivot.eventLocationId")
+    .innerJoin("Event", "EventLocation.eventId", "Event.id")
+    .select([
+      "Event.id",
+      "Event.what",
+      "Event.when",
+      "EventLocation.placeName",
+      "EventLocation.lng",
+      "EventLocation.lat",
+    ])
     .get({
       cache: cached ? CACHED : FRESH,
       next: { tags: [tagTile(p)] },
