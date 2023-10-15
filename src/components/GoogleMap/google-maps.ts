@@ -154,7 +154,7 @@ export class GoogleMaps {
       const marker = new this.AdvancedMarkerElement({
         //map,
         position: location,
-        content: pinGlyph.element,
+        content: pinGlyph.element, //can not pass same element to multiple.
         //title: "A marker using a custom SVG for the glyph.",
       });
 
