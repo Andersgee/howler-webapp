@@ -150,6 +150,7 @@ export class GoogleMaps {
         glyphColor: "#fff",
         background: "#fff",
         borderColor: "#fff",
+        scale: 2, //default looks like 24px, recommended is atleast 44px 48px
       });
       const marker = new this.AdvancedMarkerElement({
         //map,
