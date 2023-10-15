@@ -2,6 +2,7 @@ import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { setMapBounds } from "#src/store/actions";
 import { debounce } from "#src/utils/debounce";
 import { type Prettify } from "#src/utils/typescript";
+import { absUrl } from "#src/utils/url";
 import { calcTileIdsInView, type LngLat } from "./utils";
 
 //https://console.cloud.google.com/google/maps-apis/studio/maps
@@ -33,6 +34,7 @@ export class GoogleMaps {
 
   map: google.maps.Map | null;
   currentCenter: { lng: number; lat: number } | null;
+  markerClusterer: MarkerClusterer | null;
   //markers: google.maps.marker.AdvancedMarkerElement[];
   //currentCenterMarker: google.maps.marker.AdvancedMarkerElement | null;
   //showCenterMarker: boolean;
@@ -40,6 +42,7 @@ export class GoogleMaps {
   constructor() {
     this.map = null;
     this.currentCenter = null;
+    this.markerClusterer = null;
   }
 
   async loadLibs() {
@@ -80,6 +83,8 @@ export class GoogleMaps {
       minZoom: 3,
     });
 
+    this.markerClusterer = new MarkerClusterer({ map: this.map });
+
     //this.currentCenterMarker = new this.AdvancedMarkerElement({
     //  map: this.map,
     //  position: null,
@@ -117,25 +122,40 @@ export class GoogleMaps {
     this.map.setZoom(zoom);
   }
 
-  addMarkers(locations: Array<Prettify<LngLat & { label: string }>>) {
-    if (!this.map) {
-      console.log("no map");
-    }
+  setMarkerCluster(locations: Array<Prettify<LngLat & { label: string }>>) {
+    if (!this.map) return;
+
     const infoWindow = new this.InfoWindow({
       content: "",
       disableAutoPan: true,
     });
 
-    const markers = locations.map((location, i) => {
+    const markers = locations.map((location) => {
       //const label = labels[i % labels.length];
       const label = location.label;
+      //const pinGlyph = new this.PinElement({
+      //  glyph: label,
+      //  glyphColor: "white",
+      //});
+      //const marker = new this.AdvancedMarkerElement({
+      //  position: location,
+      //  content: pinGlyph.element,
+      //});
+
+      // A marker with a custom SVG glyph.
+      const glyphImg = document.createElement("img");
+      glyphImg.src = absUrl("/icons/pin.svg");
       const pinGlyph = new this.PinElement({
-        glyph: label,
-        glyphColor: "white",
+        glyph: glyphImg,
+        glyphColor: "#fff",
+        background: "#fff",
+        borderColor: "#fff",
       });
       const marker = new this.AdvancedMarkerElement({
+        //map,
         position: location,
         content: pinGlyph.element,
+        //title: "A marker using a custom SVG for the glyph.",
       });
 
       // markers can only be keyboard focusable when they have click listeners
@@ -147,7 +167,8 @@ export class GoogleMaps {
       return marker;
     });
 
-    const markerClusterer = new MarkerClusterer({ map: this.map, markers });
+    this.markerClusterer?.clearMarkers(true);
+    this.markerClusterer?.addMarkers(markers);
   }
 }
 
