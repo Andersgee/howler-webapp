@@ -1,5 +1,6 @@
 import type { MessagePayload } from "firebase/messaging";
 import { create } from "zustand";
+import type { LngLat } from "#src/components/GoogleMap/utils";
 import { createBearSlice, type BearSlice } from "./bear";
 import { createDialogSlice, type DialogSlice } from "./dialog";
 import { createFcmSlice, type FcmSlice } from "./fcm";
@@ -24,7 +25,9 @@ export const useStore = createSelectors(useStoreBase);
 //external setters allows usage outside react (aswell as within react)
 
 /** for GoogleMaps external class */
-export const setTileIdsInView = (tileIdsInView: string[]) => useStore.setState({ tileIdsInView });
+export const onBoundsChangedSetState = (tileIdsInView: string[], mapBounds: { ne: LngLat; sw: LngLat }) =>
+  useStore.setState({ tileIdsInView, mapBounds });
+
 //export const getTileIdsInView = useStore.select.tileIdsInView();
 
 /** for FirebaseCloudMessaging external class */

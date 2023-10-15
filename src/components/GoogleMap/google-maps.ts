@@ -1,6 +1,6 @@
-import { setTileIdsInView } from "#src/store";
+import { onBoundsChangedSetState } from "#src/store";
 import { debounce } from "#src/utils/debounce";
-import { tileNamesInView } from "./utils";
+import { calcTileIdsInView } from "./utils";
 
 //https://console.cloud.google.com/google/maps-apis/studio/maps
 const TEST_MAP_ID = "478ad7a3d9f73ca4";
@@ -94,9 +94,10 @@ export class GoogleMaps {
         if (bounds && zoom) {
           const ne = bounds.getNorthEast();
           const sw = bounds.getSouthWest();
+          const mapBounds = { ne: { lng: ne.lng(), lat: ne.lat() }, sw: { lng: sw.lng(), lat: sw.lat() } };
 
-          const tiles = tileNamesInView({ lng: ne.lng(), lat: ne.lat() }, { lng: sw.lng(), lat: sw.lat() }, zoom);
-          setTileIdsInView(tiles);
+          const tileIdsInView = calcTileIdsInView({ ne: mapBounds.ne, sw: mapBounds.sw, z: zoom });
+          onBoundsChangedSetState(tileIdsInView, mapBounds);
           //console.log("tiles:", tiles);
         }
         //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)

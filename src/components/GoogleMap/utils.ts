@@ -5,7 +5,7 @@ const TILE_SIZE = 256;
 const MIN_ZOOM = 4;
 const MAX_ZOOM = 4;
 
-type LngLat = { lng: number; lat: number };
+export type LngLat = { lng: number; lat: number };
 type LngLatZoom = LngLat & { zoom: number };
 
 export function tileIdsFromLngLat({ lng, lat }: LngLat) {
@@ -52,7 +52,69 @@ function clamp(x: number, a: number, b: number) {
   return Math.max(a, Math.min(b, x));
 }
 
-export function tileNamesInView(ne: LngLat, sw: LngLat, z: number) {
+/*
+ * top: north latitude of bounding box.
+ * left: left longitude of bounding box (western bound).
+ * bottom: south latitude of the bounding box.
+ * right: right longitude of bounding box (eastern bound).
+ * latitude: latitude of the point to check.
+ * longitude: longitude of the point to check.
+ */
+
+/*
+boolean isBounded(double top, double left, 
+  double bottom, double right, 
+  double latitude, double longitude){
+// Check latitude bounds first.
+if(top >= latitude && latitude >= bottom){
+// If your bounding box doesn't wrap 
+//   the date line the value
+//   must be between the bounds.
+//   If your bounding box does wrap the 
+//   date line it only needs to be  
+//   higher than the left bound or 
+//   lower than the right bound.
+  
+  if(left <= right && left <= longitude && longitude <= right){
+    return true;
+  } else if(left > right && (left <= longitude || longitude <= right)) {
+    return true;
+  }
+  }
+  return false;
+}
+*/
+
+function isBetween(min: number, max: number, x: number) {
+  return x >= min && x <= max;
+}
+
+export function boundsContains({ ne, sw, p }: { ne: LngLat; sw: LngLat; p: LngLat }) {
+  //lat is north
+  //lng is east
+  const lat = p.lat;
+  const lng = p.lng;
+
+  const northBound = ne.lat;
+  const westBound = sw.lng;
+  const southBound = sw.lat;
+  const eastBound = ne.lng;
+
+  if (northBound === 0 && westBound === 0 && southBound === 0 && eastBound === 0) return false;
+
+  //point must always be between south/north bound
+  if (!isBetween(southBound, northBound, lat)) return false;
+
+  //check if left/right spans date line eg left is positive and right is negative
+  //the lng from google maps is [-180..180]
+  if (westBound >= 0 && eastBound <= 0) {
+    return lng >= westBound || lng <= eastBound;
+  }
+
+  return isBetween(westBound, eastBound, lng);
+}
+
+export function calcTileIdsInView({ ne, sw, z }: { ne: LngLat; sw: LngLat; z: number }) {
   const zoom = clamp(z, MIN_ZOOM, MAX_ZOOM);
   //const zoom = z;
   //const ne = bounds.getNorthEast();
