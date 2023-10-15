@@ -21,9 +21,12 @@ const useStoreBase = create<StoreState>()((...a) => ({
 
 export const useStore = createSelectors(useStoreBase);
 
-//allows usage outside react (aswell as within react)
+//external setters allows usage outside react (aswell as within react)
+
+/** for GoogleMaps external class */
 export const setTileIdsInView = (tileIdsInView: string[]) => useStore.setState({ tileIdsInView });
 //export const getTileIdsInView = useStore.select.tileIdsInView();
 
+/** for FirebaseCloudMessaging external class */
 export const setFcmLatestMessagePayload = (payload: MessagePayload) =>
   useStore.setState({ fcmLatestMessagePayload: payload });

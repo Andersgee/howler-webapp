@@ -6,7 +6,11 @@ import { createHtmlPortalNode, InPortal, OutPortal, type HtmlPortalNode } from "
 import { useStore } from "#src/store";
 import { absUrl } from "#src/utils/url";
 
-/** renders google-maps without reloading everything (OutPortal) */
+/**
+ * renders google-maps without reloading everything (OutPortal)
+ *
+ * parent element decides size
+ */
 export function GoogleMap() {
   const mapPortalNode = useStore.select.mapPortalNode();
   if (!mapPortalNode) return null;
@@ -62,6 +66,7 @@ function useHtmlPortalNode() {
   const [portalNode, setPortalNode] = useState<HtmlPortalNode<Component<any>> | null>(null);
   useEffect(() => {
     //more or less document.createElement()
+    //this creates the <OutPortal> div that renders what you put as children to <InPortal>
     const node = createHtmlPortalNode({
       attributes: { style: "width:100%;height:100%;" },
     });
