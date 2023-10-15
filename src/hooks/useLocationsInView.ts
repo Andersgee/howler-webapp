@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useStore } from "#src/store";
 import { api } from "./api";
 

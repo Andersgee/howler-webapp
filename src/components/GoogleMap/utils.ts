@@ -85,33 +85,44 @@ if(top >= latitude && latitude >= bottom){
 }
 */
 
-function isBetween(min: number, max: number, x: number) {
+function isBetween(x: number, min: number, max: number) {
   return x >= min && x <= max;
 }
 
-export function boundsContains({ ne, sw, p }: { ne: LngLat; sw: LngLat; p: LngLat }) {
-  //lat is north
+type Primitive = string | number | boolean;
+export function isIdenticalLists(a: Array<Primitive>, b: Array<Primitive>) {
+  if (a.length != b.length) return false;
+
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
+export function boundsContains({
+  ne: { lng: east, lat: north },
+  sw: { lng: west, lat: south },
+  p: { lng, lat },
+}: {
+  ne: LngLat;
+  sw: LngLat;
+  p: LngLat;
+}) {
   //lng is east
-  const lat = p.lat;
-  const lng = p.lng;
+  //lat is north
 
-  const northBound = ne.lat;
-  const westBound = sw.lng;
-  const southBound = sw.lat;
-  const eastBound = ne.lng;
-
-  if (northBound === 0 && westBound === 0 && southBound === 0 && eastBound === 0) return false;
+  if (north === 0 && west === 0 && south === 0 && east === 0) return false;
 
   //point must always be between south/north bound
-  if (!isBetween(southBound, northBound, lat)) return false;
+  if (!isBetween(lat, south, north)) return false;
 
-  //check if left/right spans date line eg left is positive and right is negative
-  //the lng from google maps is [-180..180]
-  if (westBound >= 0 && eastBound <= 0) {
-    return lng >= westBound || lng <= eastBound;
+  //check if box spans the date line (located at +180/-180 lng)
+  //west might be 179 and east might be -179 for example
+  if (west > east) {
+    return lng >= west || lng <= east;
   }
 
-  return isBetween(westBound, eastBound, lng);
+  return isBetween(lng, west, east);
 }
 
 export function calcTileIdsInView({ ne, sw, z }: { ne: LngLat; sw: LngLat; z: number }) {
@@ -135,7 +146,7 @@ export function calcTileIdsInView({ ne, sw, z }: { ne: LngLat; sw: LngLat; z: nu
       tiles.push(tileNameFromCoord({ x, y, zoom }));
     }
   }
-  return tiles;
+  return tiles.sort();
 }
 
 function coordinates({ lng, lat, zoom }: LngLatZoom) {

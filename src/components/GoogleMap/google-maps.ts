@@ -1,4 +1,4 @@
-import { onBoundsChangedSetState } from "#src/store";
+import { setMapBounds } from "#src/store";
 import { debounce } from "#src/utils/debounce";
 import { calcTileIdsInView } from "./utils";
 
@@ -97,7 +97,7 @@ export class GoogleMaps {
           const mapBounds = { ne: { lng: ne.lng(), lat: ne.lat() }, sw: { lng: sw.lng(), lat: sw.lat() } };
 
           const tileIdsInView = calcTileIdsInView({ ne: mapBounds.ne, sw: mapBounds.sw, z: zoom });
-          onBoundsChangedSetState(tileIdsInView, mapBounds);
+          setMapBounds(tileIdsInView, mapBounds);
           //console.log("tiles:", tiles);
         }
         //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)
