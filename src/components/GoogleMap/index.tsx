@@ -33,7 +33,7 @@ export function GoogleMapPortal() {
 
   if (!portalNode) return null;
   return (
-    <InPortal node={portalNode} className="h-full w-full bg-cyan-500">
+    <InPortal node={portalNode} className="h-full w-full">
       <GoogleMapDiv />
     </InPortal>
   );
