@@ -1,16 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
 import { api, type RouterOutputs } from "#src/hooks/api";
-import { useImageUpload } from "#src/hooks/useImageUpload";
-import { useStore } from "#src/store";
 import { FullsizeImageButton } from "../buttons/FullsizeImageButton";
-import { InputFileButton } from "../buttons/InputFileButton";
 import { EventImage } from "../EventImage";
-import { IconArrowDown, IconImage, IconLoadingSpinner, IconWhat, IconWhen, IconWho } from "../Icons";
-import { buttonStylesSecondary } from "../ui/Button";
+import { IconArrowDown, IconWhat, IconWhen, IconWho } from "../Icons";
 import { LinkUserImage } from "../UserImage";
 import { WhenText } from "../WhenText";
+import { ImageUploadButton } from "./ImageUploadButton";
 import { Where, WhereForCreator } from "./Where";
 
 type Props = {
@@ -21,34 +17,7 @@ type Props = {
 };
 
 export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isCreator }: Props) {
-  const googleMaps = useStore.select.googleMaps();
-
-  const apiContext = api.useContext();
   const { data: event } = api.event.info.useQuery({ eventId }, { initialData: initialEventInfo });
-  const { data: location } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
-
-  const { mutate: updateImage } = api.event.updateImage.useMutation();
-
-  const { uploadFile, isUploading: imageIsUploading } = useImageUpload(
-    { eventId },
-    {
-      onSuccess: ({ imageUrl }) => {
-        //optimistic
-        apiContext.event.info.setData({ eventId }, (prev) => {
-          if (!prev) return prev;
-          const data = structuredClone(prev); //dont mutate prev
-          return { ...data, image: imageUrl };
-        });
-        //update db
-        updateImage({ eventId, image: imageUrl });
-      },
-    }
-  );
-
-  useEffect(() => {
-    if (!location || !googleMaps) return;
-    googleMaps.showEventMarker({ lng: location.lng, lat: location.lat });
-  }, [location, googleMaps]);
 
   if (!event) return null;
 
@@ -61,29 +30,8 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
           </FullsizeImageButton>
         </div>
       )}
-      {isCreator && (
-        <InputFileButton
-          disabled={imageIsUploading}
-          accept="image/png, image/jpeg"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-              uploadFile(file);
-            }
-          }}
-          className={buttonStylesSecondary}
-        >
-          {imageIsUploading ? (
-            <>
-              <IconLoadingSpinner /> <span className="ml-2">Uploading</span>
-            </>
-          ) : (
-            <>
-              <IconImage /> <span className="ml-2">Select Picture...</span>
-            </>
-          )}
-        </InputFileButton>
-      )}
+      {isCreator && <ImageUploadButton eventId={event.id} />}
+
       <div className="flex items-center text-sm">
         <div>created by </div>
         <LinkUserImage src={event.creator.image!} alt={event.creator.name} userId={event.creator.id} />
