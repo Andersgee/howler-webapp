@@ -107,10 +107,19 @@ export class GoogleMaps {
 
   showCurrentCenterMarker() {
     this.showCenterMarker = true;
+    const c = this.map?.getCenter();
+    this.currentCenter = c ? { lng: c.lng(), lat: c.lat() } : null;
+
     if (this.currentCenterMarker) {
       this.currentCenterMarker.position = this.currentCenter;
     }
   }
+
+  showCurrentCenterMarkerOnly() {
+    this.clearMarkers();
+    this.showCurrentCenterMarker();
+  }
+
   hideCurrentCenterMarker() {
     this.showCenterMarker = false;
     if (this.currentCenterMarker) {

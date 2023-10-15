@@ -34,10 +34,14 @@ function findSimpleName(data: ReverseGeoCodingResponseSchema) {
   for (const result of data.results) {
     for (const address_component of result.address_components) {
       const isNotPlusCode = address_component.types[0] !== "plus_code";
-      if (isNotPlusCode && !hasNumbers(address_component.long_name)) {
+      if (isNotPlusCode && !hasNumbers(address_component.long_name) && startsWithLetter(address_component.long_name)) {
         return address_component.long_name;
       }
-      if (isNotPlusCode && !hasNumbers(address_component.short_name)) {
+      if (
+        isNotPlusCode &&
+        !hasNumbers(address_component.short_name) &&
+        startsWithLetter(address_component.short_name)
+      ) {
         return address_component.short_name;
       }
     }
@@ -50,4 +54,9 @@ function hasNumbers(str: string) {
     .split(" ")
     .map((x) => !isNaN(Number(x)))
     .some(Boolean);
+}
+
+function startsWithLetter(str: string) {
+  if (str.length < 1) return false;
+  return isNaN(Number(str[0]));
 }

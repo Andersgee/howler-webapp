@@ -4,14 +4,14 @@ import { useEffect } from "react";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { useImageUpload } from "#src/hooks/useImageUpload";
 import { useStore } from "#src/store";
-import { FullsizeImageButton } from "./buttons/FullsizeImageButton";
-import { InputFileButton } from "./buttons/InputFileButton";
-import { EventImage } from "./EventImage";
-import { GoogleMap } from "./GoogleMap";
-import { IconArrowDown, IconImage, IconLoadingSpinner, IconWhat, IconWhen, IconWhere, IconWho } from "./Icons";
-import { Button, buttonStylesSecondary } from "./ui/Button";
-import { LinkUserImage } from "./UserImage";
-import { WhenText } from "./WhenText";
+import { FullsizeImageButton } from "../buttons/FullsizeImageButton";
+import { InputFileButton } from "../buttons/InputFileButton";
+import { EventImage } from "../EventImage";
+import { IconArrowDown, IconImage, IconLoadingSpinner, IconWhat, IconWhen, IconWho } from "../Icons";
+import { buttonStylesSecondary } from "../ui/Button";
+import { LinkUserImage } from "../UserImage";
+import { WhenText } from "../WhenText";
+import { Where, WhereForCreator } from "./Where";
 
 type Props = {
   eventId: number;
@@ -21,9 +21,6 @@ type Props = {
 };
 
 export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isCreator }: Props) {
-  const toggleShowGoogleMaps = useStore.select.toggleShowGoogleMaps();
-
-  const mapIsVisible = useStore.select.showGoogleMaps();
   const googleMaps = useStore.select.googleMaps();
 
   const apiContext = api.useContext();
@@ -48,32 +45,12 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
     }
   );
 
-  const eventLocationUpdate = api.event.updateLocation.useMutation({
-    onSuccess: (updatedLocation) => {
-      if (updatedLocation) {
-        apiContext.event.location.setData({ eventId }, () => updatedLocation);
-      }
-    },
-    //onSettled: () => mapDispatch({ type: "hide", name: "map" }),
-  });
-
   useEffect(() => {
     if (!location || !googleMaps) return;
     googleMaps.showEventMarker({ lng: location.lng, lat: location.lat });
   }, [location, googleMaps]);
 
   if (!event) return null;
-
-  const handleSavePickedLocation = () => {
-    if (!googleMaps) return;
-
-    const c = googleMaps.currentCenter;
-    if (c) {
-      eventLocationUpdate.mutate({ eventId, lng: c.lng, lat: c.lat });
-    }
-    googleMaps.hideCurrentCenterMarker();
-    //mapDispatch({ type: "show", name: "map" });
-  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -117,55 +94,12 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
         <div className="flex items-center bg-white px-2 py-1 dark:bg-black">{event.what || "anything"}</div>
       </div>
 
-      {isCreator && (
-        <div className="flex items-center gap-1">
-          <IconWhere />
-          <span className="w-16 pr-2">Where?</span>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              toggleShowGoogleMaps();
-              googleMaps?.showCurrentCenterMarker();
-            }}
-            //className="bg-white px-2 py-1 dark:bg-black"
-          >
-            {mapIsVisible ? "hide map" : location?.placeName ?? "show map"}
-          </Button>
-          <Button
-            disabled={!mapIsVisible}
-            variant="default"
-            onClick={handleSavePickedLocation}
-            //className="bg-white px-2 py-1 dark:bg-black"
-          >
-            save
-          </Button>
-        </div>
+      {isCreator ? (
+        <WhereForCreator eventId={event.id} initialEventLocation={initialEventLocation} />
+      ) : (
+        <Where eventId={event.id} initialEventLocation={initialEventLocation} />
       )}
 
-      <div>portaled content below here?</div>
-      <div className="h-96 w-full">
-        <GoogleMap />
-      </div>
-      <div>portaled content above here?</div>
-      {!isCreator && (
-        <div className="flex items-center gap-1">
-          <IconWhere />
-          <span className="w-16 pr-2">Where?</span>
-          {location ? (
-            <Button
-              variant="secondary"
-              onClick={() => {
-                toggleShowGoogleMaps();
-                googleMaps?.hideCurrentCenterMarker();
-              }}
-            >
-              {mapIsVisible ? "hide map" : location?.placeName ?? "show map"}
-            </Button>
-          ) : (
-            <div className="bg-white px-2 py-1 dark:bg-black">anywhere</div>
-          )}
-        </div>
-      )}
       <div className="flex items-center gap-1">
         <IconWho />
         <span className="w-16 pr-2">Who?</span>
