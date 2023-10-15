@@ -36,7 +36,7 @@ export function Where({ className, eventId, initialEventLocation }: Props) {
                 const lng = eventLocation.lng;
                 const lat = eventLocation.lat;
                 googleMaps?.setPos({ lng, lat, zoom: 11 });
-                googleMaps?.showEventMarker({ lng, lat });
+                //googleMaps?.showEventMarker({ lng, lat });
                 setMapIsVisible(true);
               }}
             >
@@ -105,9 +105,9 @@ export function WhereForCreator({ className, eventId, initialEventLocation }: Pr
               if (eventLocation) {
                 const lng = eventLocation.lng;
                 const lat = eventLocation.lat;
-                googleMaps?.setPos({ lng, lat, zoom: 11 });
+                //googleMaps?.setPos({ lng, lat, zoom: 11 });
               }
-              googleMaps?.showCurrentCenterMarkerOnly();
+              //googleMaps?.showCurrentCenterMarkerOnly();
               setMapIsVisible(true);
             }}
           >

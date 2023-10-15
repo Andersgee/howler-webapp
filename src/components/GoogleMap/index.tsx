@@ -40,24 +40,25 @@ export function GoogleMapPortal() {
 }
 
 export function GoogleMapsScript() {
-  const initGoogleMaps = useStore.select.initGoogleMaps();
+  const loadGoogleMapsLibs = useStore.select.loadGoogleMapsLibs();
   return (
     <Script
       src={absUrl("/google-maps.js")} //"https://howler.andyfx.net/google-maps.js"
       strategy="lazyOnload"
-      onLoad={() => initGoogleMaps()}
+      onLoad={() => loadGoogleMapsLibs()}
     />
   );
 }
 
 function GoogleMapDiv() {
   const mapRef = useRef(null);
-  const googleMaps = useStore.select.googleMaps();
+  const googleMapsIsReadyToRender = useStore.select.googleMapsLibsAreLoaded();
+  const initGoogleMaps = useStore.select.initGoogleMaps();
 
   useEffect(() => {
-    if (!googleMaps || !mapRef.current) return;
-    googleMaps.render(mapRef.current);
-  }, [googleMaps]);
+    if (!googleMapsIsReadyToRender || !mapRef.current) return;
+    initGoogleMaps(mapRef.current);
+  }, [googleMapsIsReadyToRender, initGoogleMaps]);
 
   return <div ref={mapRef} className="h-full w-full" />;
 }
