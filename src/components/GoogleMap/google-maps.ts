@@ -1,4 +1,4 @@
-import { MarkerClusterer } from "@googlemaps/markerclusterer";
+import { GridAlgorithm, MarkerClusterer } from "@googlemaps/markerclusterer";
 import { setMapBounds } from "#src/store/actions";
 import { debounce } from "#src/utils/debounce";
 import { type Prettify } from "#src/utils/typescript";
@@ -83,7 +83,8 @@ export class GoogleMaps {
       minZoom: 3,
     });
 
-    this.markerClusterer = new MarkerClusterer({ map: this.map });
+    //this.markerClusterer = new MarkerClusterer({ map: this.map });
+    this.markerClusterer = new MarkerClusterer({ map: this.map, algorithm: new GridAlgorithm({ gridSize: 60 }) });
 
     //this.currentCenterMarker = new this.AdvancedMarkerElement({
     //  map: this.map,
