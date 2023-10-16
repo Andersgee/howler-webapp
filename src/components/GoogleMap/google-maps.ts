@@ -23,6 +23,8 @@ https://developers.google.com/maps/documentation/javascript/marker-clustering
 tiling, how google handles map and tile coordinates:
 https://developers.google.com/maps/documentation/javascript/coordinates
 */
+
+const INITIAL_CENTER = { lat: -28.024, lng: 140.887 };
 /**
  * simpler wrapper for interacting with google maps
  */
@@ -39,10 +41,14 @@ export class GoogleMaps {
   //currentCenterMarker: google.maps.marker.AdvancedMarkerElement | null;
   //showCenterMarker: boolean;
 
+  eventMarker: google.maps.marker.AdvancedMarkerElement | null;
+  chooseEventLocationMarker: google.maps.marker.AdvancedMarkerElement | null;
   constructor() {
     this.map = null;
     this.currentCenter = null;
     this.markerClusterer = null;
+    this.eventMarker = null;
+    this.chooseEventLocationMarker = null;
   }
 
   async loadLibs() {
@@ -78,13 +84,13 @@ export class GoogleMaps {
 
     this.map = new this.Map(element, {
       zoom: 3,
-      center: { lat: -28.024, lng: 140.887 },
+      center: INITIAL_CENTER,
       mapId: TEST_MAP_ID,
       minZoom: 3,
     });
 
     //this.markerClusterer = new MarkerClusterer({ map: this.map });
-    this.markerClusterer = new MarkerClusterer({ map: this.map, algorithm: new GridAlgorithm({ gridSize: 60 }) });
+    this.markerClusterer = new MarkerClusterer({ map: this.map, algorithm: new GridAlgorithm({ gridSize: 50 }) });
 
     //this.currentCenterMarker = new this.AdvancedMarkerElement({
     //  map: this.map,
@@ -95,6 +101,10 @@ export class GoogleMaps {
     this.map.addListener("center_changed", () => {
       const c = this.map?.getCenter();
       this.currentCenter = c ? { lng: c.lng(), lat: c.lat() } : null;
+
+      if (this.chooseEventLocationMarker !== null && this.chooseEventLocationMarker.position !== null) {
+        this.chooseEventLocationMarker.position = this.currentCenter;
+      }
     });
 
     this.map.addListener(
@@ -123,7 +133,71 @@ export class GoogleMaps {
     this.map.setZoom(zoom);
   }
 
-  setMarkerCluster(locations: Array<Prettify<LngLat & { label: string }>>) {
+  clearMarkers() {
+    if (this.eventMarker) {
+      this.eventMarker.position = null;
+    }
+    this.markerClusterer?.clearMarkers();
+  }
+
+  hideAllMarkers() {
+    if (this.eventMarker && this.eventMarker.position !== null) {
+      this.eventMarker.position = null;
+    }
+    if (this.chooseEventLocationMarker && this.chooseEventLocationMarker.position !== null) {
+      this.chooseEventLocationMarker.position = null;
+    }
+    this.markerClusterer?.clearMarkers();
+  }
+
+  setEventMarker(location: LngLat) {
+    this.hideAllMarkers();
+    if (this.eventMarker === null) {
+      const pin = new this.PinElement({
+        scale: 1.5,
+      });
+      this.eventMarker = new this.AdvancedMarkerElement({
+        content: pin.element,
+        position: location,
+        title: "This is where it happens.",
+      });
+    } else {
+      this.eventMarker.position = location;
+    }
+
+    //eventMarker.map = null //remove marker like this
+    //eventMarker.position = null // or remove marker like this
+  }
+
+  setChooseEventLocationMarkerCurrentCenter() {
+    if (this.currentCenter) {
+      this.setChooseEventLocationMarker(this.currentCenter);
+    } else {
+      this.setChooseEventLocationMarker(INITIAL_CENTER);
+    }
+  }
+
+  setChooseEventLocationMarker(location: LngLat) {
+    this.hideAllMarkers();
+
+    if (this.chooseEventLocationMarker === null) {
+      const pin = new this.PinElement({
+        scale: 1.5,
+      });
+      this.chooseEventLocationMarker = new this.AdvancedMarkerElement({
+        content: pin.element,
+        position: location,
+        title: "This is where it happens.",
+      });
+    } else {
+      this.chooseEventLocationMarker.position = location;
+    }
+
+    //eventMarker.map = null //remove marker like this
+    //eventMarker.position = null // or remove marker like this
+  }
+
+  setExploreMarkers(locations: Array<Prettify<LngLat & { label: string }>>) {
     if (!this.map) return;
 
     const infoWindow = new this.InfoWindow({
@@ -169,7 +243,7 @@ export class GoogleMaps {
       return marker;
     });
 
-    this.markerClusterer?.clearMarkers(true);
+    this.hideAllMarkers();
     this.markerClusterer?.addMarkers(markers);
   }
 }

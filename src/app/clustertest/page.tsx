@@ -10,7 +10,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!googleMaps) return;
-    googleMaps.setMarkerCluster(locations);
+    googleMaps.setExploreMarkers(locations);
   }, [googleMaps]);
   return (
     <MainShellFull>
@@ -19,7 +19,7 @@ export default function Page() {
       </div>
       <button
         onClick={() => {
-          googleMaps?.setMarkerCluster(locations2);
+          googleMaps?.setExploreMarkers(locations2);
         }}
       >
         change locations

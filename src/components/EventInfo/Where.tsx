@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api, type RouterOutputs } from "#src/hooks/api";
 import { useStore } from "#src/store";
 import { LocateButton } from "../buttons/LocateButton";
@@ -18,6 +18,11 @@ export function Where({ className, eventId, initialEventLocation }: Props) {
   const [mapIsVisible, setMapIsVisible] = useState(false);
   const { data: eventLocation } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
   const googleMaps = useStore.select.googleMaps();
+
+  useEffect(() => {
+    if (!googleMaps || !eventLocation) return;
+    googleMaps.setEventMarker({ lng: eventLocation.lng, lat: eventLocation.lat });
+  }, [googleMaps, eventLocation]);
 
   return (
     <div className={className}>
@@ -105,9 +110,11 @@ export function WhereForCreator({ className, eventId, initialEventLocation }: Pr
               if (eventLocation) {
                 const lng = eventLocation.lng;
                 const lat = eventLocation.lat;
-                //googleMaps?.setPos({ lng, lat, zoom: 11 });
+                googleMaps?.setPos({ lng, lat, zoom: 11 });
+                googleMaps?.setChooseEventLocationMarker({ lng, lat });
+              } else {
+                googleMaps?.setChooseEventLocationMarkerCurrentCenter();
               }
-              //googleMaps?.showCurrentCenterMarkerOnly();
               setMapIsVisible(true);
             }}
           >
