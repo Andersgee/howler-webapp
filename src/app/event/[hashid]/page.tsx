@@ -58,7 +58,7 @@ export default async function Page({ params }: PageProps) {
           <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
         </div>
       )}
-      <div className="flex gap-2">
+      <div className="my-2 flex gap-2">
         {isCreator && <EditEventButton eventId={eventId} initialEventInfo={event} />}
         <ShareButton title={event.what} />
         {user && (

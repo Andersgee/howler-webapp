@@ -50,6 +50,12 @@ export const eventRouter = createTRPCRouter({
     return { eventId: input.eventId, userId: ctx.user.id };
   }),
   delete: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
+    const existingEventLocation = await db
+      .selectFrom("EventLocation")
+      .select(["lng", "lat"])
+      .where("eventId", "=", input.eventId)
+      .executeTakeFirst();
+
     const deleteResult = await db
       .deleteFrom("Event")
       .where("id", "=", input.eventId)
@@ -60,6 +66,12 @@ export const eventRouter = createTRPCRouter({
     if (!numDeletedRows) return false;
 
     revalidateTag(tagEventInfo({ eventId: input.eventId }));
+    if (existingEventLocation) {
+      const tileIds = tileIdsFromLngLat(existingEventLocation);
+      for (const tileId of tileIds) {
+        revalidateTag(tagTile({ tileId }));
+      }
+    }
 
     return true;
   }),
