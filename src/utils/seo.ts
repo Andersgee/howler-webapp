@@ -124,8 +124,7 @@ export function seo({
     twitter: {
       title: title,
       card: "summary_large_image",
-      description:
-        "Looking for something to do in real life? A place to quickly find/plan stuff to do with friends, or with anyone really.",
+      description: description,
       images: [absUrl(image)],
     },
   };
