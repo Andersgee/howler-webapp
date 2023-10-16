@@ -33,6 +33,12 @@ export class FirebaseCloudMessaging {
     this.fcmToken = null;
   }
 
+  async init() {
+    await this.getFcmToken();
+    onMessage(this.messaging, (payload: MessagePayload) => setFcmLatestMessagePayload(payload));
+    return true;
+  }
+
   async getFcmToken() {
     if (!notificationsAlreadyGranted()) return false;
     try {
@@ -46,12 +52,6 @@ export class FirebaseCloudMessaging {
     } catch (error) {
       return false;
     }
-  }
-
-  async init() {
-    await this.getFcmToken();
-    onMessage(this.messaging, (payload: MessagePayload) => setFcmLatestMessagePayload(payload));
-    return true;
   }
 
   /** call this on button clicks etc, instead of right away when app loads  */

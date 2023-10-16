@@ -41,13 +41,7 @@ export function GoogleMapPortal() {
 
 export function GoogleMapsScript() {
   const loadGoogleMapsLibs = useStore.select.loadGoogleMapsLibs();
-  return (
-    <Script
-      src={absUrl("/google-maps.js")} //"https://howler.andyfx.net/google-maps.js"
-      strategy="lazyOnload"
-      onLoad={() => loadGoogleMapsLibs()}
-    />
-  );
+  return <Script src={absUrl("/google-maps.js")} strategy="lazyOnload" onLoad={() => loadGoogleMapsLibs()} />;
 }
 
 function GoogleMapDiv() {
