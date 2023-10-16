@@ -2,6 +2,7 @@ import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { tileIdsFromLngLat, uniqueStrings } from "#src/components/GoogleMap/utils";
 import { db } from "#src/db";
+import { removeImageFromEventAndCloudStorage } from "#src/utils/cloud-storage-url";
 import { getGoogleReverseGeocoding } from "#src/utils/geocoding";
 import { hashidFromId } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
@@ -244,6 +245,7 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
+      await removeImageFromEventAndCloudStorage({ eventId: input.eventId });
       const _updateResult = await db
         .updateTable("Event")
         .where("id", "=", input.eventId)
