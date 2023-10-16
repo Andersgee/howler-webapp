@@ -135,6 +135,7 @@ export class GoogleMaps {
     if (this.eventMarker && this.eventMarker.position !== null) {
       this.eventMarker.position = null;
     }
+
     if (this.chooseEventLocationMarker && this.chooseEventLocationMarker.position !== null) {
       this.chooseEventLocationMarker.position = null;
     }
@@ -162,11 +163,7 @@ export class GoogleMaps {
   }
 
   setChooseEventLocationMarkerCurrentCenter() {
-    if (this.currentCenter) {
-      this.setChooseEventLocationMarker(this.currentCenter);
-    } else {
-      this.setChooseEventLocationMarker(INITIAL_CENTER);
-    }
+    this.setChooseEventLocationMarker(this.currentCenter || INITIAL_CENTER);
   }
 
   setChooseEventLocationMarker(location: LngLat) {
@@ -231,7 +228,12 @@ export class GoogleMaps {
       // open info window when marker is clicked
       marker.addListener("click", () => {
         infoWindow.setContent(location.lat + ", " + location.lng);
-        infoWindow.open(this.map, marker);
+        infoWindow.open({
+          map: this.map,
+          anchor: marker,
+          //shouldFocus: true,
+        });
+        //infoWindow.open(this.map, marker);
       });
       return marker;
     });

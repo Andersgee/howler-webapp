@@ -26,3 +26,12 @@ export function useLocationsInView() {
 
   return locationsInView;
 }
+
+export function useLocationsInTiles() {
+  //const [locationsInView, setLocationsInView] = useState(1);
+  const tileIdsInView = useStore.select.tileIdsInView();
+
+  const { data } = api.tile.multipleTileLocations.useQuery({ tileIds: tileIdsInView });
+
+  return data;
+}
