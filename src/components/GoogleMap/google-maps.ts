@@ -72,7 +72,12 @@ export class GoogleMaps {
   }
 
   init(element: HTMLDivElement) {
-    console.log("rendering google map now"); //this costs 0.007 USD
+    //tldr on cost:
+    //the google cloud billing account gets 200 USD free usage each month for "Google Maps Platform APIs"
+    //geocoding is 0.005 USD per request see https://developers.google.com/maps/documentation/geocoding/usage-and-billing#pricing-for-product
+    //google maps is 0.007 USD per load, see https://developers.google.com/maps/documentation/javascript/usage-and-billing#pricing-for-product
+    //
+    //so essentially 28500 map loads per month is free
 
     this.map = new this.Map(element, {
       zoom: 10,
