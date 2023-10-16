@@ -24,7 +24,8 @@ tiling, how google handles map and tile coordinates:
 https://developers.google.com/maps/documentation/javascript/coordinates
 */
 
-const INITIAL_CENTER = { lat: -34.397, lng: 150.644 };
+const INITIAL_ZOOM = 5;
+const INITIAL_CENTER = { lat: 55.49, lng: 13.04 };
 /**
  * simpler wrapper for interacting with google maps
  */
@@ -80,7 +81,7 @@ export class GoogleMaps {
     //so essentially 28500 map loads per month is free
 
     this.map = new this.Map(element, {
-      zoom: 10,
+      zoom: INITIAL_ZOOM,
       center: INITIAL_CENTER,
       mapId: TEST_MAP_ID,
       minZoom: 3,
@@ -235,6 +236,7 @@ export class GoogleMaps {
           const clonedElement = element.cloneNode(true) as HTMLElement;
           //should change id of clone. see https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
           clonedElement.id = `cloned-${element.id}`;
+          clonedElement.classList.remove("sr-only");
           infoWindow.setContent(clonedElement);
         }
         infoWindow.open({

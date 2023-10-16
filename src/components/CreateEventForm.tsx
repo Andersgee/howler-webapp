@@ -46,6 +46,7 @@ export function CreateEventForm() {
           />
         </div>
         {/* Where */}
+        {/*}
         <div className="my-2 flex items-center">
           <div className="flex w-24">
             <IconWhere />
@@ -61,6 +62,7 @@ export function CreateEventForm() {
             aria-label="where"
           />
         </div>
+      */}
         {/* Who */}
         <div className="my-2 flex items-center">
           <div className="flex w-24">

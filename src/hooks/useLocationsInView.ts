@@ -7,7 +7,7 @@ export function useLocationsInView() {
   const tileIdsInView = useStore.select.tileIdsInView();
 
   const googleMaps = useStore.select.googleMaps();
-  const didRender = useRef(false);
+  const didHideMarkers = useRef(false);
 
   const { data: locationsInView } = api.tile.multipleTileLocations.useQuery({ tileIds: tileIdsInView });
 
@@ -15,9 +15,9 @@ export function useLocationsInView() {
     if (!googleMaps) return;
 
     //make sure to hide markers once
-    if (didRender.current == false) {
+    if (!didHideMarkers.current) {
       googleMaps.hideAllMarkers();
-      didRender.current = true;
+      didHideMarkers.current = true;
     }
 
     if (!locationsInView) return;
