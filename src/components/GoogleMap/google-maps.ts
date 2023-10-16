@@ -187,7 +187,7 @@ export class GoogleMaps {
     //eventMarker.position = null // or remove marker like this
   }
 
-  setExploreMarkers(locations: Array<Prettify<LngLat & { what: string }>>) {
+  setExploreMarkers(locations: Array<Prettify<LngLat & { what: string; id: number }>>) {
     if (!this.map) return;
 
     const infoWindow = new this.InfoWindow({
@@ -227,7 +227,16 @@ export class GoogleMaps {
       // markers can only be keyboard focusable when they have click listeners
       // open info window when marker is clicked
       marker.addListener("click", () => {
-        infoWindow.setContent(location.lat + ", " + location.lng);
+        const element = document.getElementById(String(location.id));
+        if (element === null) {
+          //infoWindow.setContent(location.lat + ", " + location.lng);
+          infoWindow.setContent(`what: ${location.what}`);
+        } else {
+          const clonedElement = element.cloneNode(true) as HTMLElement;
+          //should change id of clone. see https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
+          clonedElement.id = `cloned-${element.id}`;
+          infoWindow.setContent(clonedElement);
+        }
         infoWindow.open({
           map: this.map,
           anchor: marker,

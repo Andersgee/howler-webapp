@@ -4,7 +4,7 @@ import Link from "next/link";
 import { boundsContains } from "#src/components/GoogleMap/utils";
 import { IconArrowLink } from "#src/components/Icons";
 import { WhenText } from "#src/components/WhenText";
-import { useLocationsInView } from "#src/hooks/useLocationsInView";
+import { useLocationsInTiles, useLocationsInView } from "#src/hooks/useLocationsInView";
 import { useStore } from "#src/store";
 import { hashidFromId } from "#src/utils/hashid";
 
@@ -14,16 +14,17 @@ type Props = {
 
 export function EventsInViewList({ className }: Props) {
   const events = useLocationsInView();
+  //const locations = useLocationsInTiles()
   const mapBounds = useStore.select.mapBounds();
 
   return (
-    <ul className="max-w-md">
+    <div className="max-w-md">
       {events
         ?.filter((event) =>
           boundsContains({ ne: mapBounds.ne, sw: mapBounds.sw, p: { lng: event.lng, lat: event.lat } })
         )
         .map((event) => (
-          <li key={event.id}>
+          <div key={event.id} id={String(event.id)}>
             <Link
               className="hover:bg-secondary block border-b px-3 py-4 transition-colors"
               prefetch={false}
@@ -39,8 +40,8 @@ export function EventsInViewList({ className }: Props) {
                 <IconArrowLink className="shrink-0" />
               </div>
             </Link>
-          </li>
+          </div>
         ))}
-    </ul>
+    </div>
   );
 }
