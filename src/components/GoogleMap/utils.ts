@@ -11,7 +11,7 @@ type LngLatZoom = LngLat & { zoom: number };
 export function tileIdsFromLngLat({ lng, lat }: LngLat) {
   //const zooms = range(0, 8);
   const zooms = range(MIN_ZOOM, MAX_ZOOM);
-  return zooms.map((zoom) => tileName({ lng, lat, zoom }));
+  return zooms.map((zoom) => tileName({ lng, lat, zoom })).sort();
 }
 
 function tileName({ lng, lat, zoom }: LngLatZoom) {
@@ -33,6 +33,9 @@ function mod(n: number, m: number) {
 }
 
 function unique(v: number[]) {
+  return Array.from(new Set(v));
+}
+export function uniqueStrings(v: string[]) {
   return Array.from(new Set(v));
 }
 

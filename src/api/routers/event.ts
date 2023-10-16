@@ -1,6 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import { tileIdsFromLngLat } from "#src/components/GoogleMap/utils";
+import { tileIdsFromLngLat, uniqueStrings } from "#src/components/GoogleMap/utils";
 import { db } from "#src/db";
 import { getGoogleReverseGeocoding } from "#src/utils/geocoding";
 import { hashidFromId } from "#src/utils/hashid";
@@ -165,16 +165,20 @@ export const eventRouter = createTRPCRouter({
 
       const existingEventLocation = await db
         .selectFrom("EventLocation")
-        .select("id")
+        .select(["id", "lng", "lat"])
         .where("eventId", "=", input.eventId)
         .executeTakeFirst();
-      const tileIds = tileIdsFromLngLat({ lng: input.lng, lat: input.lat });
 
-      //make sure tiles exist
+      const oldTileIds = existingEventLocation
+        ? tileIdsFromLngLat({ lng: existingEventLocation.lng, lat: existingEventLocation.lat })
+        : [];
+      const newTileIds = tileIdsFromLngLat({ lng: input.lng, lat: input.lat });
+
+      //make sure new tiles exist
       const _insertResult_Tiles = await db
         .insertInto("Tile")
         .ignore() //ignore the insert if already exists
-        .values(tileIds.map((tileId) => ({ id: tileId })))
+        .values(newTileIds.map((tileId) => ({ id: tileId })))
         .executeTakeFirstOrThrow();
 
       //update or insert location
@@ -205,12 +209,16 @@ export const eventRouter = createTRPCRouter({
         eventLocationId = Number(insertResult_EventLocation.insertId);
       }
 
-      //also make sure pivots exist
+      //also update EventLocationTilePivot's for this specific EventLocation
+      const _deleteResult_EventLocationTilePivot = await db
+        .deleteFrom("EventLocationTilePivot")
+        .where("eventLocationId", "=", eventLocationId)
+        .executeTakeFirst();
       const _insertResult_EventLocationTilePivot = await db
         .insertInto("EventLocationTilePivot")
         .ignore() //ignore the insert if already exists
         .values(
-          tileIds.map((tileId) => ({
+          newTileIds.map((tileId) => ({
             eventLocationId: eventLocationId,
             tileId: tileId,
           }))
@@ -221,7 +229,7 @@ export const eventRouter = createTRPCRouter({
 
       revalidateTag(tagEventInfo({ eventId: input.eventId }));
       revalidateTag(tagEventLocation({ eventId: input.eventId }));
-      for (const tileId of tileIds) {
+      for (const tileId of uniqueStrings(oldTileIds.concat(newTileIds))) {
         revalidateTag(tagTile({ tileId }));
       }
 
