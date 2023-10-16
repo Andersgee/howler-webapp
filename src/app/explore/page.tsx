@@ -1,5 +1,3 @@
-"use client";
-
 import { GoogleMap } from "#src/components/GoogleMap";
 import { MainShellFull } from "#src/components/MainShell";
 import { EventsInViewList } from "./EventsInViewList";

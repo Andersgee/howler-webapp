@@ -24,7 +24,7 @@ tiling, how google handles map and tile coordinates:
 https://developers.google.com/maps/documentation/javascript/coordinates
 */
 
-const INITIAL_CENTER = { lat: -28.024, lng: 140.887 };
+const INITIAL_CENTER = { lat: -34.397, lng: 150.644 };
 /**
  * simpler wrapper for interacting with google maps
  */
@@ -72,18 +72,10 @@ export class GoogleMaps {
   }
 
   init(element: HTMLDivElement) {
-    console.log("rendering google map now, this costs 0.007 USD");
-    /*
-    this.map = new this.Map(element, {
-      center: { lat: -34.397, lng: 150.644 },
-      zoom: 12,
-      mapId: TEST_MAP_ID, //required for some libs like AdvancedMarkerElement
-      minZoom: 3,
-    });
-    */
+    console.log("rendering google map now"); //this costs 0.007 USD
 
     this.map = new this.Map(element, {
-      zoom: 3,
+      zoom: 10,
       center: INITIAL_CENTER,
       mapId: TEST_MAP_ID,
       minZoom: 3,
@@ -91,12 +83,6 @@ export class GoogleMaps {
 
     //this.markerClusterer = new MarkerClusterer({ map: this.map });
     this.markerClusterer = new MarkerClusterer({ map: this.map, algorithm: new GridAlgorithm({ gridSize: 50 }) });
-
-    //this.currentCenterMarker = new this.AdvancedMarkerElement({
-    //  map: this.map,
-    //  position: null,
-    //  title: "Placed pin",
-    //});
 
     this.map.addListener("center_changed", () => {
       const c = this.map?.getCenter();
@@ -133,12 +119,12 @@ export class GoogleMaps {
     this.map.setZoom(zoom);
   }
 
-  clearMarkers() {
-    if (this.eventMarker) {
-      this.eventMarker.position = null;
-    }
-    this.markerClusterer?.clearMarkers();
-  }
+  //clearMarkers() {
+  //  if (this.eventMarker) {
+  //    this.eventMarker.position = null;
+  //  }
+  //  this.markerClusterer?.clearMarkers();
+  //}
 
   hideAllMarkers() {
     if (this.eventMarker && this.eventMarker.position !== null) {
@@ -157,6 +143,7 @@ export class GoogleMaps {
         scale: 1.5,
       });
       this.eventMarker = new this.AdvancedMarkerElement({
+        map: this.map,
         content: pin.element,
         position: location,
         title: "This is where it happens.",
@@ -185,6 +172,7 @@ export class GoogleMaps {
         scale: 1.5,
       });
       this.chooseEventLocationMarker = new this.AdvancedMarkerElement({
+        map: this.map,
         content: pin.element,
         position: location,
         title: "This is where it happens.",
@@ -197,7 +185,7 @@ export class GoogleMaps {
     //eventMarker.position = null // or remove marker like this
   }
 
-  setExploreMarkers(locations: Array<Prettify<LngLat & { label: string }>>) {
+  setExploreMarkers(locations: Array<Prettify<LngLat & { what: string }>>) {
     if (!this.map) return;
 
     const infoWindow = new this.InfoWindow({
@@ -207,7 +195,7 @@ export class GoogleMaps {
 
     const markers = locations.map((location) => {
       //const label = labels[i % labels.length];
-      const label = location.label;
+      const label = location.what;
       //const pinGlyph = new this.PinElement({
       //  glyph: label,
       //  glyphColor: "white",
