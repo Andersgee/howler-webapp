@@ -32,7 +32,7 @@ function Locate() {
 /**
  * a bunch of hidden divs that googleMaps can select by id and draw in infowindows.
  */
-function InfoWindowContents({ className }: Props) {
+function InfoWindowContents() {
   const events = useLocationsInView();
   //const mapBounds = useStore.select.mapBounds();
 

@@ -3,7 +3,7 @@
 import { addHours, startOfHour, subHours } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { IconArrowDown, IconHowler, IconWhat, IconWhen, IconWhere, IconWho } from "#src/components/Icons";
+import { IconArrowDown, IconHowler, IconWhat, IconWhen, IconWho } from "#src/components/Icons";
 import { api } from "#src/hooks/api";
 import { useStore } from "#src/store";
 import { datetimelocalString } from "#src/utils/date";
@@ -20,7 +20,6 @@ export function CreateEventForm() {
     onError: () => dialogAction({ type: "show", name: "signin" }),
   });
   const [what, setWhat] = useState("");
-  const [where, setWhere] = useState("");
   const [who, setWho] = useState("");
 
   const [when, setWhen] = useState(startOfHour(addHours(new Date(), 1)));
@@ -45,24 +44,6 @@ export function CreateEventForm() {
             aria-label="what"
           />
         </div>
-        {/* Where */}
-        {/*}
-        <div className="my-2 flex items-center">
-          <div className="flex w-24">
-            <IconWhere />
-            <span className="ml-2">Where?</span>
-          </div>
-          <Input
-            type="text"
-            name="where"
-            placeholder="anywhere"
-            className="block"
-            value={where}
-            onChange={(e) => setWhere(e.target.value)}
-            aria-label="where"
-          />
-        </div>
-      */}
         {/* Who */}
         <div className="my-2 flex items-center">
           <div className="flex w-24">
@@ -129,7 +110,6 @@ export function CreateEventForm() {
               onClick={() => {
                 eventCreate.mutate({
                   what: what,
-                  where: where,
                   who: who,
                   when: when,
                   whenEnd: whenEnd,

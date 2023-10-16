@@ -79,7 +79,7 @@ export const eventRouter = createTRPCRouter({
     .input(
       z.object({
         what: z.string(),
-        where: z.string(),
+        //where: z.string(),
         when: z.date(),
         whenEnd: z.date(),
         who: z.string(),
@@ -93,7 +93,7 @@ export const eventRouter = createTRPCRouter({
         .values({
           creatorId: ctx.user.id,
           what: input.what,
-          where: input.where,
+          where: "",
           when: input.when,
           whenEnd: input.whenEnd,
           who: input.who,

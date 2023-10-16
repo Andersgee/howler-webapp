@@ -198,7 +198,7 @@ export class GoogleMaps {
 
     const markers = locations.map((location) => {
       //const label = labels[i % labels.length];
-      const label = location.what;
+      //const label = location.what;
       //const pinGlyph = new this.PinElement({
       //  glyph: label,
       //  glyphColor: "white",
