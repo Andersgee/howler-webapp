@@ -11,16 +11,12 @@ type Config = {
    */
   description: string;
   /**
-   * USAGE WITH THIS FUNCTION: either absolute or relative url such as "/hello" is ok
-   *
    * An image URL which should represent your object within the graph.
    *
    * size should be 1200x630 to be safe
    */
   image: string;
   /**
-   * USAGE WITH THIS FUNCTION: either absolute or relative url such as "/hello" is ok
-   *
    * The canonical URL of your object that will be used as its permanent ID in the graph, e.g., "https://www.imdb.com/title/tt0117500".
    */
   url: string;
@@ -29,14 +25,10 @@ type Config = {
    */
   type?: "website" | "video.movie";
   /**
-   * USAGE WITH THIS FUNCTION: either absolute or relative url such as "/hello" is ok
-   *
    * A URL to an audio file to accompany this object. example "https://example.com/bond/theme.mp3"
    */
   audio?: string;
   /**
-   * USAGE WITH THIS FUNCTION: either absolute or relative url such as "/hello" is ok
-   *
    * A URL to a video file that complements this object.
    */
   video?: string;
@@ -84,12 +76,12 @@ export function seo({
   title,
   url,
   image,
-  audio,
   description,
+  audio,
+  video,
   determiner,
   locale,
   locale_alternatives,
-  video,
 }: Config) {
   const metadata: Metadata = {
     title: title,
