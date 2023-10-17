@@ -52,9 +52,7 @@ export default async function Page({ params }: PageProps) {
   const isCreator = user?.id === event.creatorId;
   return (
     <MainShell>
-      {/*
       <EventInfo eventId={eventId} initialEventInfo={event} initialEventLocation={location} isCreator={isCreator} />
-      */}
       {!isCreator && (
         <div className="my-4 flex justify-center">
           <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
