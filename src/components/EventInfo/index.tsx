@@ -7,8 +7,7 @@ import { IconArrowDown, IconWhat, IconWhen, IconWho } from "../Icons";
 import { LinkUserImage } from "../UserImage";
 import { WhenText } from "../WhenText";
 import { ImageUploadButton } from "./ImageUploadButton";
-
-//import { Where, WhereForCreator } from "./Where";
+import { Where, WhereForCreator } from "./Where";
 
 type Props = {
   eventId: number;
@@ -43,11 +42,11 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
         <div className="flex items-center bg-white px-2 py-1 dark:bg-black">{event.what || "anything"}</div>
       </div>
 
-      {/*isCreator ? (
+      {isCreator ? (
         <WhereForCreator eventId={event.id} initialEventLocation={initialEventLocation} />
       ) : (
         <Where eventId={event.id} initialEventLocation={initialEventLocation} />
-      )*/}
+      )}
 
       <div className="flex items-center gap-1">
         <IconWho />
