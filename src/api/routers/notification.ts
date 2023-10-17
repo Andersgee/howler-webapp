@@ -11,6 +11,7 @@ export const notificationRouter = createTRPCRouter({
       .limit(10)
       .innerJoin("Notification", "Notification.id", "p.notificationId")
       .selectAll("Notification")
+      .orderBy("Notification.id", "desc")
       .execute();
 
     return notifications;
