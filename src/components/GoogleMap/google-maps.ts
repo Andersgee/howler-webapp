@@ -254,4 +254,4 @@ export class GoogleMaps {
   }
 }
 
-export const googleMapsInstance = new GoogleMaps();
+//export const googleMapsInstance = new GoogleMaps();

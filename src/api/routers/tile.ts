@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { getTile } from "#src/utils/tags";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const tileRouter = createTRPCRouter({
   tileLocations: publicProcedure.input(z.object({ tileId: z.string() })).query(async ({ input }) => {
