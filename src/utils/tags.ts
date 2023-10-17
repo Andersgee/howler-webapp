@@ -9,6 +9,12 @@ nextjs is still working on caching behaviour for regular fetch() and things seem
 - see https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#opting-out-of-data-caching
 - and https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
 
+
+***
+IMPORTANT: apparently trpc procedures must not return undefined
+so to use these in procedures aswell, make sure to "return data ?? null" for getFirst() calls
+***
+
 */
 const CACHED: RequestCache = "force-cache"; //default in nextjs
 const FRESH: RequestCache = "no-store"; //
@@ -63,7 +69,7 @@ export function tagEventLocation(p: EventLocationParams) {
   return `eventlocation-${p.eventId}`;
 }
 export async function getEventLocation(p: EventLocationParams, cached = true) {
-  return await db
+  const data = await db
     .selectFrom("EventLocation")
     .selectAll("EventLocation")
     .where("EventLocation.eventId", "=", p.eventId)
@@ -71,6 +77,7 @@ export async function getEventLocation(p: EventLocationParams, cached = true) {
       cache: cached ? CACHED : FRESH,
       next: { tags: [tagEventLocation(p)] },
     });
+  return data ?? null;
 }
 
 type EventInfoParams = { eventId: number };
@@ -79,7 +86,7 @@ export function tagEventInfo(p: EventInfoParams) {
   return `eventinfo-${p.eventId}`;
 }
 export async function getEventInfo(p: EventInfoParams, cached = true) {
-  return await db
+  const data = await db
     .selectFrom("Event")
     .selectAll("Event")
     .where("Event.id", "=", p.eventId)
@@ -92,6 +99,7 @@ export async function getEventInfo(p: EventInfoParams, cached = true) {
       cache: cached ? CACHED : FRESH,
       next: { tags: [tagEventInfo(p)] },
     });
+  return data ?? null;
 }
 
 export function tagEvents() {
@@ -119,7 +127,7 @@ export function tagUserInfo(p: UserInfoParams) {
   return `userinfo-${p.userId}`;
 }
 export async function getUserInfo(p: UserInfoParams, cached = true) {
-  return await db
+  const data = await db
     .selectFrom("User")
     .selectAll()
     .where("User.id", "=", p.userId)
@@ -127,9 +135,11 @@ export async function getUserInfo(p: UserInfoParams, cached = true) {
       cache: cached ? CACHED : FRESH,
       next: { tags: [tagUserInfo(p)] },
     });
+
+  return data ?? null;
 }
 export async function getUserInfoPublic(p: UserInfoParams, cached = true) {
-  return await db
+  const data = await db
     .selectFrom("User")
     .select(["id", "name", "image"])
     .where("User.id", "=", p.userId)
@@ -137,6 +147,8 @@ export async function getUserInfoPublic(p: UserInfoParams, cached = true) {
       cache: cached ? CACHED : FRESH,
       next: { tags: [tagUserInfo(p)] },
     });
+
+  return data ?? null;
 }
 
 type TileParams = { tileId: string };
