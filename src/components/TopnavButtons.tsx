@@ -57,34 +57,42 @@ export function SigninButton() {
 
 export function NotificationsButton(_props: { user: TokenUser }) {
   const notificationMessages = useStore.select.fcmNotificationMessages();
+  const [numberUnseen, setNumberUnseen] = useState(notificationMessages.length);
   const fcm = useStore.select.fcm();
   const notificationLatest10 = api.notification.latest10.useQuery();
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={(x) => setOpen(x)}>
-      <PopoverTrigger onClick={() => fcm?.maybeRequestNotificationPermission()}>
-        <IconBellWithNumber number={notificationMessages.length} />
+      <PopoverTrigger
+        onClick={() => {
+          fcm?.maybeRequestNotificationPermission();
+          setNumberUnseen(0);
+        }}
+      >
+        <IconBellWithNumber number={numberUnseen} />
       </PopoverTrigger>
-      <PopoverContent>
-        <div className="flex items-center justify-between">
+      <PopoverContent className="p-0">
+        <div className="flex items-center justify-between p-4">
           <h2>Notifications</h2>
           <Link href="/account/notifications" onClick={() => setOpen(false)}>
             <IconSettings clickable />
           </Link>
         </div>
-        <Separator />
         <ul>
-          {notificationMessages.map((message) => (
-            <li key={message.id}>
-              <a className="hover:bg-secondary block border-b py-4 transition-colors" href={message.linkUrl}>
-                <div className="flex items-center justify-between px-4">
+          {notificationMessages.map((notification) => (
+            <li key={notification.id}>
+              <Link
+                className="hover:bg-secondary block border-b py-4 transition-colors"
+                href={notification.relativeLinkUrl}
+                onClick={() => setOpen(false)}
+              >
+                <div className="flex items-center px-3">
                   <div>
-                    <h3 className="capitalize-first shrink truncate text-base font-normal">{message.title}</h3>
-                    <p>{message.body}</p>
+                    <h3 className="capitalize-first shrink truncate text-base font-normal">{notification.title}</h3>
+                    <p className="truncate">{notification.body}</p>
                   </div>
-                  <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                 </div>
-              </a>
+              </Link>
             </li>
           ))}
 
@@ -97,12 +105,11 @@ export function NotificationsButton(_props: { user: TokenUser }) {
                 href={notification.relativeLinkUrl}
                 onClick={() => setOpen(false)}
               >
-                <div className="flex items-center justify-between px-4">
+                <div className="flex items-center px-3">
                   <div>
                     <h3 className="capitalize-first shrink truncate text-base font-normal">{notification.title}</h3>
-                    <p>{notification.body}</p>
+                    <p className="truncate">{notification.body}</p>
                   </div>
-                  <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                 </div>
               </Link>
             </li>
@@ -130,30 +137,29 @@ export function ChatNotificationsButton(_props: { user: TokenUser }) {
       >
         <IconChatWithNumber number={unseenChatMessages.length} />
       </PopoverTrigger>
-      <PopoverContent>
-        <div className="flex items-center justify-between">
+      <PopoverContent className="p-0">
+        <div className="flex items-center justify-between p-4">
           <h2>Messages</h2>
           <Link href="/account/notifications" onClick={() => setOpen(false)}>
             <IconSettings clickable />
           </Link>
         </div>
-        <Separator />
+        {/*<Separator />*/}
         <ul>
           {groupedLatest10Chat?.map(({ eventId, messages }) => (
             <li key={eventId}>
               <Link
-                className="hover:bg-secondary block border-b py-4 transition-colors"
+                className="hover:bg-secondary block border-t py-4 transition-colors"
                 href={`/event/${hashidFromId(eventId)}/chat`}
               >
-                <div className="flex items-center justify-between px-4">
+                <div className="flex items-center px-3">
                   <div>
                     <h3 className="capitalize-first shrink truncate text-base font-normal">
                       <EventWhatFromId eventId={eventId} />
                     </h3>
-                    <p>{messages[0]?.text || ""}</p>
+                    <p className="truncate">{messages[0]?.text || ""}</p>
                     {messages.length > 1 && <p>{`...and ${messages.length > 9 ? "9+" : messages.length - 1} more`}</p>}
                   </div>
-                  <IconArrowLink className="text-neutral-500 dark:text-neutral-300" />
                 </div>
               </Link>
             </li>
