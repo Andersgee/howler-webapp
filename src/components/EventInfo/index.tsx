@@ -53,7 +53,7 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
         <span className="w-16 pr-2">Who?</span>
         <div className="bg-white px-2 py-1 dark:bg-black">{event.who || "anyone"}</div>
       </div>
-      {/*
+
       <div className="flex items-start gap-1">
         <IconWhen />
         <span className="w-16 pr-2">When?</span>
@@ -67,7 +67,6 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
           </div>
         </div>
       </div>
-    */}
     </div>
   );
 }
