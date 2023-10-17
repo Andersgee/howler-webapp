@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { SigninButtons } from "#src/components/buttons/SigninButtons";
-import { MainShell } from "#src/components/MainShell";
 import { getUserInfo } from "#src/utils/tags";
 import { getUserFromCookie } from "#src/utils/token";
 
@@ -20,8 +19,8 @@ export default async function Page() {
   if (!user) notFound();
 
   return (
-    <MainShell>
+    <div>
       <h1>Choose when and how to be notified, coming soon</h1>
-    </MainShell>
+    </div>
   );
 }

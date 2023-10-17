@@ -17,10 +17,10 @@ export default async function Page() {
   if (!user) notFound();
 
   return (
-    <>
+    <div>
       <h1>Account</h1>
       <p>signed in as {tokenUser.name}</p>
       <p>todo</p>
-    </>
+    </div>
   );
 }
