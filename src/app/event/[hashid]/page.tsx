@@ -46,9 +46,11 @@ export default async function Page({ params }: PageProps) {
     <MainShell>
       <EventInfo eventId={eventId} initialEventInfo={event} initialEventLocation={location} isCreator={isCreator} />
 
-      <div className="my-4 flex justify-center">
-        <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
-      </div>
+      {!isCreator && (
+        <div className="my-4 flex justify-center">
+          <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
+        </div>
+      )}
 
       <div className="my-2 flex gap-2">
         {isCreator && <EditEventButton eventId={eventId} initialEventInfo={event} />}

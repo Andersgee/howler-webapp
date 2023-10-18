@@ -10,7 +10,7 @@ import type { TokenUser } from "#src/utils/token/schema";
 import { SigninButtons } from "./buttons/SigninButtons";
 import { SignoutButton } from "./buttons/SignoutButton";
 import { EventWhatFromId } from "./EventWhatQuery";
-import { IconArrowLink, IconBellWithNumber, IconChatWithNumber, IconSettings } from "./Icons";
+import { IconBellWithNumber, IconChatWithNumber, IconSettings } from "./Icons";
 import { Button } from "./ui/Button";
 import { Separator } from "./ui/Separator";
 import { UserImageClickable } from "./UserImage";
