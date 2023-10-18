@@ -4,8 +4,8 @@ import { db } from "#src/db";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const tagsUserRouter = {
-  info: (p: { userId: number }) => `info-${p.userId}`,
-  isFollowing: (p: { myId: number; otherId: number }) => `isfollowing-${p.myId}-${p.otherId}`,
+  info: (p: { userId: number }) => `user-info-${p.userId}`,
+  isFollowing: (p: { myId: number; otherId: number }) => `user-isFollowing-${p.myId}-${p.otherId}`,
 };
 
 export const userRouter = createTRPCRouter({
