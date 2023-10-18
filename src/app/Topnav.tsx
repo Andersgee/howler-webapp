@@ -1,3 +1,4 @@
+import { apiRsc } from "#src/api/apiRsc";
 import { HomeButton } from "#src/components/HomeButton";
 import {
   ChatNotificationsButton,
@@ -5,10 +6,9 @@ import {
   ProfileButton,
   SigninButton,
 } from "#src/components/TopnavButtons";
-import { getUserFromCookie } from "#src/utils/token";
 
 export async function Topnav() {
-  const user = await getUserFromCookie();
+  const { user } = await apiRsc();
   return (
     <nav className="container">
       <div className="flex justify-between">

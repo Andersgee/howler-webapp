@@ -1,10 +1,16 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { db } from "#src/db";
-import { getIsFollowingUser, tagIsFollowingUser } from "#src/utils/tags";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { getIsFollowingUser, getUserInfo, getUserInfoPublic, tagIsFollowingUser } from "#src/utils/tags";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
+  info: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
+    return getUserInfo({ userId: input.userId });
+  }),
+  infoPublic: publicProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
+    return getUserInfoPublic({ userId: input.userId });
+  }),
   isFollowing: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
     return getIsFollowingUser({ myUserId: ctx.user.id, otherUserId: input.userId });
   }),

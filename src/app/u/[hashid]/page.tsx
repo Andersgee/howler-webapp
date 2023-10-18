@@ -1,22 +1,21 @@
 import { notFound } from "next/navigation";
+import { apiRsc } from "#src/api/apiRsc";
 import { FollowUserButton } from "#src/components/buttons/FollowUserButton";
 import { MainShell } from "#src/components/MainShell";
 import { UserImage } from "#src/components/UserImage";
 import { idFromHashid } from "#src/utils/hashid";
-import { getIsFollowingUser, getUserInfoPublic } from "#src/utils/tags";
-import { getUserFromCookie } from "#src/utils/token";
 
 export default async function Page({ params }: { params: { hashid: string } }) {
   const profileUserHashId = params.hashid;
   const profileUserId = idFromHashid(profileUserHashId);
   if (profileUserId === undefined) notFound();
 
-  const profileUser = await getUserInfoPublic({ userId: profileUserId });
+  const { api, user } = await apiRsc();
+
+  const profileUser = await api.user.infoPublic.fetch({ userId: profileUserId });
   if (!profileUser) notFound();
 
-  const user = await getUserFromCookie();
-
-  const isFollowing = user ? await getIsFollowingUser({ myUserId: user.id, otherUserId: profileUserId }) : false;
+  const isFollowing = user ? await api.user.isFollowing.fetch({ userId: user.id }) : false;
 
   return (
     <MainShell>

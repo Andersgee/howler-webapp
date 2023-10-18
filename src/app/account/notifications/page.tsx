@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
+import { apiRsc } from "#src/api/apiRsc";
 import { SigninButtons } from "#src/components/buttons/SigninButtons";
-import { getUserInfo } from "#src/utils/tags";
-import { getUserFromCookie } from "#src/utils/token";
 
 //export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const tokenUser = await getUserFromCookie();
-  if (!tokenUser) {
+  const { api, user } = await apiRsc();
+  if (!user) {
     return (
       <div>
         <h1>Sign in </h1>
@@ -15,8 +14,8 @@ export default async function Page() {
       </div>
     );
   }
-  const user = await getUserInfo({ userId: tokenUser.id });
-  if (!user) notFound();
+  const userInfo = await api.user.info.fetch({ userId: user.id });
+  if (!userInfo) notFound();
 
   return (
     <div>
