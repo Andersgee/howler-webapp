@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { apiRsc } from "#src/api/servertrpc";
 import { DeleteEventButton } from "#src/components/buttons/DeleteEventButton";
 import { EditEventButton } from "#src/components/buttons/EditEventButton";
 import { JoinEventButton } from "#src/components/buttons/JoinEventButton";
@@ -48,16 +49,18 @@ export default async function Page({ params }: PageProps) {
   const location = await getEventLocation({ eventId });
 
   const user = await getUserFromCookie();
-  const hasJoinedEvent = user ? await getHasJoinedEvent({ eventId, userId: user.id }) : false;
+
+  const hasJoinedEvent = await apiRsc(user).event.isJoined.fetch({ eventId });
+  //const hasJoinedEvent = user ? await getHasJoinedEvent({ eventId, userId: user.id }) : false;
   const isCreator = user?.id === event.creatorId;
   return (
     <MainShell>
       <EventInfo eventId={eventId} initialEventInfo={event} initialEventLocation={location} isCreator={isCreator} />
-      {!isCreator && (
-        <div className="my-4 flex justify-center">
-          <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
-        </div>
-      )}
+
+      <div className="my-4 flex justify-center">
+        <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
+      </div>
+
       <div className="my-2 flex gap-2">
         {isCreator && <EditEventButton eventId={eventId} initialEventInfo={event} />}
         <ShareButton title={event.what} />

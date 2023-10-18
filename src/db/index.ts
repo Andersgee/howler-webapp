@@ -40,7 +40,7 @@ declare module "kysely" {
      *
      * keep in mind that GET request has `{cache: "force-cache"}` by default in nextjs
      * */
-    getFirst(init?: RequestInit): Promise<Simplify<O> | undefined>;
+    getFirst(init?: RequestInit): Promise<Simplify<O> | null>;
     /**
      * same as get() but return first element or throw if no element
      *
@@ -66,9 +66,9 @@ SelectQueryBuilder.prototype.get = async function <O>(init?: RequestInit): Promi
   }
 };
 
-SelectQueryBuilder.prototype.getFirst = async function <O>(init?: RequestInit): Promise<Simplify<O> | undefined> {
+SelectQueryBuilder.prototype.getFirst = async function <O>(init?: RequestInit): Promise<Simplify<O> | null> {
   const [result] = await this.get(init);
-  return result as Simplify<O> | undefined;
+  return (result as Simplify<O>) ?? null;
 };
 
 SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(init?: RequestInit): Promise<Simplify<O>> {

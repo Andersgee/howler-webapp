@@ -10,10 +10,8 @@ nextjs is still working on caching behaviour for regular fetch() and things seem
 - and https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
 
 
-***
-IMPORTANT: apparently trpc procedures must not return undefined
-so to use these in procedures aswell, make sure to "return data ?? null" for getFirst() calls
-***
+also: apparently trpc procedures must never return undefined,
+so make sure getFirst() calls dont returns null instead of undefined undefined
 
 */
 const CACHED: RequestCache = "force-cache"; //default in nextjs
@@ -77,7 +75,7 @@ export async function getEventLocation(p: EventLocationParams, cached = true) {
       cache: cached ? CACHED : FRESH,
       next: { tags: [tagEventLocation(p)] },
     });
-  return data ?? null;
+  return data;
 }
 
 type EventInfoParams = { eventId: number };
@@ -99,7 +97,7 @@ export async function getEventInfo(p: EventInfoParams, cached = true) {
       cache: cached ? CACHED : FRESH,
       next: { tags: [tagEventInfo(p)] },
     });
-  return data ?? null;
+  return data;
 }
 
 export function tagEvents() {
@@ -136,7 +134,7 @@ export async function getUserInfo(p: UserInfoParams, cached = true) {
       next: { tags: [tagUserInfo(p)] },
     });
 
-  return data ?? null;
+  return data;
 }
 export async function getUserInfoPublic(p: UserInfoParams, cached = true) {
   const data = await db
@@ -148,7 +146,7 @@ export async function getUserInfoPublic(p: UserInfoParams, cached = true) {
       next: { tags: [tagUserInfo(p)] },
     });
 
-  return data ?? null;
+  return data;
 }
 
 type TileParams = { tileId: string };
