@@ -23,24 +23,6 @@ so make sure getFirst() calls dont returns null instead of undefined undefined
 const CACHED: RequestCache = "force-cache"; //default in nextjs
 const FRESH: RequestCache = "no-store"; //
 
-type UserInfoParams = { userId: number };
-
-export function tagUserInfo(p: UserInfoParams) {
-  return `userinfo-${p.userId}`;
-}
-export async function getUserInfo(p: UserInfoParams, cached = true) {
-  const data = await db
-    .selectFrom("User")
-    .selectAll()
-    .where("User.id", "=", p.userId)
-    .getFirst({
-      cache: cached ? CACHED : FRESH,
-      next: { tags: [tagUserInfo(p)] },
-    });
-
-  return data;
-}
-
 type HasJoinedEventParams = { eventId: number; userId: number };
 
 export function tagHasJoinedEvent(p: HasJoinedEventParams) {
@@ -119,19 +101,6 @@ export async function getEventsLatest10() {
     .get({
       next: { revalidate: 10 },
     });
-}
-
-export async function getUserInfoPublic(p: UserInfoParams, cached = true) {
-  const data = await db
-    .selectFrom("User")
-    .select(["id", "name", "image"])
-    .where("User.id", "=", p.userId)
-    .getFirst({
-      cache: cached ? CACHED : FRESH,
-      next: { tags: [tagUserInfo(p)] },
-    });
-
-  return data;
 }
 
 type TileParams = { tileId: string };

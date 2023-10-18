@@ -1,5 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { type NextRequest } from "next/server";
+import { tagsUserRouter } from "#src/api/routers/user";
 import { db } from "#src/db";
 import {
   addUser,
@@ -13,7 +14,6 @@ import {
   USER_COOKIE_MAXAGE,
   USER_COOKIE_NAME,
 } from "#src/utils/auth";
-import { tagUserInfo } from "#src/utils/tags";
 import { createTokenFromUser, getSessionFromRequestCookie, verifyStateToken } from "#src/utils/token";
 import { type TokenUser } from "#src/utils/token/schema";
 import { absUrl, encodeParams } from "#src/utils/url";
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
         image: userInfo.avatar_url,
       };
     }
-    revalidateTag(tagUserInfo({ userId: tokenUser.id }));
+    revalidateTag(tagsUserRouter.info({ userId: tokenUser.id }));
 
     const userCookie = await createTokenFromUser(tokenUser);
 
