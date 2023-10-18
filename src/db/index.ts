@@ -93,6 +93,7 @@ async function executeWithFetchGet(compiledQuery: CompiledQuery, init?: RequestI
     headers: {
       Authorization: process.env.DATABASE_HTTP_AUTH_HEADER,
     },
+    cache: "force-cache",
     ...init,
   });
 }

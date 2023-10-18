@@ -1,52 +1,69 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { db } from "#src/db";
-import { getIsFollowingUser, getUserInfo, getUserInfoPublic, tagIsFollowingUser } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
+export const tagsUserRouter = {
+  info: (p: { userId: number }) => `info-${p.userId}`,
+  isFollowing: (p: { myId: number; otherId: number }) => `isfollowing-${p.myId}-${p.otherId}`,
+};
+
 export const userRouter = createTRPCRouter({
-  info: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
-    return getUserInfo({ userId: input.userId });
-  }),
-  infoPublic: publicProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
-    return getUserInfoPublic({ userId: input.userId });
-  }),
-  isFollowing: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
-    return getIsFollowingUser({ myUserId: ctx.user.id, otherUserId: input.userId });
-  }),
-  image: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input }) => {
+  info: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input }) => {
     return db
       .selectFrom("User")
-      .select(["User.id", "User.image", "User.name"])
+      .selectAll()
       .where("User.id", "=", input.userId)
-      .executeTakeFirst();
+      .getFirst({
+        next: {
+          tags: [tagsUserRouter.info(input)],
+        },
+      });
+  }),
+  infoPublic: publicProcedure.input(z.object({ userId: z.number() })).query(async ({ input }) => {
+    return db
+      .selectFrom("User")
+      .select(["id", "name", "image"])
+      .where("User.id", "=", input.userId)
+      .getFirst({
+        next: { tags: [tagsUserRouter.info(input)] },
+      });
+  }),
+  isFollowing: protectedProcedure.input(z.object({ userId: z.number() })).query(async ({ input, ctx }) => {
+    const r = await db
+      .selectFrom("UserUserPivot")
+      .select(["userId", "followerId"])
+      .where("followerId", "=", ctx.user.id)
+      .where("userId", "=", input.userId)
+      .getFirst({
+        next: { tags: [tagsUserRouter.isFollowing({ myId: ctx.user.id, otherId: input.userId })] },
+      });
+
+    if (r) return true;
+    return false;
   }),
   follow: protectedProcedure.input(z.object({ userId: z.number() })).mutation(async ({ input, ctx }) => {
-    const insertResult = await db
+    const _insertResult = await db
       .insertInto("UserUserPivot")
+      .ignore()
       .values({
         followerId: ctx.user.id,
         userId: input.userId,
       })
       .executeTakeFirst();
 
-    const numInsertedRows = Number(insertResult.numInsertedOrUpdatedRows);
-    if (!numInsertedRows) return false;
-
-    revalidateTag(tagIsFollowingUser({ myUserId: ctx.user.id, otherUserId: input.userId }));
+    revalidateTag(tagsUserRouter.isFollowing({ myId: ctx.user.id, otherId: input.userId }));
     return true;
   }),
 
   unFollow: protectedProcedure.input(z.object({ userId: z.number() })).mutation(async ({ input, ctx }) => {
-    const deleteResult = await db
+    const _deleteResult = await db
       .deleteFrom("UserUserPivot")
       .where("followerId", "=", ctx.user.id)
       .where("userId", "=", input.userId)
       .executeTakeFirst();
 
-    const numDeletedRows = Number(deleteResult.numDeletedRows);
-    if (!numDeletedRows) return false;
-    revalidateTag(tagIsFollowingUser({ myUserId: ctx.user.id, otherUserId: input.userId }));
+    revalidateTag(tagsUserRouter.isFollowing({ myId: ctx.user.id, otherId: input.userId }));
     return true;
   }),
 });

@@ -12,12 +12,12 @@ type Props = {
 };
 
 export function UserImageFromId({ userId, className }: Props) {
-  const userImage = api.user.image.useQuery({ userId });
+  const { data: user } = api.user.infoPublic.useQuery({ userId });
 
   return (
     <Image
-      src={userImage.data?.image || ""}
-      alt={userImage.data?.name || ""}
+      src={user?.image || ""}
+      alt={user?.image || ""}
       width={30}
       height={30}
       sizes="30px"
