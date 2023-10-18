@@ -14,6 +14,13 @@ import type { DB } from "./types";
 
 //const AUTH_SECRET = `Basic ${process.env.DATABASE_HTTP_AUTH_SECRET}`;
 
+/**
+ * limit to not accidentally use stuff like "reload" or "only-if-cached", "no-cache" etc
+ */
+type LimitedNextjsCacheOptions = { cache?: "force-cache" | "no-store" };
+
+type RequestInitLimited = RequestInit & LimitedNextjsCacheOptions;
+
 declare module "kysely" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface SelectQueryBuilder<DB, TB extends keyof DB, O> {
@@ -34,23 +41,23 @@ declare module "kysely" {
      * });
      * ```
      */
-    get(init?: RequestInit): Promise<Simplify<O>[]>;
+    get(init?: RequestInitLimited): Promise<Simplify<O>[]>;
     /**
      * same as get() but return first element
      *
      * keep in mind that GET request has `{cache: "force-cache"}` by default in nextjs
      * */
-    getFirst(init?: RequestInit): Promise<Simplify<O> | null>;
+    getFirst(init?: RequestInitLimited): Promise<Simplify<O> | null>;
     /**
      * same as get() but return first element or throw if no element
      *
      * keep in mind that GET request has `{cache: "force-cache"}` by default in nextjs
      * */
-    getFirstOrThrow(init?: RequestInit): Promise<Simplify<O>>;
+    getFirstOrThrow(init?: RequestInitLimited): Promise<Simplify<O>>;
   }
 }
 
-SelectQueryBuilder.prototype.get = async function <O>(init?: RequestInit): Promise<Simplify<O>[]> {
+SelectQueryBuilder.prototype.get = async function <O>(init?: RequestInitLimited): Promise<Simplify<O>[]> {
   const compiledQuery = this.compile();
   const res = await executeWithFetchGet(compiledQuery, init);
 
@@ -66,12 +73,12 @@ SelectQueryBuilder.prototype.get = async function <O>(init?: RequestInit): Promi
   }
 };
 
-SelectQueryBuilder.prototype.getFirst = async function <O>(init?: RequestInit): Promise<Simplify<O> | null> {
+SelectQueryBuilder.prototype.getFirst = async function <O>(init?: RequestInitLimited): Promise<Simplify<O> | null> {
   const [result] = await this.get(init);
   return (result as Simplify<O>) ?? null;
 };
 
-SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(init?: RequestInit): Promise<Simplify<O>> {
+SelectQueryBuilder.prototype.getFirstOrThrow = async function <O>(init?: RequestInitLimited): Promise<Simplify<O>> {
   const [result] = await this.get(init);
   if (result === undefined) {
     throw new Error("no result");

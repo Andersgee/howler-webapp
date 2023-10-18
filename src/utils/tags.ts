@@ -20,69 +20,9 @@ also: apparently trpc procedures must never return undefined,
 so make sure getFirst() calls dont returns null instead of undefined undefined
 
 */
-const CACHED: RequestCache = "force-cache"; //default in nextjs
-const FRESH: RequestCache = "no-store"; //
-
-type HasJoinedEventParams = { eventId: number; userId: number };
-
-export function tagHasJoinedEvent(p: HasJoinedEventParams) {
-  return `hasjoinedevent-${p.eventId}-${p.userId}`;
-}
-export async function getHasJoinedEvent(p: HasJoinedEventParams, cached = true) {
-  const userEventPivot = await db
-    .selectFrom("UserEventPivot")
-    .select("userId")
-    .where("userId", "=", p.userId)
-    .where("eventId", "=", p.eventId)
-    .getFirst({
-      cache: cached ? CACHED : FRESH,
-      next: {
-        tags: [tagHasJoinedEvent(p)],
-      },
-    });
-
-  if (userEventPivot) return true;
-  return false;
-}
-
-type EventLocationParams = { eventId: number };
-
-export function tagEventLocation(p: EventLocationParams) {
-  return `eventlocation-${p.eventId}`;
-}
-export async function getEventLocation(p: EventLocationParams, cached = true) {
-  const data = await db
-    .selectFrom("EventLocation")
-    .selectAll("EventLocation")
-    .where("EventLocation.eventId", "=", p.eventId)
-    .getFirst({
-      cache: cached ? CACHED : FRESH,
-      next: { tags: [tagEventLocation(p)] },
-    });
-  return data;
-}
-
-type EventInfoParams = { eventId: number };
-
-export function tagEventInfo(p: EventInfoParams) {
-  return `eventinfo-${p.eventId}`;
-}
-export async function getEventInfo(p: EventInfoParams, cached = true) {
-  const data = await db
-    .selectFrom("Event")
-    .selectAll("Event")
-    .where("Event.id", "=", p.eventId)
-    .select((eb) => [
-      jsonObjectFrom(
-        eb.selectFrom("User").select(["User.id", "User.name", "User.image"]).whereRef("User.id", "=", "Event.creatorId")
-      ).as("creator"),
-    ])
-    .getFirst({
-      cache: cached ? CACHED : FRESH,
-      next: { tags: [tagEventInfo(p)] },
-    });
-  return data;
-}
+//const CACHED: RequestCache = "force-cache"; //default in nextjs
+const CACHED = "force-cache";
+const FRESH = "no-store"; //
 
 export function tagEvents() {
   return "events";

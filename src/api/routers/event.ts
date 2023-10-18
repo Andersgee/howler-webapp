@@ -1,3 +1,4 @@
+import { jsonObjectFrom } from "kysely/helpers/mysql";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import { tileIdsFromLngLat, uniqueStrings } from "#src/components/GoogleMap/utils";
@@ -6,37 +7,66 @@ import { removeImageFromEventAndCloudStorage } from "#src/utils/cloud-storage-ur
 import { getGoogleReverseGeocoding } from "#src/utils/geocoding";
 import { hashidFromId } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
-import {
-  getEventInfo,
-  getEventLocation,
-  getHasJoinedEvent,
-  tagEventInfo,
-  tagEventLocation,
-  tagHasJoinedEvent,
-  tagTile,
-} from "#src/utils/tags";
+import { tagTile } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+
+export const tagsEventRouter = {
+  info: (p: { eventId: number }) => `event-info-${p.eventId}`,
+  isJoined: (p: { eventId: number; userId: number }) => `event-isJoined-${p.eventId}-${p.userId}`,
+  location: (p: { eventId: number }) => `event-location-${p.eventId}`,
+};
 
 export const eventRouter = createTRPCRouter({
   isJoined: protectedProcedure.input(z.object({ eventId: z.number() })).query(async ({ input, ctx }) => {
-    return getHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id });
+    const userEventPivot = await db
+      .selectFrom("UserEventPivot")
+      .select("userId")
+      .where("userId", "=", ctx.user.id)
+      .where("eventId", "=", input.eventId)
+      .getFirst({
+        next: {
+          tags: [tagsEventRouter.isJoined({ eventId: input.eventId, userId: ctx.user.id })],
+        },
+      });
+
+    if (userEventPivot) return true;
+    return false;
   }),
   info: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input }) => {
-    return getEventInfo({ eventId: input.eventId });
+    return db
+      .selectFrom("Event")
+      .selectAll("Event")
+      .where("Event.id", "=", input.eventId)
+      .select((eb) => [
+        jsonObjectFrom(
+          eb
+            .selectFrom("User")
+            .select(["User.id", "User.name", "User.image"])
+            .whereRef("User.id", "=", "Event.creatorId")
+        ).as("creator"),
+      ])
+      .getFirst({ next: { tags: [tagsEventRouter.info(input)] } });
   }),
   location: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input }) => {
-    return getEventLocation({ eventId: input.eventId });
+    return db
+      .selectFrom("EventLocation")
+      .selectAll("EventLocation")
+      .where("EventLocation.eventId", "=", input.eventId)
+      .getFirst({
+        next: { tags: [tagsEventRouter.location(input)] },
+      });
   }),
   join: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
     const _insertResult = await db
       .insertInto("UserEventPivot")
+      .ignore()
       .values({
         eventId: input.eventId,
         userId: ctx.user.id,
       })
       .executeTakeFirstOrThrow();
 
-    revalidateTag(tagHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id }));
+    revalidateTag(tagsEventRouter.isJoined({ eventId: input.eventId, userId: ctx.user.id }));
 
     return { eventId: input.eventId, userId: ctx.user.id };
   }),
@@ -47,7 +77,7 @@ export const eventRouter = createTRPCRouter({
       .where("eventId", "=", input.eventId)
       .executeTakeFirstOrThrow();
 
-    revalidateTag(tagHasJoinedEvent({ eventId: input.eventId, userId: ctx.user.id }));
+    revalidateTag(tagsEventRouter.isJoined({ eventId: input.eventId, userId: ctx.user.id }));
     return { eventId: input.eventId, userId: ctx.user.id };
   }),
   delete: protectedProcedure.input(z.object({ eventId: z.number() })).mutation(async ({ input, ctx }) => {
@@ -66,7 +96,7 @@ export const eventRouter = createTRPCRouter({
     const numDeletedRows = Number(deleteResult.numDeletedRows);
     if (!numDeletedRows) return false;
 
-    revalidateTag(tagEventInfo({ eventId: input.eventId }));
+    revalidateTag(tagsEventRouter.info(input));
     if (existingEventLocation) {
       const tileIds = tileIdsFromLngLat(existingEventLocation);
       for (const tileId of tileIds) {
@@ -144,9 +174,24 @@ export const eventRouter = createTRPCRouter({
         })
         .executeTakeFirstOrThrow();
 
-      const eventInfo = await getEventInfo({ eventId: input.eventId }, false);
+      const eventInfo = await db
+        .selectFrom("Event")
+        .selectAll("Event")
+        .where("Event.id", "=", input.eventId)
+        .select((eb) => [
+          jsonObjectFrom(
+            eb
+              .selectFrom("User")
+              .select(["User.id", "User.name", "User.image"])
+              .whereRef("User.id", "=", "Event.creatorId")
+          ).as("creator"),
+        ])
+        .getFirst({
+          cache: "no-store",
+          next: { tags: [tagsEventRouter.info(input)] },
+        });
 
-      revalidateTag(tagEventInfo({ eventId: input.eventId }));
+      revalidateTag(tagsEventRouter.info(input));
 
       return eventInfo;
     }),
@@ -168,7 +213,7 @@ export const eventRouter = createTRPCRouter({
         .selectFrom("EventLocation")
         .select(["id", "lng", "lat"])
         .where("eventId", "=", input.eventId)
-        .executeTakeFirst();
+        .getFirst({ cache: "no-store" });
 
       const oldTileIds = existingEventLocation
         ? tileIdsFromLngLat({ lng: existingEventLocation.lng, lat: existingEventLocation.lat })
@@ -226,10 +271,18 @@ export const eventRouter = createTRPCRouter({
         )
         .executeTakeFirst();
 
-      const eventLocation = await getEventLocation({ eventId: input.eventId }, false);
+      //const eventLocation = await getEventLocation({ eventId: input.eventId }, false);
 
-      revalidateTag(tagEventInfo({ eventId: input.eventId }));
-      revalidateTag(tagEventLocation({ eventId: input.eventId }));
+      const eventLocation = await db
+        .selectFrom("EventLocation")
+        .selectAll("EventLocation")
+        .where("EventLocation.eventId", "=", input.eventId)
+        .getFirst({
+          cache: "no-store",
+        });
+
+      revalidateTag(tagsEventRouter.info(input));
+      revalidateTag(tagsEventRouter.location(input));
       for (const tileId of uniqueStrings(oldTileIds.concat(newTileIds))) {
         revalidateTag(tagTile({ tileId }));
       }
@@ -254,7 +307,7 @@ export const eventRouter = createTRPCRouter({
         })
         .executeTakeFirstOrThrow();
 
-      revalidateTag(tagEventInfo({ eventId: input.eventId }));
+      revalidateTag(tagsEventRouter.info(input));
       return true;
     }),
 });

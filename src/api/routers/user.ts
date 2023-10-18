@@ -15,9 +15,7 @@ export const userRouter = createTRPCRouter({
       .selectAll()
       .where("User.id", "=", input.userId)
       .getFirst({
-        next: {
-          tags: [tagsUserRouter.info(input)],
-        },
+        next: { tags: [tagsUserRouter.info(input)] },
       });
   }),
   infoPublic: publicProcedure.input(z.object({ userId: z.number() })).query(async ({ input }) => {
