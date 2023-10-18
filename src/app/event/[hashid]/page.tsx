@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { apiRsc } from "#src/api/servertrpc";
+import { apiRsc, apiRscPublic } from "#src/api/apiRsc";
 import { DeleteEventButton } from "#src/components/buttons/DeleteEventButton";
 import { EditEventButton } from "#src/components/buttons/EditEventButton";
 import { JoinEventButton } from "#src/components/buttons/JoinEventButton";
@@ -11,29 +11,19 @@ import { MainShell } from "#src/components/MainShell";
 import { Button } from "#src/components/ui/Button";
 import { idFromHashid } from "#src/utils/hashid";
 import { seo } from "#src/utils/seo";
-import { getEventInfo, getEventLocation, getHasJoinedEvent } from "#src/utils/tags";
-import { getUserFromCookie } from "#src/utils/token";
 import type { PageProps } from "#src/utils/typescript";
 
 export async function generateMetadata({ params }: PageProps) {
   const eventId = idFromHashid(params.hashid);
   if (!eventId) notFound();
-  const event = await getEventInfo({ eventId });
+  const event = await apiRscPublic.event.info.fetch({ eventId });
   if (!event) notFound();
 
-  const location = await getEventLocation({ eventId });
-  if (location?.placeName) {
-    return seo({
-      title: `${event.what || "anything"} | Howler`,
-      description: `where: ${location.placeName}, who: ${event.who || "anyone"}`,
-      url: `/event/${params.hashid}`,
-      image: "/icons/favicon-512x512.png",
-    });
-  }
+  const location = await apiRscPublic.event.location.fetch({ eventId });
 
   return seo({
     title: `${event.what || "anything"} | Howler`,
-    description: `where: ${event.where || "anywhere"}, who: ${event.who || "anyone"}`,
+    description: `where: ${location?.placeName || event.where || "anywhere"}, who: ${event.who || "anyone"}`,
     url: `/event/${params.hashid}`,
     image: "/icons/favicon-512x512.png",
   });
@@ -44,15 +34,14 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function Page({ params }: PageProps) {
   const eventId = idFromHashid(params.hashid);
   if (!eventId) notFound();
-  const event = await getEventInfo({ eventId });
+  const { api, user } = await apiRsc();
+
+  const event = await api.event.info.fetch({ eventId });
   if (!event) notFound();
-  const location = await getEventLocation({ eventId });
-
-  const user = await getUserFromCookie();
-
-  const hasJoinedEvent = await apiRsc(user).event.isJoined.fetch({ eventId });
-  //const hasJoinedEvent = user ? await getHasJoinedEvent({ eventId, userId: user.id }) : false;
+  const location = await api.event.location.fetch({ eventId });
+  const hasJoinedEvent = await api.event.isJoined.fetch({ eventId });
   const isCreator = user?.id === event.creatorId;
+
   return (
     <MainShell>
       <EventInfo eventId={eventId} initialEventInfo={event} initialEventLocation={location} isCreator={isCreator} />
