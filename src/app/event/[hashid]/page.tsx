@@ -39,7 +39,7 @@ export default async function Page({ params }: PageProps) {
   const event = await api.event.info.fetch({ eventId });
   if (!event) notFound();
   const location = await api.event.location.fetch({ eventId });
-  const hasJoinedEvent = await api.event.isJoined.fetch({ eventId });
+  const isJoined = user ? await api.event.isJoined.fetch({ eventId }) : false;
   const isCreator = user?.id === event.creatorId;
 
   return (
@@ -48,7 +48,7 @@ export default async function Page({ params }: PageProps) {
 
       {!isCreator && (
         <div className="my-4 flex justify-center">
-          <JoinEventButton eventId={eventId} initialIsJoined={hasJoinedEvent} />
+          <JoinEventButton eventId={eventId} initialIsJoined={isJoined} />
         </div>
       )}
 
