@@ -7,8 +7,8 @@ import { removeImageFromEventAndCloudStorage } from "#src/utils/cloud-storage-ur
 import { getGoogleReverseGeocoding } from "#src/utils/geocoding";
 import { hashidFromId } from "#src/utils/hashid";
 import { notifyEventCreated } from "#src/utils/notify";
-import { tagTile } from "#src/utils/tags";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { tagsTileRouter } from "./tile";
 
 export const tagsEventRouter = {
   info: (p: { eventId: number }) => `event-info-${p.eventId}`,
@@ -100,7 +100,7 @@ export const eventRouter = createTRPCRouter({
     if (existingEventLocation) {
       const tileIds = tileIdsFromLngLat(existingEventLocation);
       for (const tileId of tileIds) {
-        revalidateTag(tagTile({ tileId }));
+        revalidateTag(tagsTileRouter.locations({ tileId }));
       }
     }
 
@@ -284,7 +284,7 @@ export const eventRouter = createTRPCRouter({
       revalidateTag(tagsEventRouter.info(input));
       revalidateTag(tagsEventRouter.location(input));
       for (const tileId of uniqueStrings(oldTileIds.concat(newTileIds))) {
-        revalidateTag(tagTile({ tileId }));
+        revalidateTag(tagsTileRouter.locations({ tileId }));
       }
 
       return eventLocation;

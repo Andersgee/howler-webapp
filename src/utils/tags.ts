@@ -42,31 +42,3 @@ export async function getEventsLatest10() {
       next: { revalidate: 10 },
     });
 }
-
-type TileParams = { tileId: string };
-
-export function tagTile(p: TileParams) {
-  return `tile-${p.tileId}`;
-}
-
-export async function getTile(p: TileParams, cached = true) {
-  const eventLocations = await db
-    .selectFrom("EventLocationTilePivot")
-    .where("EventLocationTilePivot.tileId", "=", p.tileId)
-    .innerJoin("EventLocation", "EventLocation.id", "EventLocationTilePivot.eventLocationId")
-    .innerJoin("Event", "EventLocation.eventId", "Event.id")
-    .select([
-      "Event.id",
-      "Event.what",
-      "Event.when",
-      "EventLocation.placeName",
-      "EventLocation.lng",
-      "EventLocation.lat",
-    ])
-    .get({
-      cache: cached ? CACHED : FRESH,
-      next: { tags: [tagTile(p)] },
-    });
-
-  return eventLocations;
-}
