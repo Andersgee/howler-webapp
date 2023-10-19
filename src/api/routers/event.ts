@@ -190,7 +190,18 @@ export const eventRouter = createTRPCRouter({
           next: { tags: [tagsEventRouter.info(input)] },
         });
 
+      //also need to update tiles cuz changed name
+      const eventLocation = await db
+        .selectFrom("EventLocation")
+        .select(["lng", "lat"])
+        .where("eventId", "=", input.eventId)
+        .getFirst({ cache: "no-store" });
+      const tileIds = eventLocation ? tileIdsFromLngLat(eventLocation) : [];
+
       revalidateTag(tagsEventRouter.info(input));
+      for (const tileId of tileIds) {
+        revalidateTag(tagsTileRouter.locations({ tileId }));
+      }
 
       return eventInfo;
     }),

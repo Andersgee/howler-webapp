@@ -19,6 +19,10 @@ Not sure how I love these "smart auto options" where default changes depending o
 also: apparently trpc procedures must never return undefined,
 so make sure getFirst() calls dont returns null instead of undefined undefined
 
+also see cache limits here:
+https://vercel.com/docs/infrastructure/data-cache/limits-and-pricing
+
+
 */
 //const CACHED: RequestCache = "force-cache"; //default in nextjs
 const CACHED = "force-cache";
