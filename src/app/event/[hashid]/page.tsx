@@ -29,8 +29,6 @@ export async function generateMetadata({ params }: PageProps) {
   });
 }
 
-//export const dynamic = "force-dynamic";
-
 export default async function Page({ params }: PageProps) {
   const eventId = idFromHashid(params.hashid);
   if (!eventId) notFound();
