@@ -6,7 +6,6 @@ import { Suspense } from "react";
 import { GoogleMapPortal, GoogleMapsScript } from "#src/components/GoogleMap";
 import { NavigationEvents } from "#src/components/NavigationEvents";
 import { ScreenSizeIndicator } from "#src/components/ScreenSizeIndicator";
-import { UserSession } from "#src/components/UserSession";
 import { Toaster } from "#src/context/Toaster";
 import { fontSans } from "#src/utils/font";
 
@@ -33,7 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Toaster />
         <GoogleMapPortal />
       </body>
-      <UserSession />
       <GoogleMapsScript />
     </html>
   );

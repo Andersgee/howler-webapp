@@ -24,7 +24,7 @@ async function getSession() {
   }
 }
 
-export function UserSession() {
+export function useSession() {
   const setUser = useStore.use.setUser();
 
   useEffect(() => {
