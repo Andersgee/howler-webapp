@@ -49,7 +49,10 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
         Click here to reload
       </Button>
 
-      <div className="mt-10">{errorString}</div>
+      <details className="mt-10">
+        <summary>Details</summary>
+        {errorString}
+      </details>
     </MainShell>
   );
 }
