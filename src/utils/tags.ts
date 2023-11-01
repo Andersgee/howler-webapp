@@ -25,8 +25,8 @@ https://vercel.com/docs/infrastructure/data-cache/limits-and-pricing
 
 */
 //const CACHED: RequestCache = "force-cache"; //default in nextjs
-const CACHED = "force-cache";
-const FRESH = "no-store"; //
+//const CACHED = "force-cache";
+//const FRESH = "no-store"; //
 
 export function tagEvents() {
   return "events";
