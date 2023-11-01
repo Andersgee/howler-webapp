@@ -102,19 +102,37 @@ export class GoogleMaps {
     this.map.addListener(
       "bounds_changed",
       debounce(() => {
-        // send the new bounds back to your server
-        const bounds = this.map?.getBounds();
-        const zoom = this.map?.getZoom();
-        if (bounds && zoom) {
-          const ne = bounds.getNorthEast();
-          const sw = bounds.getSouthWest();
-          const mapBounds = { ne: { lng: ne.lng(), lat: ne.lat() }, sw: { lng: sw.lng(), lat: sw.lat() } };
+        try {
+          const bounds = this.map?.getBounds();
+          const zoom = this.map?.getZoom();
+          if (bounds && zoom) {
+            const ne = bounds.getNorthEast();
+            const sw = bounds.getSouthWest();
+            const mapBounds = { ne: { lng: ne.lng(), lat: ne.lat() }, sw: { lng: sw.lng(), lat: sw.lat() } };
 
-          const tileIdsInView = calcTileIdsInView({ ne: mapBounds.ne, sw: mapBounds.sw, z: zoom });
-          setMapBounds(tileIdsInView, mapBounds);
-          //console.log("tiles:", tiles);
+            const tileIdsInView = calcTileIdsInView({ ne: mapBounds.ne, sw: mapBounds.sw, z: zoom });
+            setMapBounds(tileIdsInView, mapBounds);
+            //console.log("tiles:", tiles);
+          }
+          //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)
+        } catch (error) {
+          /*
+          try to fix this error: Cannot read properties of undefined (reading 'fromLatLngToDivPixel')
+          it seems to only happens on phone when navigating back/forward
+
+          Im rendeing into a div that might not currently be on the page with <OutPortal> so this is likely the issue
+          
+          note to self:
+          node_modules/@types/google-maps:
+          fromLatLngToDivPixel() Computes the pixel coordinates of the given geographical
+          location in the DOM element that holds the draggable map.
+
+          fromLatLngToDivPixel seems to be called in
+          - in google maps draw()
+          - in markerclusterer latLngBoundsToPixelBounds()
+
+          */
         }
-        //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)
       }, 300)
     );
   }
@@ -249,8 +267,12 @@ export class GoogleMaps {
       return marker;
     });
 
-    this.hideAllMarkers();
-    this.markerClusterer?.addMarkers(markers);
+    try {
+      this.hideAllMarkers();
+      this.markerClusterer?.addMarkers(markers);
+    } catch (error) {
+      // fromLatLngToDivPixel error cuz google maps DOM node is not page?
+    }
   }
 }
 
