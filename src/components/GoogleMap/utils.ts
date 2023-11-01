@@ -102,6 +102,7 @@ export function isIdenticalLists(a: PrimitiveList, b: PrimitiveList) {
   return true;
 }
 
+/** return true if `p` is inside the bounds given by `ne` and `sw` */
 export function boundsContains({
   ne: { lng: east, lat: north },
   sw: { lng: west, lat: south },

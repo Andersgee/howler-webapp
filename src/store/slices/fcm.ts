@@ -1,10 +1,7 @@
 import type { MessagePayload } from "firebase/messaging";
 import type { StateCreator } from "zustand";
-import { FirebaseCloudMessaging } from "#src/components/CloudMessaging/firebase-cloud-messaging";
+import { type FirebaseCloudMessaging } from "#src/components/CloudMessaging/firebase-cloud-messaging";
 import type { ChatMessageData, NotificationMessageData } from "#src/components/CloudMessaging/message-schema";
-import { registerSW } from "#src/utils/service-worker";
-
-//import { GoogleMaps } from "#src/components/GoogleMap/google-maps";
 
 type UnseenChatMessage = { eventId: number; unseen: number };
 
@@ -12,7 +9,6 @@ type newChatMessage = Omit<ChatMessageData, "type" | "title">;
 
 export type FcmSlice = {
   fcm: FirebaseCloudMessaging | null;
-  initFcm: () => void;
   fcmLatestMessagePayload: MessagePayload | null;
   fcmNotificationMessages: NotificationMessageData[];
   fcmAddNotificationMessage: (d: NotificationMessageData) => void;
@@ -28,18 +24,6 @@ export const createFcmSlice: StateCreator<FcmSlice, [], [], FcmSlice> = (set, ge
   fcmNotificationMessages: [],
   fcmAddNotificationMessage: (d) => set((prev) => ({ fcmNotificationMessages: [d, ...prev.fcmNotificationMessages] })),
   fcmUnseenChatMessages: [],
-  initFcm: async () => {
-    if (get().fcm !== null) return;
-
-    const registration = await registerSW();
-    if (registration) {
-      const fcm = new FirebaseCloudMessaging(registration);
-      const ok = await fcm.init();
-      if (ok) {
-        set({ fcm });
-      }
-    }
-  },
   fcmAddUnseenChatMessage: (newChatMessage) => {
     const prev = get().fcmUnseenChatMessages;
 

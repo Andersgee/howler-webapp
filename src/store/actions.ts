@@ -1,5 +1,7 @@
 import type { MessagePayload } from "firebase/messaging";
+import { FirebaseCloudMessaging } from "#src/components/CloudMessaging/firebase-cloud-messaging";
 import { isIdenticalLists, type LngLat } from "#src/components/GoogleMap/utils";
+import { registerSW } from "#src/utils/service-worker";
 import { useStore } from ".";
 
 //external setters allows usage outside react (aswell as within react)
@@ -18,3 +20,16 @@ export const setMapBounds = (tileIdsInView: string[], mapBounds: { ne: LngLat; s
 /** for FirebaseCloudMessaging external class */
 export const setFcmLatestMessagePayload = (payload: MessagePayload) =>
   useStore.setState({ fcmLatestMessagePayload: payload });
+
+export const initFcm = async () => {
+  if (useStore.getState().fcm !== null) return;
+
+  const registration = await registerSW();
+  if (registration) {
+    const fcm = new FirebaseCloudMessaging(registration);
+    const ok = await fcm.init();
+    if (ok) {
+      useStore.setState({ fcm });
+    }
+  }
+};

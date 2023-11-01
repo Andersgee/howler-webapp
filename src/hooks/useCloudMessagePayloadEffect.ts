@@ -12,16 +12,17 @@ import { api } from "#src/hooks/api";
 import { useStore } from "#src/store";
 import { type Optional } from "#src/utils/typescript";
 
-export function CloudMessaging() {
-  const initFcm = useStore.use.initFcm();
+/** effect for when store.fcmLatestMessagePayload changes */
+export function useCloudMessagePayloadEffect() {
+  //const initFcm = useStore.use.initFcm();
   const payload = useStore.use.fcmLatestMessagePayload();
   const fcmAddNotificationMessage = useStore.use.fcmAddNotificationMessage();
   const fcmAddUnseenChatMessage = useStore.use.fcmAddUnseenChatMessage();
   const apiContext = api.useContext();
 
-  useEffect(() => {
-    initFcm();
-  }, [initFcm]);
+  //useEffect(() => {
+  //  initFcm();
+  //}, [initFcm]);
 
   useEffect(() => {
     if (!payload) return;
