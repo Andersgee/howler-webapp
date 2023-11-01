@@ -2,31 +2,35 @@
 
 // Error components must be Client components
 import { useEffect, useRef, useState } from "react";
-import { IconLoadingSpinner } from "#src/components/Icons";
+//import { IconLoadingSpinner } from "#src/components/Icons";
 import { MainShell } from "#src/components/MainShell";
 import { Button } from "#src/components/ui/Button";
-import { api } from "#src/hooks/api";
-import { hashidFromId } from "#src/utils/hashid";
+
+//import { api } from "#src/hooks/api";
+//import { hashidFromId } from "#src/utils/hashid";
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
-  const [errorId, setErrorId] = useState("");
+  //const [errorId, setErrorId] = useState("");
+
+  const [errorString, setErrorString] = useState("");
   const didReport = useRef(false);
-  const errorCreate = api.error.create.useMutation({
-    onSuccess: (insertId) => setErrorId(`${hashidFromId(insertId)}-${insertId}`),
-  });
+  //const errorCreate = api.error.create.useMutation({
+  //  onSuccess: (insertId) => setErrorId(`${hashidFromId(insertId)}-${insertId}`),
+  //});
   useEffect(() => {
     if (didReport.current) return; //error could change many times, only report first error
 
     //errorCreate.mutate({ name: error.name, message: error.message });
+    setErrorString(JSON.stringify(error));
     didReport.current = true;
     // Log the error to an error reporting service
     console.error(error);
-  }, [error, errorCreate]);
+  }, [error]);
 
   return (
     <MainShell>
       <h2>Something went wrong!</h2>
-      {errorId ? (
+      {/*errorId ? (
         <div>
           <p>{`a report with id "${errorId}" has been generated to help prevent this in the future.`}</p>
         </div>
@@ -34,7 +38,7 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
         <div>
           <IconLoadingSpinner /> hang on...
         </div>
-      )}
+      )*/}
 
       <Button
         onClick={
@@ -44,6 +48,8 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
       >
         Click here to reload
       </Button>
+
+      <div className="mt-10">{errorString}</div>
     </MainShell>
   );
 }
