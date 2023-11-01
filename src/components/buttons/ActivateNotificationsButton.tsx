@@ -5,8 +5,8 @@ import { IconBell } from "../Icons";
 import { Button } from "../ui/Button";
 
 export function ActivateNotificationsButton() {
-  const fcm = useStore.select.fcm();
-  const user = useStore.select.user();
+  const fcm = useStore.use.fcm();
+  const user = useStore.use.user();
   if (!user || !!fcm?.fcmToken) return null;
 
   return (

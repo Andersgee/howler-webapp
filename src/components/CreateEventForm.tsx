@@ -12,7 +12,7 @@ import { Input } from "./ui/Input";
 
 export function CreateEventForm() {
   const router = useRouter();
-  const dialogAction = useStore.select.dialogAction();
+  const dialogAction = useStore.use.dialogAction();
   const eventCreate = api.event.create.useMutation({
     onSuccess: ({ eventHashId }) => {
       router.push(`/event/${eventHashId}`);

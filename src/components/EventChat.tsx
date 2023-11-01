@@ -44,7 +44,7 @@ type Props = {
 };
 
 export function EventChat({ eventId, userId, initialIsJoined }: Props) {
-  const clearEventChatNotifications = useStore.select.fcmClearEventChatNotifications();
+  const clearEventChatNotifications = useStore.use.fcmClearEventChatNotifications();
   const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
   const {
     data: infiniteMessages,

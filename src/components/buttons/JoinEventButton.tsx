@@ -10,9 +10,9 @@ type Props = {
 };
 
 export function JoinEventButton({ initialIsJoined, eventId }: Props) {
-  const user = useStore.select.user();
+  const user = useStore.use.user();
   const apiContext = api.useContext();
-  const dialogAction = useStore.select.dialogAction();
+  const dialogAction = useStore.use.dialogAction();
 
   const { data: isJoined } = api.event.isJoined.useQuery({ eventId }, { initialData: initialIsJoined });
 

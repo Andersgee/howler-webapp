@@ -25,7 +25,7 @@ export function ExploreMap({ className }: Props) {
 }
 
 function Locate() {
-  const googleMaps = useStore.select.googleMaps();
+  const googleMaps = useStore.use.googleMaps();
   return <LocateButton label="Go to my position" onLocated={(p) => googleMaps?.setPos({ ...p, zoom: 10 })} />;
 }
 

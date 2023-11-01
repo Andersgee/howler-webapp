@@ -40,8 +40,8 @@ export function ProfileButton({ user }: { user: TokenUser }) {
 }
 
 export function SigninButton() {
-  const dialogValue = useStore.select.dialogValue();
-  const dialogAction = useStore.select.dialogAction();
+  const dialogValue = useStore.use.dialogValue();
+  const dialogAction = useStore.use.dialogAction();
 
   return (
     <Popover open={dialogValue === "signin"} onOpenChange={() => dialogAction({ type: "toggle", name: "signin" })}>
@@ -56,9 +56,9 @@ export function SigninButton() {
 }
 
 export function NotificationsButton(_props: { user: TokenUser }) {
-  const notificationMessages = useStore.select.fcmNotificationMessages();
+  const notificationMessages = useStore.use.fcmNotificationMessages();
   const [numberUnseen, setNumberUnseen] = useState(notificationMessages.length);
-  const fcm = useStore.select.fcm();
+  const fcm = useStore.use.fcm();
   const notificationLatest10 = api.notification.latest10.useQuery();
   const [open, setOpen] = useState(false);
   return (
@@ -121,9 +121,9 @@ export function NotificationsButton(_props: { user: TokenUser }) {
 }
 
 export function ChatNotificationsButton(_props: { user: TokenUser }) {
-  const fcm = useStore.select.fcm();
-  const unseenChatMessages = useStore.select.fcmUnseenChatMessages();
-  const clearChatNotifications = useStore.select.fcmClearChatNotifications();
+  const fcm = useStore.use.fcm();
+  const unseenChatMessages = useStore.use.fcmUnseenChatMessages();
+  const clearChatNotifications = useStore.use.fcmClearChatNotifications();
   const { data: groupedLatest10Chat } = api.notification.latest10chat.useQuery();
 
   const [open, setOpen] = useState(false);

@@ -12,7 +12,7 @@ import { absUrl } from "#src/utils/url";
  * parent element decides size
  */
 export function GoogleMap() {
-  const mapPortalNode = useStore.select.mapPortalNode();
+  const mapPortalNode = useStore.use.mapPortalNode();
   if (!mapPortalNode) return null;
 
   return <OutPortal node={mapPortalNode} />;
@@ -22,7 +22,7 @@ export function GoogleMap() {
  * load google-maps into an external dom node (InPortal)
  */
 export function GoogleMapPortal() {
-  const mapSetPortalNode = useStore.select.mapSetPortalNode();
+  const mapSetPortalNode = useStore.use.mapSetPortalNode();
   const portalNode = useHtmlPortalNode();
 
   useEffect(() => {
@@ -40,14 +40,14 @@ export function GoogleMapPortal() {
 }
 
 export function GoogleMapsScript() {
-  const loadGoogleMapsLibs = useStore.select.loadGoogleMapsLibs();
+  const loadGoogleMapsLibs = useStore.use.loadGoogleMapsLibs();
   return <Script src={absUrl("/google-maps.js")} strategy="lazyOnload" onLoad={() => loadGoogleMapsLibs()} />;
 }
 
 function GoogleMapDiv() {
   const mapRef = useRef(null);
-  const googleMapsIsReadyToRender = useStore.select.googleMapsLibsAreLoaded();
-  const initGoogleMaps = useStore.select.initGoogleMaps();
+  const googleMapsIsReadyToRender = useStore.use.googleMapsLibsAreLoaded();
+  const initGoogleMaps = useStore.use.initGoogleMaps();
 
   useEffect(() => {
     if (!googleMapsIsReadyToRender || !mapRef.current) return;

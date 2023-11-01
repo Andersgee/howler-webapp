@@ -17,7 +17,7 @@ type Props = {
 export function Where({ className, eventId, initialEventLocation }: Props) {
   const [mapIsVisible, setMapIsVisible] = useState(false);
   const { data: eventLocation } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
-  const googleMaps = useStore.select.googleMaps();
+  const googleMaps = useStore.use.googleMaps();
 
   useEffect(() => {
     if (!googleMaps || !eventLocation) return;
@@ -64,7 +64,7 @@ export function Where({ className, eventId, initialEventLocation }: Props) {
 export function WhereForCreator({ className, eventId, initialEventLocation }: Props) {
   const [mapIsVisible, setMapIsVisible] = useState(false);
   const { data: eventLocation } = api.event.location.useQuery({ eventId }, { initialData: initialEventLocation });
-  const googleMaps = useStore.select.googleMaps();
+  const googleMaps = useStore.use.googleMaps();
   const apiContext = api.useContext();
 
   const eventUpdateLocation = api.event.updateLocation.useMutation({

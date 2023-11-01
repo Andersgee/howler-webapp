@@ -10,10 +10,10 @@ type Props = {
 };
 
 export function FollowUserButton({ initialIsFollowing, userId }: Props) {
-  const user = useStore.select.user();
+  const user = useStore.use.user();
   const apiContext = api.useContext();
 
-  const dialogAction = useStore.select.dialogAction();
+  const dialogAction = useStore.use.dialogAction();
 
   const { data: isFollowing } = api.user.isFollowing.useQuery({ userId }, { initialData: initialIsFollowing });
 

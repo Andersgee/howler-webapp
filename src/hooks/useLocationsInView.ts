@@ -4,9 +4,9 @@ import { api } from "./api";
 
 export function useLocationsInView() {
   //const [locationsInView, setLocationsInView] = useState(1);
-  const tileIdsInView = useStore.select.tileIdsInView();
+  const tileIdsInView = useStore.use.tileIdsInView();
 
-  const googleMaps = useStore.select.googleMaps();
+  const googleMaps = useStore.use.googleMaps();
   const didHideMarkers = useRef(false);
 
   const { data: locationsInView } = api.tile.multipleTileLocations.useQuery({ tileIds: tileIdsInView });
@@ -29,7 +29,7 @@ export function useLocationsInView() {
 
 export function useLocationsInTiles() {
   //const [locationsInView, setLocationsInView] = useState(1);
-  const tileIdsInView = useStore.select.tileIdsInView();
+  const tileIdsInView = useStore.use.tileIdsInView();
 
   const { data } = api.tile.multipleTileLocations.useQuery({ tileIds: tileIdsInView });
 
