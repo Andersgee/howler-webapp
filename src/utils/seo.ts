@@ -1,3 +1,4 @@
+import { URL } from "url";
 import type { Metadata } from "next";
 import { absUrl } from "./url";
 
@@ -84,11 +85,12 @@ export function seo({
   locale_alternatives,
 }: Config) {
   const metadata: Metadata = {
+    metadataBase: new URL(absUrl()),
     title: title,
     description: description,
     applicationName: "Howler",
-    referrer: "origin-when-cross-origin",
-    viewport: "width=device-width, initial-scale=1",
+    //referrer: "origin-when-cross-origin",
+    //viewport: "width=device-width, initial-scale=1",
     manifest: absUrl("/manifest.webmanifest"),
     icons: [
       { rel: "icon", type: "image/svg+xml", url: absUrl("/icons/favicon.svg") },

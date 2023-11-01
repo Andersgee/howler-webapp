@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { apiRsc } from "#src/api/apiRsc";
-import { SigninButtons } from "#src/components/buttons/SigninButtons";
 
 //export const dynamic = "force-dynamic";
 
@@ -9,8 +8,7 @@ export default async function Page() {
   if (!user) {
     return (
       <div>
-        <h1>Sign in </h1>
-        <SigninButtons />
+        <h1>Not signed in</h1>
       </div>
     );
   }

@@ -99,8 +99,8 @@ model Notification {
 model FcmToken {
     id        String   @id //the getToken() from firebase/messaging
     createdAt DateTime @default(now())
-    userId    Int
     User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    Int
 }
 
 model Example {
@@ -132,7 +132,7 @@ model Eventchatmessage {
 
 model Event {
     id        Int  @id @default(autoincrement())
-    creator   User @relation(fields: [creatorId], references: [id])
+    creator   User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
     creatorId Int
 
     what    String
