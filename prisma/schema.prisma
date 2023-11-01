@@ -63,6 +63,8 @@ model User {
 
     notifications     UserNotificationPivot[]
     eventchatmessages Eventchatmessage[]
+
+    errors Error[]
 }
 
 model UserUserPivot {
@@ -172,4 +174,13 @@ model Tile {
     id String @id //"z-x-y" eg "5-10-11"
 
     eventLocations EventLocationTilePivot[]
+}
+
+model Error {
+    id     Int   @id @default(autoincrement())
+    user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId Int?
+
+    name    String
+    message String
 }

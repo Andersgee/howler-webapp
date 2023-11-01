@@ -2,9 +2,9 @@ import { Providers } from "#src/context";
 import { seo } from "#src/utils/seo";
 import { Topnav } from "./Topnav";
 import "./globals.css";
-import { Suspense } from "react";
+//import { Suspense } from "react";
+//import { NavigationEvents } from "#src/components/NavigationEvents";
 import { GoogleMapPortal, GoogleMapsScript } from "#src/components/GoogleMap";
-import { NavigationEvents } from "#src/components/NavigationEvents";
 import { ScreenSizeIndicator } from "#src/components/ScreenSizeIndicator";
 import { Toaster } from "#src/context/Toaster";
 import { fontSans } from "#src/utils/font";
@@ -24,9 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <Topnav />
           {children}
+          {/*
           <Suspense fallback={null}>
             <NavigationEvents />
           </Suspense>
+          */}
         </Providers>
         <ScreenSizeIndicator />
         <Toaster />

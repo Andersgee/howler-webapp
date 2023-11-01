@@ -1,3 +1,4 @@
+import { errorRouter } from "./routers/error";
 import { eventRouter } from "./routers/event";
 import { eventchatRouter } from "./routers/eventchat";
 import { gcsRouter } from "./routers/gcs";
@@ -13,6 +14,7 @@ export const trpcRouter = createTRPCRouter({
   eventchat: eventchatRouter,
   gcs: gcsRouter,
   tile: tileRouter,
+  error: errorRouter,
 });
 
 export type TrpcRouter = typeof trpcRouter;

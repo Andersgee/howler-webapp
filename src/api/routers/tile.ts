@@ -8,7 +8,7 @@ export const tagsTileRouter = {
 
 export const tileRouter = createTRPCRouter({
   locations: publicProcedure.input(z.object({ tileId: z.string() })).query(async ({ input }) => {
-    return db
+    return await db
       .selectFrom("EventLocationTilePivot")
       .where("EventLocationTilePivot.tileId", "=", input.tileId)
       .innerJoin("EventLocation", "EventLocation.id", "EventLocationTilePivot.eventLocationId")
