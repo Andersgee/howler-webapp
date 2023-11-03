@@ -11,9 +11,7 @@ import { useLocationsInView } from "#src/hooks/useLocationsInView";
 import { useStore } from "#src/store";
 import { hashidFromId } from "#src/utils/hashid";
 import { imageSizes } from "#src/utils/image-sizes";
-import { IconClose, IconWhat, IconWhere } from "./Icons";
-import { Button } from "./ui/Button";
-import { LinkUserImage } from "./UserImage";
+import { IconArrowLink, IconClose } from "./Icons";
 import { WhenText } from "./WhenText";
 
 type Props = {
@@ -45,7 +43,7 @@ function PortaledEventDrawer() {
   useEffect(() => {
     if (!googleMaps) return;
     const myGoogleMapDiv = document.getElementById("my-google-map-div")?.getElementsByTagName("div")[0];
-    console.log("myGoogleMapDiv:", myGoogleMapDiv);
+
     if (myGoogleMapDiv) {
       setNode(myGoogleMapDiv);
     }
@@ -61,6 +59,7 @@ function PortaledEventDrawer() {
 function EventDrawer() {
   const clickedEventId = useStore.use.mapClickedEventId();
   const mapSetClickedEventId = useStore.use.mapSetClickedEventId();
+
   const { data: event } = api.event.info.useQuery(
     { eventId: clickedEventId || 0 },
     { enabled: clickedEventId !== null }
@@ -75,7 +74,7 @@ function EventDrawer() {
           <IconClose className="rounded-full p-2 hover:bg-neutral-200" />
         </button>
       </div>
-      {event.image && (
+      {event.image ? (
         <Image
           src={event.image}
           alt="event"
@@ -86,29 +85,38 @@ function EventDrawer() {
           height={Math.round(256 / (event.imageAspectRatio ?? 1))}
           //placeholder={imagePlaceholder(256, h256)}
         />
+      ) : (
+        <div className="flex h-36 w-64 items-center justify-center border border-neutral-500 text-neutral-400">
+          creator didnt add any image
+        </div>
       )}
 
-      <Link href={`/event/${hashidFromId(event.id)}`} className="block px-3 py-2 hover:bg-neutral-200">
-        <div className="flex items-center gap-1">
-          <IconWhat className="" />
-          <span className="w-16 pr-2">What?</span>
-          <div className="flex items-center px-2 py-1">{event.what || "anything"}</div>
-        </div>
-      </Link>
-
-      <div className="m-4 flex items-center text-sm">
-        <div>created by </div>
-        <Link href={`/u/${hashidFromId(event.creator.id)}`}>
-          <div className="relative h-8 w-8">
-            <Image
-              src={event.creator.image || ""}
-              alt={"creator"}
-              sizes={imageSizes("w-8")}
-              fill
-              className="rounded-full object-contain"
-            />
-          </div>
+      <div className="m-3">
+        <Link
+          href={`/event/${hashidFromId(event.id)}`}
+          className="my-3 flex justify-between rounded-sm bg-blue-400 px-3 py-2 text-lg font-bold hover:bg-blue-500"
+        >
+          {event.what || "anything"}
+          <IconArrowLink />
         </Link>
+
+        <div className="text-xs">
+          <WhenText date={event.when} />
+        </div>
+        <div className="my-2 flex items-center text-xs">
+          <div>created by </div>
+          <Link href={`/u/${hashidFromId(event.creator.id)}`}>
+            <div className="relative h-8 w-8">
+              <Image
+                src={event.creator.image || ""}
+                alt={"creator"}
+                sizes={imageSizes("w-8")}
+                fill
+                className="rounded-full object-contain"
+              />
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

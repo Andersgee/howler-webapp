@@ -112,28 +112,17 @@ export class GoogleMaps {
 
             const tileIdsInView = calcTileIdsInView({ ne: mapBounds.ne, sw: mapBounds.sw, z: zoom });
             setMapBounds(tileIdsInView, mapBounds);
-            //console.log("tiles:", tiles);
           }
-          //const span = bounds?.toSpan(); // span is delta lng and lat between corners (not actual values of corners)
-        } catch (error) {
+        } catch {
           /*
-          try to fix this error: Cannot read properties of undefined (reading 'fromLatLngToDivPixel')
-          it seems to only happens on phone when navigating back/forward
+          Im rendering google-maps in a div that might not currently be on the page with <OutPortal>...
+          so getNorthEast() etc which internally does fromLatLngToDivPixel() which "computes the pixel coordinates of the given geographical
+          location in the DOM element that holds the draggable map" will fail cuz  the element does not exist in the DOM if not showing map.
 
-          Im rendering into a div that might not currently be on the page with <OutPortal> so this is likely the issue
-          
-          note to self:
-          node_modules/@types/google-maps:
-          fromLatLngToDivPixel() Computes the pixel coordinates of the given geographical
-          location in the DOM element that holds the draggable map.
-
-          fromLatLngToDivPixel seems to be called in
-          - in google maps draw()
-          - in markerclusterer latLngBoundsToPixelBounds()
-
+          anyway just ignore error, "bounds_changed" will re-run once map is actually painted
           */
         }
-      }, 300)
+      }, 1000)
     );
   }
 
@@ -237,7 +226,7 @@ export class GoogleMaps {
       this.hideAllMarkers();
       this.markerClusterer?.addMarkers(markers);
     } catch (error) {
-      // fromLatLngToDivPixel error cuz google maps DOM node is not on page?
+      // fromLatLngToDivPixel error cuz google maps DOM node is not on page
     }
   }
 }
