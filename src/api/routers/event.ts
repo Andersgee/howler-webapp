@@ -33,7 +33,7 @@ export const eventRouter = createTRPCRouter({
     return false;
   }),
   info: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input }) => {
-    return db
+    return await db
       .selectFrom("Event")
       .selectAll("Event")
       .where("Event.id", "=", input.eventId)
@@ -48,7 +48,7 @@ export const eventRouter = createTRPCRouter({
       .getFirst({ next: { tags: [tagsEventRouter.info(input)] } });
   }),
   location: publicProcedure.input(z.object({ eventId: z.number() })).query(async ({ input }) => {
-    return db
+    return await db
       .selectFrom("EventLocation")
       .selectAll("EventLocation")
       .where("EventLocation.eventId", "=", input.eventId)
@@ -305,6 +305,7 @@ export const eventRouter = createTRPCRouter({
       z.object({
         eventId: z.number(),
         image: z.string(),
+        imageAspectRatio: z.number(),
       })
     )
     .mutation(async ({ input }) => {
@@ -314,6 +315,7 @@ export const eventRouter = createTRPCRouter({
         .where("id", "=", input.eventId)
         .set({
           image: input.image,
+          imageAspectRatio: input.imageAspectRatio,
         })
         .executeTakeFirstOrThrow();
 

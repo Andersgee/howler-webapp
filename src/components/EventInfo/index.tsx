@@ -26,7 +26,7 @@ export function EventInfo({ eventId, initialEventInfo, initialEventLocation, isC
       {event.image && (
         <div className="mt-2 flex justify-center">
           <FullsizeImageButton title={event.what} src={event.image} alt={event.what}>
-            <EventImage src={event.image} alt={event.what} />
+            <EventImage src={event.image} alt={event.what} aspectRatio={event.imageAspectRatio ?? 1} />
           </FullsizeImageButton>
         </div>
       )}

@@ -47,6 +47,9 @@ export const tileRouter = createTRPCRouter({
       )
     );
 
-    return locationsList.flat();
+    const locations = locationsList.flat();
+    return locations;
+
+    //return locations.map((location) => ({ ...location, randId: crypto.randomUUID() }));
   }),
 });

@@ -10,7 +10,7 @@ type Props = {
 
 export function WhenText({ date, className }: Props) {
   const { datestr, isMounted } = useFormatDate(date);
-  return <span className={className}>{isMounted ? datestr : ""}</span>;
+  return <span className={className}>{isMounted ? datestr : "-"}</span>;
 }
 
 /**

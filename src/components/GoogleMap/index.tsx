@@ -54,7 +54,7 @@ function GoogleMapDiv() {
     initGoogleMaps(mapRef.current);
   }, [googleMapsIsReadyToRender, initGoogleMaps]);
 
-  return <div ref={mapRef} className="h-full w-full" />;
+  return <div ref={mapRef} id="my-google-map-div" className="h-full w-full" />;
 }
 
 function useHtmlPortalNode() {

@@ -3,7 +3,6 @@ import { useStore } from "#src/store";
 import { api } from "./api";
 
 export function useLocationsInView() {
-  //const [locationsInView, setLocationsInView] = useState(1);
   const tileIdsInView = useStore.use.tileIdsInView();
 
   const googleMaps = useStore.use.googleMaps();

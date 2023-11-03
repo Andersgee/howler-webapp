@@ -16,15 +16,15 @@ export function ImageUploadButton({ eventId }: Props) {
   const { uploadFile, isUploading: imageIsUploading } = useImageUpload(
     { eventId },
     {
-      onSuccess: ({ imageUrl }) => {
+      onSuccess: ({ imageUrl, aspectRatio }) => {
         //optimistic
         apiContext.event.info.setData({ eventId }, (prev) => {
           if (!prev) return prev;
           const data = structuredClone(prev); //dont mutate prev
-          return { ...data, image: imageUrl };
+          return { ...data, image: imageUrl, imageAspectRatio: aspectRatio };
         });
         //update db
-        updateImage({ eventId, image: imageUrl });
+        updateImage({ eventId, image: imageUrl, imageAspectRatio: aspectRatio });
       },
     }
   );

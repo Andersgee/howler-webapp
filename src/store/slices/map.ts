@@ -5,6 +5,8 @@ import type { LngLat } from "#src/components/GoogleMap/utils";
 import type { HtmlPortalNode } from "#src/lib/reverse-portal";
 
 export type MapSlice = {
+  mapClickedEventId: number | null;
+  mapSetClickedEventId: (number: number | null) => void;
   tileIdsInView: string[];
   mapBounds: { ne: LngLat; sw: LngLat };
   /** when this exists, everything is ready to go. */
@@ -17,6 +19,10 @@ export type MapSlice = {
 };
 
 export const createMapSlice: StateCreator<MapSlice, [], [], MapSlice> = (set, get) => ({
+  mapClickedEventId: null,
+  mapSetClickedEventId: (x) => {
+    set({ mapClickedEventId: x });
+  },
   tileIdsInView: [],
   mapBounds: { ne: { lng: 0, lat: 0 }, sw: { lng: 0, lat: 0 } },
   googleMaps: null,

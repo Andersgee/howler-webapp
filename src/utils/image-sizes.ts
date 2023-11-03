@@ -46,11 +46,13 @@ type Options = {
  * </div>
  * ```
  */
-export function imageSizes(width: TailwindSize, o: Options) {
+export function imageSizes(width: TailwindSize, o?: Options) {
+  const w = `${SIZES[width]}px`;
+  if (!o) return w;
+
   const xl2 = o["2xl"] ? `(min-width: ${SCREENS["2xl"]}px) ${SIZES[o["2xl"]]}px, ` : "";
   const xl = o["xl"] ? `(min-width: ${SCREENS["xl"]}px) ${SIZES[o["xl"]]}px, ` : "";
   const md = o["md"] ? `(min-width: ${SCREENS["md"]}px) ${SIZES[o["md"]]}px, ` : "";
   const sm = o["sm"] ? `(min-width: ${SCREENS["sm"]}px) ${SIZES[o["sm"]]}px, ` : "";
-  const w = `${SIZES[width]}px`;
   return `${xl2}${xl}${md}${sm}${w}`;
 }

@@ -17,7 +17,7 @@ type Input = {
 };
 
 type Options = {
-  onSuccess?: ({ imageUrl }: { imageUrl: string }) => void;
+  onSuccess?: ({ imageUrl, aspectRatio }: { imageUrl: string; aspectRatio: number }) => void;
   onError?: (msg: string) => void;
 };
 
@@ -43,6 +43,13 @@ export function useImageUpload(input: Input, options?: Options) {
         return;
       }
 
+      let aspectRatio = 1;
+      try {
+        aspectRatio = await getImageAspectRatio(file);
+      } catch {
+        console.log("using default image aspectRatio of 1.");
+      }
+
       try {
         const res = await fetch(gcs.signedUploadUrl, {
           method: "PUT",
@@ -54,7 +61,7 @@ export function useImageUpload(input: Input, options?: Options) {
           body: file,
         });
         if (res.ok) {
-          options?.onSuccess?.({ imageUrl: gcs.imageUrl });
+          options?.onSuccess?.({ imageUrl: gcs.imageUrl, aspectRatio });
         } else {
           options?.onError?.("Something went wrong. Try again.");
         }
@@ -68,4 +75,17 @@ export function useImageUpload(input: Input, options?: Options) {
   );
 
   return { uploadFile, isUploading };
+}
+
+async function getImageAspectRatio(file: File): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const aspectRatio = img.width / img.height;
+      URL.revokeObjectURL(img.src);
+      resolve(aspectRatio);
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
 }

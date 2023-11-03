@@ -20,6 +20,7 @@ export type Event = {
   who: string;
   info: string;
   image: string | null;
+  imageAspectRatio: number | null;
 };
 export type Eventchatmessage = {
   id: Generated<number>;

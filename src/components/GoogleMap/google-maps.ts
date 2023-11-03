@@ -1,5 +1,5 @@
 import { GridAlgorithm, MarkerClusterer } from "@googlemaps/markerclusterer";
-import { setMapBounds } from "#src/store/actions";
+import { setMapBounds, setMapClickedEventId } from "#src/store/actions";
 import { debounce } from "#src/utils/debounce";
 import { type Prettify } from "#src/utils/typescript";
 import { absUrl } from "#src/utils/url";
@@ -120,7 +120,7 @@ export class GoogleMaps {
           try to fix this error: Cannot read properties of undefined (reading 'fromLatLngToDivPixel')
           it seems to only happens on phone when navigating back/forward
 
-          Im rendeing into a div that might not currently be on the page with <OutPortal> so this is likely the issue
+          Im rendering into a div that might not currently be on the page with <OutPortal> so this is likely the issue
           
           note to self:
           node_modules/@types/google-maps:
@@ -206,27 +206,10 @@ export class GoogleMaps {
     //eventMarker.position = null // or remove marker like this
   }
 
-  setExploreMarkers(locations: Array<Prettify<LngLat & { what: string; id: number }>>) {
+  setExploreMarkers(events: Array<Prettify<LngLat & { id: number; what: string }>>) {
     if (!this.map) return;
 
-    const infoWindow = new this.InfoWindow({
-      content: "",
-      disableAutoPan: true,
-    });
-
-    const markers = locations.map((location) => {
-      //const label = labels[i % labels.length];
-      //const label = location.what;
-      //const pinGlyph = new this.PinElement({
-      //  glyph: label,
-      //  glyphColor: "white",
-      //});
-      //const marker = new this.AdvancedMarkerElement({
-      //  position: location,
-      //  content: pinGlyph.element,
-      //});
-
-      // A marker with a custom SVG glyph.
+    const markers = events.map((event) => {
       const glyphImg = document.createElement("img");
       glyphImg.src = absUrl("/icons/pin.svg");
       const pinGlyph = new this.PinElement({
@@ -234,36 +217,19 @@ export class GoogleMaps {
         glyphColor: "#fff",
         background: "#fff",
         borderColor: "#fff",
-        scale: 2, //default looks like 24px, recommended is atleast 44px 48px
+        scale: 1.5, //default looks like 24px, recommended is atleast 44px, lets do 36? adjust pin.svg accordingly
       });
       const marker = new this.AdvancedMarkerElement({
-        //map,
-        position: location,
+        map: this.map,
+        position: { lng: event.lng, lat: event.lat },
         content: pinGlyph.element, //can not pass same element to multiple.
-        //title: "A marker using a custom SVG for the glyph.",
+        title: event.what || "anything",
       });
 
-      // markers can only be keyboard focusable when they have click listeners
-      // open info window when marker is clicked
       marker.addListener("click", () => {
-        const element = document.getElementById(String(location.id));
-        if (element === null) {
-          //infoWindow.setContent(location.lat + ", " + location.lng);
-          infoWindow.setContent(`what: ${location.what}`);
-        } else {
-          const clonedElement = element.cloneNode(true) as HTMLElement;
-          //should change id of clone. see https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
-          clonedElement.id = `cloned-${element.id}`;
-          clonedElement.classList.remove("sr-only");
-          infoWindow.setContent(clonedElement);
-        }
-        infoWindow.open({
-          map: this.map,
-          anchor: marker,
-          //shouldFocus: true,
-        });
-        //infoWindow.open(this.map, marker);
+        setMapClickedEventId(event.id);
       });
+
       return marker;
     });
 
@@ -271,7 +237,7 @@ export class GoogleMaps {
       this.hideAllMarkers();
       this.markerClusterer?.addMarkers(markers);
     } catch (error) {
-      // fromLatLngToDivPixel error cuz google maps DOM node is not page?
+      // fromLatLngToDivPixel error cuz google maps DOM node is not on page?
     }
   }
 }

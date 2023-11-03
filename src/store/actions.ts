@@ -15,6 +15,11 @@ export const setMapBounds = (tileIdsInView: string[], mapBounds: { ne: LngLat; s
   }
 };
 
+/** for GoogleMaps external class */
+export const setMapClickedEventId = (eventId: number) => {
+  useStore.setState({ mapClickedEventId: eventId });
+};
+
 //export const getTileIdsInView = useStore.select.tileIdsInView();
 
 /** for FirebaseCloudMessaging external class */
