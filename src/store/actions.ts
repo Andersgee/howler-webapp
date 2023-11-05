@@ -16,7 +16,7 @@ export const setMapBounds = (tileIdsInView: string[], mapBounds: { ne: LngLat; s
 };
 
 /** for GoogleMaps external class */
-export const setMapClickedEventId = (eventId: number) => {
+export const setMapClickedEventId = (eventId: number | null) => {
   useStore.setState({ mapClickedEventId: eventId });
 };
 

@@ -41,6 +41,7 @@ export class GoogleMaps {
   //markers: google.maps.marker.AdvancedMarkerElement[];
   //currentCenterMarker: google.maps.marker.AdvancedMarkerElement | null;
   //showCenterMarker: boolean;
+  infoWindowElement: HTMLDivElement | null;
 
   eventMarker: google.maps.marker.AdvancedMarkerElement | null;
   chooseEventLocationMarker: google.maps.marker.AdvancedMarkerElement | null;
@@ -50,6 +51,7 @@ export class GoogleMaps {
     this.markerClusterer = null;
     this.eventMarker = null;
     this.chooseEventLocationMarker = null;
+    this.infoWindowElement = null;
   }
 
   async loadLibs() {
@@ -89,6 +91,14 @@ export class GoogleMaps {
 
     //this.markerClusterer = new MarkerClusterer({ map: this.map });
     this.markerClusterer = new MarkerClusterer({ map: this.map, algorithm: new GridAlgorithm({ gridSize: 50 }) });
+
+    this.infoWindowElement = document.createElement("div");
+    //this.infoWindowElement.id = "google-maps-infowindow-element";
+
+    //const infoWindow = new this.InfoWindow({
+    //  content: "",
+    //  disableAutoPan: true,
+    //});
 
     this.map.addListener("center_changed", () => {
       const c = this.map?.getCenter();
@@ -198,6 +208,16 @@ export class GoogleMaps {
   setExploreMarkers(events: Array<Prettify<LngLat & { id: number; what: string }>>) {
     if (!this.map) return;
 
+    //same info window for all markers
+    const infoWindow = new this.InfoWindow({
+      content: this.infoWindowElement,
+      disableAutoPan: true,
+    });
+
+    infoWindow.addListener("closeclick", () => {
+      setMapClickedEventId(null);
+    });
+
     const markers = events.map((event) => {
       const glyphImg = document.createElement("img");
       glyphImg.src = absUrl("/icons/pin.svg");
@@ -217,6 +237,11 @@ export class GoogleMaps {
 
       marker.addListener("click", () => {
         setMapClickedEventId(event.id);
+        infoWindow.open({
+          map: this.map,
+          anchor: marker,
+          //shouldFocus: true,
+        });
       });
 
       return marker;
