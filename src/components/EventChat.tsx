@@ -154,7 +154,15 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
 
       <div className="absolute inset-x-0 bottom-3">
         <div className="container max-w-lg">
-          <div className="flex items-center">
+          <form
+            className="flex items-center"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (inputRef.current?.value) {
+                eventchatSend.mutate({ eventId, text: inputRef.current.value });
+              }
+            }}
+          >
             <input
               autoComplete="off"
               //autoFocus
@@ -165,19 +173,10 @@ export function EventChat({ eventId, userId, initialIsJoined }: Props) {
               className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 grow rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
 
-            <Button
-              className="ml-1"
-              disabled={eventchatSend.isLoading}
-              onPointerDown={(e) => {
-                e.preventDefault();
-                if (inputRef.current?.value) {
-                  eventchatSend.mutate({ eventId, text: inputRef.current.value });
-                }
-              }}
-            >
+            <Button className="ml-1" type="submit" disabled={eventchatSend.isLoading}>
               <IconSend className="" />
             </Button>
-          </div>
+          </form>
         </div>
       </div>
     </>
