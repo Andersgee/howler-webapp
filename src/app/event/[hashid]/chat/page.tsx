@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps) {
     title: `${event.what || "anything"} | Howler`,
     description: `where: ${location?.placeName || event.where || "anywhere"}, who: ${event.who || "anyone"}`,
     url: `/event/${params.hashid}`,
-    image: "/icons/favicon-512x512.png",
+    image: "/howler.png",
   });
 }
 

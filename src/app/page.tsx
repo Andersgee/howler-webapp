@@ -9,7 +9,7 @@ export const metadata = seo({
   description:
     "Looking for something to do in real life? A place to quickly find/plan stuff to do with friends, or with anyone really.",
   url: "/",
-  image: "/icons/favicon-512x512.png",
+  image: "/howler.png",
 });
 
 export default function Page() {
