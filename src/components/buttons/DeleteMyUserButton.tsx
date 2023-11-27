@@ -12,6 +12,7 @@ export function DeleteMyUserButton() {
 
   return (
     <ButtonWithConfirmDialog
+      variant="destructive"
       title="Are you absolutely sure?"
       description="This can not be undone! It will delete your account and anything related to it like events and all your chat messages etc."
       actionVariant="destructive"

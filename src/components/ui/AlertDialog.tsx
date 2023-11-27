@@ -18,7 +18,7 @@ const AlertDialogOverlay = forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Overlay
     className={cn(
-      "bg-color-neutral-0/80 data-state-open:animate-in data-state-open:fade-in-0 data-state-closed:animate-out data-state-closed:fade-out-0 fixed inset-0 z-50 backdrop-blur-sm",
+      "data-state-open:animate-in data-state-open:fade-in-0 data-state-closed:animate-out data-state-closed:fade-out-0 fixed inset-0 z-50 bg-neutral-50/80 backdrop-blur-sm dark:bg-neutral-900/80",
       className
     )}
     {...props}
@@ -36,7 +36,7 @@ const AlertDialogContent = forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
-        "border-color-neutral-200 bg-color-neutral-0 data-state-open:animate-in data-state-open:fade-in-0 data-state-open:zoom-in-95 data-state-open:slide-in-from-left-1/2 data-state-open:slide-in-from-top-[48%] data-state-closed:animate-out data-state-closed:fade-out-0 data-state-closed:zoom-out-95 data-state-closed:slide-out-to-left-1/2 data-state-closed:slide-out-to-top-[48%] fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 shadow-lg duration-200 sm:rounded-lg md:w-full",
+        "data-state-open:animate-in data-state-open:fade-in-0 data-state-open:zoom-in-95 data-state-open:slide-in-from-left-1/2 data-state-open:slide-in-from-top-[48%] data-state-closed:animate-out data-state-closed:fade-out-0 data-state-closed:zoom-out-95 data-state-closed:slide-out-to-left-1/2 data-state-closed:slide-out-to-top-[48%] fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-neutral-200 bg-neutral-50/100 p-6 shadow-lg duration-200 dark:border-neutral-800 dark:bg-neutral-950/100 sm:rounded-lg md:w-full",
         className
       )}
       {...props}
@@ -67,7 +67,11 @@ const AlertDialogDescription = forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Description ref={ref} className={cn("text-color-neutral-700 text-sm", className)} {...props} />
+  <AlertDialogPrimitive.Description
+    ref={ref}
+    className={cn("text-sm text-neutral-700 dark:text-neutral-300", className)}
+    {...props}
+  />
 ));
 AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName;
 

@@ -27,9 +27,9 @@ export default async function Page() {
           image: <UserImage alt={userInfo.name} src={userInfo.image || ""} />
         </li>
       </ul>
-      <hr />
-      <h2 className="mt-14">DANGER ZONE</h2>
-      <p>
+      <hr className="my-10" />
+      <h2 className="">DANGER ZONE</h2>
+      <p className="mb-2">
         You can delete your account and everything you created like events, chat messages etc. by clicking this button
       </p>
       <DeleteMyUserButton />

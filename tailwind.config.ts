@@ -93,6 +93,41 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      //https://tailwindcss.com/docs/hover-focus-and-other-states#aria-states
+      aria: {
+        busy: 'busy="true"',
+        checked: 'checked="true"',
+        disabled: 'disabled="true"',
+        expanded: 'expanded="true"',
+        hidden: 'hidden="true"',
+        pressed: 'pressed="true"',
+        readonly: 'readonly="true"',
+        required: 'required="true"',
+        selected: 'selected="true"',
+      },
+      //https://tailwindcss.com/docs/hover-focus-and-other-states#data-attributes
+      data: {
+        //https://www.radix-ui.com/primitives/docs/components/dropdown-menu
+        "orientation-vertical": 'orientation="vertical"',
+        "orientation-horizontal": 'orientation="horizontal"',
+        highlighted: "highlighted",
+        disabled: "disabled",
+        "state-open": 'state="open"',
+        "state-closed": 'state="closed"',
+        "side-left": 'side="left"',
+        "side-right": 'side="right"',
+        "side-bottom": 'side="bottom"',
+        "side-top": 'side="top"',
+        "align-start": 'align="start"',
+        "align-end": 'align="end"',
+        "align-center": 'align="center"',
+        //https://www.radix-ui.com/primitives/docs/components/checkbox
+        "state-checked": 'state="checked"',
+        "state-unchecked": 'state="unchecked"',
+        "state-indeterminate": 'state="indeterminate"',
+
+        //https://github.com/pacocoursey/cmdk#parts-and-styling
+      },
     },
   },
   plugins: [
