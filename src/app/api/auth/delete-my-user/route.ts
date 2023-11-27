@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
     const user = await getUserFromRequestCookie(request);
     if (!user) throw new Error("no user");
 
+    //TODO: need to revalidate stuff and also delete images from bucket...
     const _deleteResult = await db.deleteFrom("User").where("id", "=", user.id).executeTakeFirst();
 
     return new Response(undefined, {

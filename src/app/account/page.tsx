@@ -28,7 +28,7 @@ export default async function Page() {
         </li>
       </ul>
       <hr />
-      <h2 className="mt-10">DANGER ZONE</h2>
+      <h2 className="mt-14">DANGER ZONE</h2>
       <p>
         You can delete your account and everything you created like events, chat messages etc. by clicking this button
       </p>
