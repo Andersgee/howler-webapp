@@ -229,7 +229,7 @@ class OutPortal<C extends Component<any>> extends React.PureComponent<OutPortalP
     // Render a placeholder to the DOM, so we can get a reference into
     // our location in the DOM, and swap it out for the portaled node.
     // A <div> placeholder works fine even for SVG.
-    return <div className="bg-yellow-500" ref={this.placeholderNode} />;
+    return <div ref={this.placeholderNode} />;
   }
 }
 

@@ -22,9 +22,7 @@ export function ExploreMap({ className }: Props) {
 
   return (
     <div className={className}>
-      {/*<InfoWindowContents />*/}
       <div className="relative h-96 w-full">
-        {/*<EventDrawer />*/}
         <GoogleMap />
       </div>
 
